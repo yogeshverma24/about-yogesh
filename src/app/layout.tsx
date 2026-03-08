@@ -6,9 +6,9 @@ import CustomCursor from "../components1/global/CustomCursor";
 import { ThemeProvider } from "../components1/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Catenally | Data Inspired · Tech Integrated · Real Time Thinkers",
-  description:
-    "Catenally is a software & digital solutions company delivering web, mobile, and technology-driven products with precision, performance, and innovation.",
+  title: "Yogesh Verma | Software & Mobile App Solutions Developer",
+    description:
+    "Yogesh Kumar is a freelance developer providing end-to-end software solutions including mobile apps, web platforms, and scalable digital products using modern technologies like iOS, React Native, and Next.js.",
 };
 
 export default function RootLayout({

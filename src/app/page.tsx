@@ -121,7 +121,7 @@ export default function PortfolioPage() {
             </motion.div>
 
             <h1 className="text-5xl md:text-5xl xl:text-6xl font-black tracking-tighter leading-tight" style={{ color: textPrimary }}>
-              I&apos;m <span className="text-transparent bg-clip-text" style={{ backgroundImage: colors.gradient.primary }}>Yogesh Kumar</span>
+              I&apos;m <span className="text-transparent bg-clip-text" style={{ backgroundImage: colors.gradient.primary }}>Yogesh Verma</span>
             </h1>
 
             <p className="mt-6 text-xl font-medium max-w-xl opacity-80" style={{ color: textSecondary }}>
@@ -183,7 +183,7 @@ export default function PortfolioPage() {
               >
                 <Image
                   src={isDark ? dark : light}
-                  alt="Yogesh Kumar"
+                  alt="Yogesh Verma"
                   fill
                   className="object-cover rounded-full"
                   priority
@@ -365,7 +365,7 @@ export default function PortfolioPage() {
             className="mt-12 text-sm font-bold opacity-40 uppercase tracking-[0.3em]"
             style={{ color: textSecondary }}
           >
-            © 2026 Yogesh Kumar • Freelance Mobile Developer
+            © 2026 Yogesh Verma • Freelance Mobile Developer
           </p>
         </motion.div>
       </section>

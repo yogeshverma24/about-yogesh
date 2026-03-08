@@ -64,15 +64,15 @@ export function Footer() {
             <div className="space-y-4">
               <div className="flex items-start gap-3 group cursor-pointer">
                 <MapPin size={20} className="text-purple-500 mt-1 shrink-0" />
-                <span className="text-sm group-hover:text-white transition-colors">Anugiri Apartments, 6th Floor, Nagol, Hyderabad – 500003</span>
+                <span className="text-sm group-hover:text-white transition-colors">Gurugram, Haryana – 122018</span>
               </div>
               <div className="flex items-center gap-3 group cursor-pointer">
                 <Phone size={20} className="text-purple-500 shrink-0" />
-                <span className="text-sm group-hover:text-white transition-colors">+91 12345 67890</span>
+                <span className="text-sm group-hover:text-white transition-colors">+91 9058 704188</span>
               </div>
               <div className="flex items-center gap-3 group cursor-pointer">
                 <Mail size={20} className="text-purple-500 shrink-0" />
-                <span className="text-sm group-hover:text-white transition-colors">contact@catenally.com</span>
+                <span className="text-sm group-hover:text-white transition-colors">itsyogeshverma12@gmail.com</span>
               </div>
             </div>
           </div>
@@ -127,7 +127,7 @@ export function Footer() {
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-2 text-[10px] font-black uppercase tracking-widest opacity-40">
             {footerLinks.legal.map((link) => (
-              <Link key={link.label} href={link.href} className="hover:text-white transition-colors">
+              <Link key={link.label} href={""} className="hover:text-white transition-colors">
                 {link.label}
               </Link>
             ))}
@@ -135,7 +135,7 @@ export function Footer() {
           
           <div className="text-center md:text-right">
             <p className="text-[11px] font-bold uppercase tracking-widest opacity-40">
-              © 2026 Catenally • Engineering Tomorrow
+              © 2026 DelegateSpace • Engineering Tomorrow
             </p>
             <p className="text-[10px] mt-1 font-medium opacity-30">
               Maintained by <span className="text-white">DelegateSpaces</span>
