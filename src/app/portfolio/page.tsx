@@ -13,6 +13,7 @@ import {
 import { colors } from '@/lib/constants/colors'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
@@ -72,19 +73,28 @@ const stats = [
 
 const categories = [
   { label: 'All Work', value: 'all' },
-  { label: 'Web Platforms', value: 'web' },
-  { label: 'Engineering', value: 'engineering' },
-  { label: 'Mobile Apps', value: 'mobile' },
-  { label: 'Products', value: 'product' },
+  { label: 'Web Platforms', value: 'web' }, // DelegateSpace, Catanarry, DeleateHost, VKS 
+  { label: 'MVP', value: 'mvp' }, // Spinny Clone, Social Media Clone, Bundle script
+  { label: 'Mobile Apps', value: 'mobile' }, // Music Player, Social Media app, Car Play, Muslim pro
+  { label: 'Products', value: 'product' }, // DelegateCampus, Task Manager
 ]
 
 const projects = [
-  { id: 1, title: 'Our Project Title', category: 'web', image: '/images/portfolio/project1/project1.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 2, title: 'Our Project Title', category: 'engineering', image: '/images/portfolio/project1/project2.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 3, title: 'Our Project Title', category: 'mobile', image: '/images/portfolio/project1/project3.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 4, title: 'Our Project Title', category: 'product', image: '/images/portfolio/project1/project4.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 5, title: 'Our Project Title', category: 'engineering', image: '/images/portfolio/project1/project5.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 6, title: 'Our Project Title', category: 'web', image: '/images/portfolio/project1/project6.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 1, title: 'DelegateSpaces', category: 'web', image: '/images/portfolio/web/delegatespace.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 2, title: 'Catenally', category: 'web', image: '/images/portfolio/web/catenally.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 3, title: 'DelegateHost', category: 'web', image: '/images/portfolio/web/delegatehost.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 4, title: 'VSK Global Infotech', category: 'web', image: '/images/portfolio/web/vks.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+
+  
+  { id: 5, title: 'Spinny Clone', category: 'mvp', image: '/images/portfolio/mvp/bundles.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 6, title: 'Bundle Script', category: 'mvp', image: '/images/portfolio/mvp/spinny.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+
+  { id: 7, title: 'Campus', category: 'product', image: '/images/portfolio/product/campus.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 8, title: 'Task Manager', category: 'product', image: '/images/portfolio/product/taskmanager.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+
+  { id: 9, title: 'Social Media', category: 'mobile', image: '/images/portfolio/mobile/social.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 10, title: 'Carplay', category: 'mobile', image: '/images/portfolio/mobile/carplay.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 11, title: 'Music Player', category: 'mobile', image: '/images/portfolio/mobile/music.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
 ]
 
 export default function OurWorks() {
@@ -191,7 +201,7 @@ export default function OurWorks() {
         className="py-28"
         style={{ background: isDark ? colors.background.dark : colors.background.secondary }}
       >
-        <div className="max-w-7xl mx-auto px-6 text-center">
+        <div className="max-w-8xl mx-auto px-6 text-center px-25">
 
           <motion.div
             initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -233,7 +243,7 @@ export default function OurWorks() {
             ))}
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-12 gap-y-10">
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project, i) => (
                 <motion.div
@@ -244,33 +254,61 @@ export default function OurWorks() {
                   animate="visible"
                   exit="exit"
                   layout
-                  whileHover={{ y: -8, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }}
-                  className="group text-left rounded-3xl border"
+                  whileHover={{ y: -8 }}
+                  className="group text-left rounded-3xl border overflow-hidden"
                   style={{
                     borderColor: isDark ? colors.neutral[700] : colors.border.DEFAULT,
                     background: isDark ? colors.neutral[800] : colors.background.primary,
                   }}
                 >
-                  <div className="relative h-[300px] rounded-3xl overflow-hidden mb-5">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-300" />
-                  </div>
 
-                  <h3
-                    className="text-2xl font-semibold mb-3 px-4"
-                    style={{ color: isDark ? colors.text.inverse : colors.text.primary }}
-                  >
-                    {project.title}
-                  </h3>
+                  <Link href={`/projects/${project.id}`} target="_blank">
 
-                  <p className="leading-relaxed px-4 mb-5" style={{ color: isDark ? colors.neutral[400] : colors.text.secondary }}>
-                    {project.description}
-                  </p>
+                    <div className="relative h-[270px] overflow-hidden">
+
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                      />
+
+                      {/* Hover Overlay */}
+                      <motion.div
+                        className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center text-center p-6"
+                      >
+
+                        <span className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                          View Project
+                        </span>
+
+                        <div className="w-12 h-[2px] bg-white mt-3 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+
+                      </motion.div>
+
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6">
+
+                      <h3
+                        className="text-2xl font-semibold mb-3"
+                        style={{ color: isDark ? colors.text.inverse : colors.text.primary }}
+                      >
+                        {project.title}
+                      </h3>
+
+                      <p
+                        className="leading-relaxed"
+                        style={{ color: isDark ? colors.neutral[400] : colors.text.secondary }}
+                      >
+                        {project.description}
+                      </p>
+
+                    </div>
+
+                  </Link>
+
                 </motion.div>
               ))}
             </AnimatePresence>
