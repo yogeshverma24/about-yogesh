@@ -11,7 +11,6 @@ import { colors } from '@/lib/constants/colors'
 import { useTheme } from 'next-themes'
 import { motion } from 'framer-motion'
 
-// Animation Constants
 const easeOut = [0.22, 1, 0.36, 1] as const
 
 const fadeUp = {
@@ -41,7 +40,7 @@ const contactMethods = [
   {
     icon: Mail,
     title: 'Email Me',
-    detail: 'yogesh.verma@example.com',
+    detail: 'itsyogeshverma12@gmail.com',
     sub: 'Quick response within 24 hours',
   },
   {
@@ -53,7 +52,7 @@ const contactMethods = [
   {
     icon: Linkedin,
     title: 'LinkedIn',
-    detail: 'yogesh-verma-dev',
+    detail: 'yogesh-verma-06',
     sub: 'Let’s connect professionally',
   },
 ]
@@ -83,7 +82,6 @@ export default function ContactUs() {
   return (
     <div style={{ background: isDark ? colors.background.dark : colors.background.primary, color: textPrimary }}>
       
-      {/* --- MATCHED HERO SECTION --- */}
       <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto text-center overflow-hidden">
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-500 mb-4 block">
@@ -102,7 +100,6 @@ export default function ContactUs() {
         </motion.div>
       </section>
 
-      {/* --- CONTACT METHODS GRID --- */}
       <section className="pb-32 px-6 max-w-7xl mx-auto">
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
@@ -126,11 +123,9 @@ export default function ContactUs() {
         </motion.div>
       </section>
 
-      {/* --- CONTACT FORM & PHILOSOPHY --- */}
       <section className="py-24 px-6 border-t" style={{ borderColor }}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-start">
           
-          {/* Left: Contact Info & Philosophy */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
             <h2 className="text-4xl font-black mb-8 leading-tight">My Working <br /> <span className="text-purple-500">Philosophy</span></h2>
             
@@ -161,7 +156,6 @@ export default function ContactUs() {
             </div>
           </motion.div>
 
-          {/* Right: Modern Contact Form */}
           <motion.div 
             className="p-10 md:p-12 rounded-[2.5rem] border shadow-2xl"
             style={{ backgroundColor: cardBg, borderColor }}
@@ -225,7 +219,6 @@ export default function ContactUs() {
         </div>
       </section>
 
-      {/* --- SUBTLE MAP REPLACEMENT --- */}
       <section className="py-24 text-center">
         <div className="max-w-2xl mx-auto px-6">
            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase mb-6">

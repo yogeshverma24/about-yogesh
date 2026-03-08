@@ -6,11 +6,13 @@ import {
   Rocket, Building2, Landmark, HeartPulse,
   ShoppingBag, GraduationCap, Cloud, Megaphone,
   Layers, Compass,
+  Globe,
+  Smartphone,
+  Zap,
 } from 'lucide-react'
 import { colors } from '@/lib/constants/colors'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
-
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
@@ -22,25 +24,6 @@ const fadeUp = {
     transition: { duration: 0.7, ease: easeOut, delay },
   }),
 }
-
-const slideInLeft = {
-  hidden: { opacity: 0, x: -44 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const, delay },
-  }),
-}
-
-const slideInRight = {
-  hidden: { opacity: 0, x: 44 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const, delay },
-  }),
-}
-
 
 const staggerContainer = {
   hidden: {},
@@ -63,20 +46,20 @@ const cardVariant = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { 
-      duration: 0.5, 
-      ease: [0.22, 1, 0.36, 1] as const, 
-      delay: i * 0.08 
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as const,
+      delay: i * 0.08
     },
   }),
-  exit: { 
-    opacity: 0, 
-    y: -12, 
-    scale: 0.97, 
-    transition: { 
-      duration: 0.3, 
-      ease: 'easeIn' as const 
-    } 
+  exit: {
+    opacity: 0,
+    y: -12,
+    scale: 0.97,
+    transition: {
+      duration: 0.3,
+      ease: 'easeIn' as const
+    }
   },
 }
 
@@ -96,12 +79,12 @@ const categories = [
 ]
 
 const projects = [
-  { id: 1, title: 'Our Project Title', category: 'web',         image: '/images/portfolio/project1/project1.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 1, title: 'Our Project Title', category: 'web', image: '/images/portfolio/project1/project1.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
   { id: 2, title: 'Our Project Title', category: 'engineering', image: '/images/portfolio/project1/project2.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 3, title: 'Our Project Title', category: 'mobile',      image: '/images/portfolio/project1/project3.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 4, title: 'Our Project Title', category: 'product',     image: '/images/portfolio/project1/project4.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 3, title: 'Our Project Title', category: 'mobile', image: '/images/portfolio/project1/project3.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 4, title: 'Our Project Title', category: 'product', image: '/images/portfolio/project1/project4.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
   { id: 5, title: 'Our Project Title', category: 'engineering', image: '/images/portfolio/project1/project5.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 6, title: 'Our Project Title', category: 'web',         image: '/images/portfolio/project1/project6.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 6, title: 'Our Project Title', category: 'web', image: '/images/portfolio/project1/project6.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
 ]
 
 export default function OurWorks() {
@@ -109,6 +92,7 @@ export default function OurWorks() {
   const isDark = resolvedTheme === 'dark'
   const textPrimary = isDark ? colors.text.inverse : colors.text.primary
   const textSecondary = isDark ? colors.neutral[400] : colors.text.secondary
+  const borderColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)';
 
   const [active, setActive] = useState('all')
   const [counts, setCounts] = useState(stats.map(() => 0))
@@ -137,23 +121,70 @@ export default function OurWorks() {
       }}
     >
 
-{/* --- MATCHED HERO SECTION --- */}
-<section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto text-center overflow-hidden">
+      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto text-center overflow-hidden">
+
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-[100px]" />
+        </div>
+
         <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-500 mb-4 block">
-            The Portfolio
+            Selected Work
           </span>
 
-          <h1 className="text-5xl md:text-5xl font-black mb-8 tracking-tight leading-[1.1]" style={{ color: textPrimary }}>
-            Digital <span className="text-purple-500">Showcase.</span>
+          <h1
+            className="text-5xl md:text-5xl font-black mb-8 tracking-tight leading-[1.1]"
+            style={{ color: textPrimary }}
+          >
+            The <span className="text-purple-500">Portfolio.</span>
           </h1>
 
-          <p className="text-lg md:text-xl leading-relaxed mb-12 max-w-3xl mx-auto font-medium" style={{ color: textSecondary }}>
-            A selection of my best work in 
-            <strong className="text-purple-500 font-bold"> Web Engineering and Mobile Development</strong>. 
-            Built with a focus on performance, scalability, and clean code.
+          <p
+            className="text-lg md:text-xl leading-relaxed mb-12 max-w-3xl mx-auto font-medium"
+            style={{ color: textSecondary }}
+          >
+            A curated collection of projects showcasing my work in
+            <strong className="text-purple-500 font-bold"> web platforms, mobile applications, and scalable software solutions</strong>.
+            Each project reflects my focus on performance, clean architecture, and modern user experiences.
           </p>
+
+          <div className="flex justify-center gap-3 md:gap-4 flex-wrap">
+
+            <div
+              className="flex items-center gap-2.5 px-5 py-2 rounded-full border transition-all duration-300 hover:border-purple-500/50"
+              style={{ borderColor, backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc' }}
+            >
+              <Globe size={16} className="text-purple-500" />
+              <span className="text-sm font-bold" style={{ color: textPrimary }}>
+                Web Platforms
+              </span>
+            </div>
+
+            <div
+              className="flex items-center gap-2.5 px-5 py-2 rounded-full border transition-all duration-300 hover:border-purple-500/50"
+              style={{ borderColor, backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc' }}
+            >
+              <Smartphone size={16} className="text-purple-500" />
+              <span className="text-sm font-bold" style={{ color: textPrimary }}>
+                Mobile Apps
+              </span>
+            </div>
+
+            <div
+              className="flex items-center gap-2.5 px-5 py-2 rounded-full border transition-all duration-300 hover:border-purple-500/50"
+              style={{ borderColor, backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc' }}
+            >
+              <Zap size={16} className="text-purple-500" />
+              <span className="text-sm font-bold" style={{ color: textPrimary }}>
+                Scalable Solutions
+              </span>
+            </div>
+
+          </div>
+
         </motion.div>
+
       </section>
 
       <section

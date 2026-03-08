@@ -6,7 +6,6 @@ import { colors } from '@/lib/constants/colors'
 import { useTheme } from 'next-themes'
 import { motion } from 'framer-motion'
 
-// Animation Constants
 const easeOut = [0.22, 1, 0.36, 1] as const
 
 const fadeUp = {
@@ -97,11 +96,8 @@ export default function WhatWeDo() {
 
   return (
     <div style={{ background: isDark ? colors.background.dark : colors.background.primary, color: textPrimary }}>
-      
 
-      {/* --- MATCHED SERVICES HERO SECTION --- */}
       <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto text-center overflow-hidden">
-        {/* Subtle Background Glow to match the site's depth */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
           <div className="absolute top-10 left-1/2 -translate-x-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-[100px]" />
         </div>
@@ -111,7 +107,6 @@ export default function WhatWeDo() {
           animate="visible"
           variants={fadeUp}
         >
-          {/* Subtle Label - Matching "The Story" style */}
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-purple-500 mb-4 block">
             Expertise & Solutions
           </span>
@@ -127,12 +122,11 @@ export default function WhatWeDo() {
             className="text-lg md:text-xl leading-relaxed mb-12 max-w-3xl mx-auto font-medium"
             style={{ color: textSecondary }}
           >
-            With <strong className="text-purple-500 font-bold">5+ years of professional experience</strong>, I architect and deploy 
-            high-performance digital products. From MERN stack web ecosystems to native mobile applications, I deliver 
+            With <strong className="text-purple-500 font-bold">5+ years of professional experience</strong>, I architect and deploy
+            high-performance digital products. From MERN stack web ecosystems to native mobile applications, I deliver
             <span className="dark:text-white text-slate-900"> end-to-end technical excellence.</span>
           </p>
 
-          {/* Clean Tech Badges - Matching the About Me layout */}
           <div className="flex justify-center gap-3 md:gap-4 flex-wrap">
             <div
               className="flex items-center gap-2.5 px-5 py-2 rounded-full border transition-all duration-300 hover:border-purple-500/50"
@@ -161,7 +155,6 @@ export default function WhatWeDo() {
         </motion.div>
       </section>
 
-      {/* DETAILED SERVICES */}
       <section className="py-32">
         <div className="max-w-7xl mx-auto px-6 space-y-48">
           {myServices.map((service, index) => {
@@ -170,8 +163,8 @@ export default function WhatWeDo() {
 
             return (
               <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                
-                <motion.div 
+
+                <motion.div
                   className={`relative ${isReverse ? 'lg:order-2' : ''}`}
                   initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }}
                   variants={isReverse ? slideInRight : slideInLeft}
@@ -184,7 +177,7 @@ export default function WhatWeDo() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   className={isReverse ? 'lg:order-1' : ''}
                   initial="hidden" whileInView="visible" viewport={{ once: true }}
                   variants={isReverse ? slideInLeft : slideInRight}
@@ -195,10 +188,10 @@ export default function WhatWeDo() {
                     </div>
                     <span className="text-sm font-bold text-purple-500 uppercase tracking-widest">{service.subtitle}</span>
                   </div>
-                  
+
                   <h3 className="text-4xl font-black mb-6 leading-tight">{service.title}</h3>
                   <p className="text-lg leading-relaxed mb-8" style={{ color: textSecondary }}>{service.description}</p>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {service.points.map((point, i) => (
                       <div key={i} className="flex items-center gap-3">
@@ -215,29 +208,28 @@ export default function WhatWeDo() {
         </div>
       </section>
 
-      {/* CORE COMPETENCIES GRID */}
       <section className="py-30 bg-slate-50/50 dark:bg-white/[0.02] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
             <h2 className="text-4xl font-black mb-16">Technical Mastery</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-4 gap-8"
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}
           >
             {coreCompetencies.map((item, i) => {
               const Icon = item.icon
               return (
-                <motion.div 
-                  key={i} 
+                <motion.div
+                  key={i}
                   variants={staggerItem}
                   whileHover={{ y: -10 }}
-                  // className="p-8 rounded-3xl border transition-all duration-300"
-                  // style={{ 
-                  //   backgroundColor: isDark ? colors.neutral[800] : '#ffffff',
-                  //   borderColor: isDark ? colors.neutral[700] : 'rgba(0,0,0,0.05)'
-                  // }}
+                // className="p-8 rounded-3xl border transition-all duration-300"
+                // style={{ 
+                //   backgroundColor: isDark ? colors.neutral[800] : '#ffffff',
+                //   borderColor: isDark ? colors.neutral[700] : 'rgba(0,0,0,0.05)'
+                // }}
                 >
                   <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 mx-auto">
                     <Icon className="text-purple-500" size={24} />
