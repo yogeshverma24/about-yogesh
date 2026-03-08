@@ -78,7 +78,7 @@ export default function ServicesSection() {
             }}>
             Our Expertise
           </span>
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6" style={{ color: textPrimary }}>
+          <h2 className="text-4xl md:text-4xl font-extrabold tracking-tight mb-6" style={{ color: textPrimary }}>
             Explore Our <span style={{ color: colors.primary[500] }}>Services</span>
           </h2>
           <p className="text-lg leading-relaxed" style={{ color: textSecondary }}>

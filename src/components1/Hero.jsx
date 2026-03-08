@@ -50,7 +50,7 @@ const Hero = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-4xl sm:text-5xl md:text-6xl xl:text-[78px] font-semibold xl:leading-[90px] max-w-5xl"
+        className="text-4xl sm:text-5xl md:text-5xl xl:text-[78px] font-semibold xl:leading-[90px] max-w-5xl"
       >
         We Are{" "}
         <span

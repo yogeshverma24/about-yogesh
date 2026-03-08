@@ -61,7 +61,7 @@ export default function DigitalProductsSection() {
             Our Impact
           </span>
           
-          <h2 className="text-5xl md:text-5xl font-black leading-[1.2] mb-8 tracking-tight" style={{ color: textPrimary }}>
+          <h2 className="text-5xl md:text-4xl font-black leading-[1.2] mb-8 tracking-tight" style={{ color: textPrimary }}>
             Digital Products Built With{' '}
             <span style={{ color: colors.primary[500] }}>Purpose</span>
           </h2>
@@ -138,7 +138,7 @@ function AnimatedStat({ value, suffix, label, textSecondary, isDark }: any) {
 
       <div className="flex flex-col items-center justify-center">
         <motion.div
-          className="text-5xl md:text-5xl font-black mb-4 bg-clip-text text-transparent flex"
+          className="text-5xl md:text-4xl font-black mb-4 bg-clip-text text-transparent flex"
           style={{ backgroundImage: colors.gradient.primary }}
         >
           <motion.span>{rounded}</motion.span>

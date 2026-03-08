@@ -144,7 +144,7 @@ export default function OurWorks() {
             The Portfolio
           </span>
 
-          <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-[1.1]" style={{ color: textPrimary }}>
+          <h1 className="text-5xl md:text-5xl font-black mb-8 tracking-tight leading-[1.1]" style={{ color: textPrimary }}>
             Digital <span className="text-purple-500">Showcase.</span>
           </h1>
 

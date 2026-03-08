@@ -66,7 +66,7 @@ export default function HowItWorksSection() {
             style={{ color: isDark ? colors.primary[400] : colors.primary[100] }}>
             WHAT'S THE FUNCTION
           </p>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight"
+          <h2 className="text-4xl md:text-4xl font-black tracking-tight"
             style={{ color: isDark ? colors.text.inverse : '#ffffff' }}>
             Let’s see how it works
           </h2>

@@ -108,7 +108,7 @@ export default function AboutPage() {
           </span>
 
           <h1
-            className="text-4xl md:text-6xl font-black mb-8 tracking-tight"
+            className="text-4xl md:text-5xl font-black mb-8 tracking-tight"
             style={{ color: textPrimary }}
           >
             About <span className="text-purple-500">Me</span>
@@ -137,7 +137,7 @@ export default function AboutPage() {
               style={{ borderColor, backgroundColor: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc' }}
             >
               <Calendar size={18} className="text-purple-500" />
-              <span className="text-sm font-bold" style={{ color: textPrimary }}>3+ Years Experience</span>
+              <span className="text-sm font-bold" style={{ color: textPrimary }}>5+ Years Experience</span>
             </div>
           </div>
         </motion.div>
@@ -167,7 +167,7 @@ export default function AboutPage() {
             </span>
 
             <h2
-              className="text-4xl md:text-5xl font-black mb-6 tracking-tight"
+              className="text-4xl md:text-4xl font-black mb-6 tracking-tight"
               style={{ color: textPrimary }}
             >
               Frameworks & <br />

@@ -22,24 +22,14 @@ import { useTheme } from 'next-themes';
 
 import light from '../../public/images/yogesh/light.png';
 import dark from '../../public/images/yogesh/dark.png';
+import { colors } from '@/lib/constants/colors'
 
-const colors = {
-  primary: {
-    50: '#f5f3ff',
-    100: '#ede9fe',
-    500: '#8b5cf6',
-    600: '#7c3aed',
-    900: '#4c1d95',
-  },
-  gradient: {
-    primary: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-    dark: 'radial-gradient(circle at top left, #1e1b4b, #0f172a)',
-    soft: 'radial-gradient(circle at top left, #f5f3ff, #ffffff)',
-  },
-  text: {
-    primary: '#0f172a',
-    secondary: '#475569',
-    inverse: '#f8fafc',
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4 }
   }
 };
 
@@ -130,20 +120,16 @@ export default function PortfolioPage() {
               <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: textSecondary }}>Available for Projects</span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter leading-tight" style={{ color: textPrimary }}>
+            <h1 className="text-5xl md:text-5xl xl:text-6xl font-black tracking-tighter leading-tight" style={{ color: textPrimary }}>
               I&apos;m <span className="text-transparent bg-clip-text" style={{ backgroundImage: colors.gradient.primary }}>Yogesh Kumar</span>
             </h1>
 
             <p className="mt-6 text-xl font-medium max-w-xl opacity-80" style={{ color: textSecondary }}>
-              iOS Developer specializing in high-performance apps, clean architecture, and delightful user experiences. Based in Gurugram.
-            </p>
+              Passionate about crafting seamless, beautiful, and high-performance iOS experiences. Focused on clean architecture, modern UI, and creating delightful digital products. Based in Gurugram (Haryana).            </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
               <button className="px-8 py-4 rounded-full text-white font-bold shadow-xl transition hover:scale-105 active:scale-95" style={{ background: colors.gradient.primary }}>
                 View My Work
-              </button>
-              <button className="px-8 py-4 rounded-full font-bold border-2 transition hover:bg-black/5 dark:hover:bg-white/5 active:scale-95" style={{ borderColor: colors.primary[500], color: colors.primary[500] }}>
-                Download CV
               </button>
             </div>
 
@@ -227,62 +213,85 @@ export default function PortfolioPage() {
       </section>
 
       <section className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight" style={{ color: textPrimary }}>
-              Featured <span style={{ color: colors.primary[500] }}>Portfolio</span>
-            </h2>
-            <div className="h-1.5 w-20 mt-4 rounded-full" style={{ background: colors.gradient.primary }} />
-          </div>
-          <p className="max-w-md font-medium text-lg" style={{ color: textSecondary }}>
-            A curated collection of production-ready applications focusing on user experience and system scalability.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((proj, i) => (
-            <motion.div
-              key={proj.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group p-8 rounded-[2.5rem] border backdrop-blur-sm flex flex-col justify-between h-[360px] transition-all hover:shadow-2xl hover:shadow-purple-500/5"
-              style={{ backgroundColor: cardBg, borderColor }}
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <span
+              className="inline-block px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
+              style={{
+                backgroundColor: isDark ? colors.primary[900] : colors.primary[100],
+                color: isDark ? colors.primary[300] : colors.primary[500],
+              }}
             >
-              <div>
-                <span className="text-[10px] font-bold text-purple-500 uppercase tracking-widest bg-purple-500/5 px-3 py-1 rounded-full">{proj.category}</span>
-                <h3 className="text-2xl font-bold mt-4" style={{ color: textPrimary }}>{proj.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed font-medium opacity-80" style={{ color: textSecondary }}>{proj.desc}</p>
-              </div>
-              <Link href={proj.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-purple-500 group-hover:gap-3 transition-all">
-                View Project <ExternalLink className="w-4 h-4" />
-              </Link>
-            </motion.div>
-          ))}
+              Professional Work
+            </span>
+
+            <h2
+              className="text-4xl md:text-4xl font-black mb-6 tracking-tight"
+              style={{ color: textPrimary }}
+            >
+              Featured
+              <span className="text-purple-500"> Projects</span>
+            </h2>
+
+            <p
+              className="max-w-3xl mx-auto text-lg md:text-xl font-medium mb-16 opacity-80"
+              style={{ color: textSecondary }}
+            >
+              Passionate about building high-performance mobile apps using iOS and React Native, focused on clean architecture, modern UI, and seamless user experiences.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((proj, i) => (
+              <motion.div
+                key={proj.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -10 }}
+                className="group p-8 rounded-[2.5rem] border backdrop-blur-sm flex flex-col justify-between h-[280px] transition-all hover:shadow-2xl hover:shadow-purple-500/5"
+                style={{ backgroundColor: cardBg, borderColor }}
+              >
+                <div>
+                  <span className="text-[10px] font-bold text-purple-500 uppercase tracking-widest bg-purple-500/5 px-3 py-1 rounded-full">{proj.category}</span>
+                  <h3 className="text-2xl font-bold mt-4" style={{ color: textPrimary }}>{proj.title}</h3>
+                  <p className="mt-4 text-sm leading-relaxed font-medium opacity-80" style={{ color: textSecondary }}>{proj.desc}</p>
+                </div>
+                <Link
+                  href={proj.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 text-sm font-bold text-purple-500 group-hover:gap-3 transition-all"
+                >                View Project <ExternalLink className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="py-32 px-6" style={{ background: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(139, 92, 246, 0.03)' }}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-8" style={{ color: textPrimary }}>
-              Core <br /> <span style={{ color: colors.primary[500] }}>Expertise</span>
+            <h2 className="text-4xl md:text-4xl font-black tracking-tight mb-8" style={{ color: textPrimary }}>
+              My Expertise <br /> <span style={{ color: colors.primary[500] }}> & Specializations</span>
             </h2>
             <div className="space-y-6">
               <div className="flex items-start gap-4 p-6 rounded-3xl transition-colors hover:bg-purple-500/5 group">
                 <Globe className="w-8 h-8 text-purple-500 shrink-0" />
                 <div>
                   <h4 className="font-bold text-lg" style={{ color: textPrimary }}>Global Standards</h4>
-                  <p className="text-sm opacity-60" style={{ color: textSecondary }}>Building apps that reach international markets with full localization and accessibility.</p>
+                  <p className="py-2 opacity-60" style={{ color: textSecondary }}>Building apps that reach international markets with full localization, accessibility support, and performance optimized for users across different regions and devices.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-6 rounded-3xl transition-colors hover:bg-blue-500/5">
                 <Terminal className="w-8 h-8 text-blue-500 shrink-0" />
                 <div>
                   <h4 className="font-bold text-lg" style={{ color: textPrimary }}>Rapid Prototyping</h4>
-                  <p className="text-sm opacity-60" style={{ color: textSecondary }}>Converting complex ideas into functional MVPs with clean, testable Swift code.</p>
+                  <p className="py-2 opacity-60" style={{ color: textSecondary }}>Turning complex ideas into functional MVPs quickly using clean, scalable, and testable code with modern development practices for iOS and cross-platform apps.</p>
                 </div>
               </div>
             </div>
@@ -304,7 +313,7 @@ export default function PortfolioPage() {
 
       <section className="py-32 px-6">
         <motion.div
-          className="max-w-5xl mx-auto rounded-[3rem] p-12 md:p-20 text-center border overflow-hidden relative"
+          className="max-w-7xl mx-auto rounded-[3rem] p-12 md:p-20 text-center border overflow-hidden relative"
           style={{ backgroundColor: cardBg, borderColor }}
         >
           <motion.div
@@ -315,28 +324,48 @@ export default function PortfolioPage() {
             <Star className="w-40 h-40 fill-purple-500" />
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-black mb-8" style={{ color: textPrimary }}>
-            Ready to build the next <br /> <span style={{ color: colors.primary[500] }}>App Store hit?</span>
+          <h2
+            className="text-4xl md:text-4xl font-black mb-6 tracking-tight"
+            style={{ color: textPrimary }}
+          >
+            Let’s Build Something <br />
+            <span style={{ color: colors.primary[500] }}>
+              Amazing Together
+            </span>
           </h2>
+
+          <p
+            className="max-w-4xl mx-auto text-lg md:text-xl font-medium opacity-80 mb-10 my-10"
+            style={{ color: textSecondary }}
+          >
+            I'm available for freelance projects including mobile app development,
+            MVP development, and scalable product builds using iOS and React Native.
+            If you have an idea or product in mind, let's discuss how we can bring it
+            to life.
+          </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="mailto:yogesh@example.com"
-              className="inline-flex items-center justify-center gap-2 rounded-full px-10 py-4 font-bold text-white transition-all shadow-xl hover:shadow-purple-500/20 active:scale-95"
+              className="inline-flex items-center justify-center gap-2 rounded-full px-10 py-4 font-bold text-white transition-all shadow-xl hover:shadow-purple-500/20 hover:scale-105 active:scale-95"
               style={{ background: colors.gradient.primary }}
             >
-              Hire Me <Mail className="w-5 h-5" />
+              Start a Project <Mail className="w-5 h-5" />
             </Link>
+
             <button
-              className="inline-flex items-center justify-center rounded-full px-10 py-4 font-bold transition-all border-2 hover:bg-black/5 active:scale-95"
+              className="inline-flex items-center justify-center rounded-full px-10 py-4 font-bold transition-all border-2 hover:bg-black/5 hover:scale-105 active:scale-95"
               style={{ borderColor, color: textPrimary }}
             >
-              Get in Touch
+              Schedule a Discussion
             </button>
           </div>
 
-          <p className="mt-12 text-sm font-bold opacity-40 uppercase tracking-[0.3em]" style={{ color: textSecondary }}>
-            © 2026 Yogesh Kumar • Gurugram
+          <p
+            className="mt-12 text-sm font-bold opacity-40 uppercase tracking-[0.3em]"
+            style={{ color: textSecondary }}
+          >
+            © 2026 Yogesh Kumar • Freelance Mobile Developer
           </p>
         </motion.div>
       </section>

@@ -117,7 +117,7 @@ export default function WhatWeDo() {
           </span>
 
           <h1
-            className="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-[1.1]"
+            className="text-5xl md:text-5xl font-black mb-8 tracking-tight leading-[1.1]"
             style={{ color: textPrimary }}
           >
             Full Stack <span className="text-purple-500">Mastery.</span>
@@ -216,7 +216,7 @@ export default function WhatWeDo() {
       </section>
 
       {/* CORE COMPETENCIES GRID */}
-      <section className="py-24 bg-slate-50/50 dark:bg-white/[0.02] border-y border-white/5">
+      <section className="py-30 bg-slate-50/50 dark:bg-white/[0.02] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
             <h2 className="text-4xl font-black mb-16">Technical Mastery</h2>
@@ -233,11 +233,11 @@ export default function WhatWeDo() {
                   key={i} 
                   variants={staggerItem}
                   whileHover={{ y: -10 }}
-                  className="p-8 rounded-3xl border transition-all duration-300"
-                  style={{ 
-                    backgroundColor: isDark ? colors.neutral[800] : '#ffffff',
-                    borderColor: isDark ? colors.neutral[700] : 'rgba(0,0,0,0.05)'
-                  }}
+                  // className="p-8 rounded-3xl border transition-all duration-300"
+                  // style={{ 
+                  //   backgroundColor: isDark ? colors.neutral[800] : '#ffffff',
+                  //   borderColor: isDark ? colors.neutral[700] : 'rgba(0,0,0,0.05)'
+                  // }}
                 >
                   <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 mx-auto">
                     <Icon className="text-purple-500" size={24} />
