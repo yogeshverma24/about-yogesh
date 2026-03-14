@@ -74,7 +74,7 @@ const stats = [
 const categories = [
   { label: 'All Work', value: 'all' },
   { label: 'Web Platforms', value: 'web' }, // DelegateSpace, Catanarry, DeleateHost, VKS 
-  { label: 'MVP', value: 'mvp' }, // Spinny Clone, Social Media Clone, Bundle script
+  { label: 'MVP', value: 'mvp' }, // Spinny Clone, Social Media Clone, Bundle script, just home
   { label: 'Mobile Apps', value: 'mobile' }, // Music Player, Social Media app, Car Play, Muslim pro
   { label: 'Products', value: 'product' }, // DelegateCampus, Task Manager
 ]
@@ -274,7 +274,6 @@ export default function OurWorks() {
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                       />
 
-                      {/* Hover Overlay */}
                       <motion.div
                         className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center text-center p-6"
                       >
@@ -289,7 +288,6 @@ export default function OurWorks() {
 
                     </div>
 
-                    {/* Content */}
                     <div className="p-6">
 
                       <h3
