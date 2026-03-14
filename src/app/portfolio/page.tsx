@@ -80,100 +80,112 @@ const categories = [
 ]
 
 const projects = [
-  { 
-    id: 1, 
-    title: 'DelegateSpaces', 
-    category: 'web', 
-    image: '/images/portfolio/web/delegatespace.png', 
-    description: 'A modern multi-page website for an IT company that provides software development and technology services. The platform highlights company offerings, solutions, and expertise with a clean design, responsive layout, and well-structured pages for a professional digital presence.' 
+  {
+    id: 1,
+    title: 'DelegateSpaces',
+    category: 'web',
+    image: '/images/portfolio/web/delegatespace.png',
+    link: 'https://delegatespaces2.vercel.app/',
+    description: 'A modern multi-page website for an IT company that provides software development and technology services. The platform highlights company offerings, solutions, and expertise with a clean design, responsive layout, and well-structured pages for a professional digital presence.'
   },
 
-  { 
-    id: 2, 
-    title: 'Catenally', 
-    category: 'web', 
-    image: '/images/portfolio/web/catenally.png', 
-    description: 'A modern multi-page IT company website designed to showcase software solutions and services. The platform includes a sleek UI with both light and dark themes, responsive design, and well-organized sections that help businesses present their services professionally.' 
+  {
+    id: 2,
+    title: 'Catenally',
+    category: 'web',
+    image: '/images/portfolio/web/catenally.png',
+    link: 'https://catenally-y4.vercel.app/',
+    description: 'A modern multi-page IT company website designed to showcase software solutions and services. The platform includes a sleek UI with both light and dark themes, responsive design, and well-organized sections that help businesses present their services professionally.'
   },
 
-  { 
-    id: 3, 
-    title: 'DelegateHost', 
-    category: 'web', 
-    image: '/images/portfolio/web/delegatehost.png', 
-    description: 'A complete multi-page website for a hosting and technology services provider. It presents hosting plans, technical services, and support features with a modern design, structured pages, and responsive layout to ensure a seamless browsing experience.' 
+  {
+    id: 3,
+    title: 'DelegateHost',
+    category: 'web',
+    image: '/images/portfolio/web/delegatehost.png',
+    link: 'https://delegatehost.vercel.app/',
+    description: 'A complete multi-page website for a hosting and technology services provider. It presents hosting plans, technical services, and support features with a modern design, structured pages, and responsive layout to ensure a seamless browsing experience.'
   },
 
-  { 
-    id: 4, 
-    title: 'VSK Global Infotech', 
-    category: 'web', 
-    image: '/images/portfolio/web/vks.png', 
-    description: 'A job portal website for a recruitment and job provider company. Users can search, explore, and apply for job opportunities while the admin panel allows administrators to manage job listings, applications, and candidate data efficiently.' 
+  {
+    id: 4,
+    title: 'VSK Global Infotech',
+    category: 'web',
+    image: '/images/portfolio/web/vks.png',
+    link: 'https://vks-web.vercel.app/',
+    description: 'A job portal website for a recruitment and job provider company. Users can search, explore, and apply for job opportunities while the admin panel allows administrators to manage job listings, applications, and candidate data efficiently.'
   },
 
-  { 
-    id: 5, 
-    title: 'Spinny Clone', 
-    category: 'mvp', 
-    image: '/images/portfolio/mvp/bundles.png', 
-    description: 'A car marketplace platform inspired by Spinny, featuring advanced car listings, detailed filtering options, and interactive 360-degree vehicle views. The system includes sharing features and a powerful admin panel to manage vehicles, listings, and platform content.' 
+  {
+    id: 5,
+    title: 'Spinny Clone',
+    category: 'mvp',
+    image: '/images/portfolio/mvp/spinny.png',
+    link: 'https://core-ecommerce-web.vercel.app/',
+    description: 'A car marketplace platform inspired by Spinny, featuring advanced car listings, detailed filtering options, and interactive 360-degree vehicle views. The system includes sharing features and a powerful admin panel to manage vehicles, listings, and platform content.'
   },
 
-  { 
-    id: 6, 
-    title: 'Bundle Script', 
-    category: 'mvp', 
-    image: '/images/portfolio/mvp/spinny.png', 
-    description: 'A community platform script designed to connect people and manage multiple activities in one place. It supports plugins such as event management, job listings, and eCommerce store features along with user authentication, making it a flexible community-building solution.' 
+  {
+    id: 6,
+    title: 'Bundle Script',
+    category: 'mvp',
+    image: '/images/portfolio/mvp/bundles.png',
+    link: 'https://ds-bundlescript-web.vercel.app/',
+    description: 'A community platform script designed to connect people and manage multiple activities in one place. It supports plugins such as event management, job listings, and eCommerce store features along with user authentication, making it a flexible community-building solution.'
   },
 
-  { 
-    id: 7, 
-    title: 'Just Home', 
-    category: 'mvp', 
-    image: '/images/portfolio/mvp/justhome.png', 
-    description: 'A real estate software solution with a multi-page website that showcases property listings with detailed property pages. The platform includes an admin panel for managing properties, listings, and updates, making property discovery simple and efficient.' 
+  {
+    id: 7,
+    title: 'Just Home',
+    category: 'mvp',
+    image: '/images/portfolio/mvp/justhome.png',
+    link: '/maintenance',
+    description: 'A real estate software solution with a multi-page website that showcases property listings with detailed property pages. The platform includes an admin panel for managing properties, listings, and updates, making property discovery simple and efficient.'
   },
 
-  { 
-    id: 8, 
-    title: 'Campus', 
-    category: 'product', 
-    image: '/images/portfolio/product/campus.png', 
-    description: 'A complete community mobile application with an integrated admin panel. The platform enables users to connect, share updates, and access features such as job postings, events, blogs, polls, and discussions within a single interactive environment.' 
+  {
+    id: 8,
+    title: 'Campus',
+    category: 'product',
+    image: '/images/portfolio/product/campus.png',
+    link: '/maintenance',
+    description: 'A complete community mobile application with an integrated admin panel. The platform enables users to connect, share updates, and access features such as job postings, events, blogs, polls, and discussions within a single interactive environment.'
   },
 
-  { 
-    id: 9, 
-    title: 'Task Manager', 
-    category: 'product', 
-    image: '/images/portfolio/product/taskmanager.png', 
-    description: 'A productivity platform similar to Jira that helps teams manage projects and daily work efficiently. It includes task management, leave tracking, attendance monitoring, and multiple collaboration features, supported by a powerful admin control system.' 
+  {
+    id: 9,
+    title: 'Task Manager',
+    category: 'product',
+    image: '/images/portfolio/product/taskmanager.png',
+    link: 'https://ds-task-manager-web.vercel.app/',
+    description: 'A productivity platform similar to Jira that helps teams manage projects and daily work efficiently. It includes task management, leave tracking, attendance monitoring, and multiple collaboration features, supported by a powerful admin control system.'
   },
 
-  { 
-    id: 10, 
-    title: 'Social Media', 
-    category: 'mobile', 
-    image: '/images/portfolio/mobile/social.png', 
-    description: 'A social media mobile application inspired by platforms like Instagram. It allows users to share posts, connect with others, explore content, and interact through likes, comments, and profiles within a modern and user-friendly mobile experience.' 
+  {
+    id: 10,
+    title: 'Social Media',
+    category: 'mobile',
+    image: '/images/portfolio/mobile/social.png',
+    link: '/maintenance',
+    description: 'A social media mobile application inspired by platforms like Instagram. It allows users to share posts, connect with others, explore content, and interact through likes, comments, and profiles within a modern and user-friendly mobile experience.'
   },
 
-  { 
-    id: 11, 
-    title: 'Carplay', 
-    category: 'mobile', 
-    image: '/images/portfolio/mobile/carplay.png', 
-    description: 'A native iOS application built with Apple CarPlay integration, designed to provide a safe and convenient in-car experience. The app enables drivers to access key features, navigation support, and media functionality directly from the vehicle interface.' 
+  {
+    id: 11,
+    title: 'Carplay',
+    category: 'mobile',
+    image: '/images/portfolio/mobile/carplay.png',
+    link: '/maintenance',
+    description: 'A native iOS application built with Apple CarPlay integration, designed to provide a safe and convenient in-car experience. The app enables drivers to access key features, navigation support, and media functionality directly from the vehicle interface.'
   },
 
-  { 
-    id: 12, 
-    title: 'Music Player', 
-    category: 'mobile', 
-    image: '/images/portfolio/mobile/music.png', 
-    description: 'A cross-platform mobile music player application for iOS and Android that allows users to stream and play music seamlessly. The platform includes core music features along with an admin panel to manage songs, content, and application settings.' 
+  {
+    id: 12,
+    title: 'Music Player',
+    category: 'mobile',
+    image: '/images/portfolio/mobile/music.png',
+    link: '/maintenance',
+    description: 'A cross-platform mobile music player application for iOS and Android that allows users to stream and play music seamlessly. The platform includes core music features along with an admin panel to manage songs, content, and application settings.'
   }
 ]
 
@@ -299,8 +311,10 @@ export default function OurWorks() {
           </motion.div>
 
           <motion.div
-            className="flex justify-center flex-wrap gap-4 mb-12"
-            initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="sticky top-20 z-40 flex justify-center flex-wrap gap-4 mb-12 py-4 backdrop-blur-md"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
             variants={staggerContainer}
           >
             {categories.map(cat => (
@@ -342,7 +356,7 @@ export default function OurWorks() {
                   }}
                 >
 
-                  <Link href={`/projects/${project.id}`} target="_blank">
+                  <Link href={project.link} target="_blank">
 
                     <div className="relative h-[270px] overflow-hidden">
 
