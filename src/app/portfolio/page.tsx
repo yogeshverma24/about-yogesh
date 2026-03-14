@@ -88,13 +88,14 @@ const projects = [
   
   { id: 5, title: 'Spinny Clone', category: 'mvp', image: '/images/portfolio/mvp/bundles.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
   { id: 6, title: 'Bundle Script', category: 'mvp', image: '/images/portfolio/mvp/spinny.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 7, title: 'Just Home', category: 'mvp', image: '/images/portfolio/mvp/justhome.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
 
-  { id: 7, title: 'Campus', category: 'product', image: '/images/portfolio/product/campus.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 8, title: 'Task Manager', category: 'product', image: '/images/portfolio/product/taskmanager.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 8, title: 'Campus', category: 'product', image: '/images/portfolio/product/campus.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 9, title: 'Task Manager', category: 'product', image: '/images/portfolio/product/taskmanager.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
 
-  { id: 9, title: 'Social Media', category: 'mobile', image: '/images/portfolio/mobile/social.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 10, title: 'Carplay', category: 'mobile', image: '/images/portfolio/mobile/carplay.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
-  { id: 11, title: 'Music Player', category: 'mobile', image: '/images/portfolio/mobile/music.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 10, title: 'Social Media', category: 'mobile', image: '/images/portfolio/mobile/social.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 11, title: 'Carplay', category: 'mobile', image: '/images/portfolio/mobile/carplay.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
+  { id: 12, title: 'Music Player', category: 'mobile', image: '/images/portfolio/mobile/music.png', description: 'We deliver solutions that offer high levels of consistency in quality and performance.' },
 ]
 
 export default function OurWorks() {
