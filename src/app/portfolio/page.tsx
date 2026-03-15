@@ -85,7 +85,7 @@ const projects = [
     title: 'DelegateSpaces',
     category: 'web',
     image: '/images/portfolio/web/delegatespace.png',
-    link: 'https://delegatespaces2.vercel.app/',
+    link: 'https://delegatespace.vercel.app/',
     description: 'A modern multi-page website for an IT company that provides software development and technology services. The platform highlights company offerings, solutions, and expertise with a clean design, responsive layout, and well-structured pages for a professional digital presence.'
   },
 
@@ -94,7 +94,7 @@ const projects = [
     title: 'Catenally',
     category: 'web',
     image: '/images/portfolio/web/catenally.png',
-    link: 'https://catenally-y4.vercel.app/',
+    link: 'https://catenally-y5.vercel.app/',
     description: 'A modern multi-page IT company website designed to showcase software solutions and services. The platform includes a sleek UI with both light and dark themes, responsive design, and well-organized sections that help businesses present their services professionally.'
   },
 
@@ -148,7 +148,7 @@ const projects = [
     title: 'Campus',
     category: 'product',
     image: '/images/portfolio/product/campus.png',
-    link: '/maintenance',
+    link: 'https://delegatecampus1.vercel.app/',
     description: 'A complete community mobile application with an integrated admin panel. The platform enables users to connect, share updates, and access features such as job postings, events, blogs, polls, and discussions within a single interactive environment.'
   },
 
