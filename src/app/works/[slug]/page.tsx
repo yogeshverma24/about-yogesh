@@ -5,7 +5,7 @@ import { projects } from '@/lib/data/projects'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { colors } from '@/lib/constants/colors'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 
 import {
@@ -26,6 +26,7 @@ import {
   ExternalLink,
   ChevronRight
 } from 'lucide-react'
+import { useState } from 'react'
 
 const iconMap: any = {
   Globe: <Globe size={18} />,
@@ -69,6 +70,7 @@ export default function ProjectDetails() {
   const borderColor = isDark ? colors.neutral[700] : colors.neutral[200]
   const cardBg = isDark ? colors.neutral[800] : colors.background.primary
   const project = projects.find(p => p.slug === slug)
+  const [activeAdminTab, setActiveAdminTab] = useState(0)
 
   if (!project) return <div className="pt-40 text-center">Project Not Found</div>
 
@@ -281,67 +283,104 @@ export default function ProjectDetails() {
             </section>
           )}
 
-          {project.adminPanel && (
-            <div className="my-15">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-purple-500/10">
-                  <Server className="text-purple-500" size={20} />
-                </div>
-                <h2 className="text-2xl font-black tracking-tight">Admin Control Center</h2>
+        {project.adminPanel && (
+          <div className="mt-32">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="p-2 rounded-xl bg-purple-500/10">
+                <Server className="text-purple-500" size={20} />
               </div>
+              <h2 className="text-2xl font-black tracking-tight">Admin Control Center</h2>
+            </div>
 
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-5">
-                  <div className="py-2">
-                    <p className="text-lg opacity-70 leading-relaxed" style={{ color: textSecondary }}>
-                      {project.adminPanel.description}
-                    </p>
-                  </div>
+            <div className="grid lg:grid-cols-12 gap-12 items-start">
+              {/* LEFT: INTERACTIVE LABELS (5 Columns) */}
+              <div className="lg:col-span-5 space-y-3">
+                <div className="pb-6">
+                  <p className="text-lg opacity-70 leading-relaxed" style={{ color: textSecondary }}>
+                    {project.adminPanel.description}
+                  </p>
+                </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {project.adminPanel.capabilities.map((cap: any, index: number) => (
-                      <div
+                <div className="grid grid-cols-1 gap-3">
+                  {project.adminPanel.capabilities.map((cap: any, index: number) => {
+                    const isActive = activeAdminTab === index;
+                    return (
+                      <button
                         key={index}
-                        className="p-5 rounded-2xl border transition-all"
+                        onClick={() => setActiveAdminTab(index)}
+                        className={`group relative p-5 rounded-2xl border text-left transition-all duration-300 ${
+                          isActive ? 'shadow-lg' : 'hover:bg-purple-500/5'
+                        }`}
                         style={{
-                          borderColor,
-                          background: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.02)'
+                          borderColor: isActive ? colors.primary[500] : borderColor,
+                          background: isActive 
+                            ? (isDark ? 'rgba(168, 85, 247, 0.1)' : 'rgba(168, 85, 247, 0.05)') 
+                            : 'transparent'
                         }}
                       >
-                        <span className="text-[10px] uppercase tracking-widest text-purple-500 font-black block mb-2">
-                          {cap.label}
-                        </span>
-                        <p className="text-xs font-medium leading-relaxed opacity-80">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className={`text-[10px] uppercase tracking-widest font-black transition-colors ${
+                            isActive ? 'text-purple-500' : 'opacity-50'
+                          }`}>
+                            {cap.label}
+                          </span>
+                          {isActive && (
+                            <motion.div layoutId="activeDot" className="h-1.5 w-1.5 rounded-full bg-purple-500" />
+                          )}
+                        </div>
+                        <p className={`text-xs font-medium leading-relaxed transition-opacity ${
+                          isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-80'
+                        }`}>
                           {cap.feature}
                         </p>
-                      </div>
-                    ))}
-                  </div>
+                      </button>
+                    )
+                  })}
                 </div>
+              </div>
 
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="relative group"
-                >
-                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-[2.5rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
-                  <div
-                    className="relative rounded-[2rem] overflow-hidden border aspect-[16/10] shadow-2xl"
+              {/* RIGHT: ANIMATED SCREENSHOT PREVIEW (7 Columns) */}
+              <div className="lg:col-span-7 sticky top-32">
+                <div className="relative group">
+                  {/* Background Glow */}
+                  <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-[3rem] blur-2xl opacity-50" />
+                  
+                  <div 
+                    className="relative rounded-[2.5rem] overflow-hidden border aspect-[16/11] shadow-2xl bg-black/5"
                     style={{ borderColor }}
                   >
-                    <Image
-                      src={project.adminPanel.image}
-                      alt="Admin Dashboard"
-                      fill
-                      className="object-cover object-top hover:scale-105 transition duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeAdminTab}
+                        initial={{ opacity: 0, x: 20, filter: 'blur(10px)' }}
+                        animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                        exit={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="absolute inset-0"
+                      >
+                        <Image
+                          src={project.adminPanel.capabilities[activeAdminTab].image}
+                          alt={project.adminPanel.capabilities[activeAdminTab].label}
+                          fill
+                          className="object-cover object-top"
+                          priority
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* Dashboard Glass Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    
+                    {/* Bottom Label Tag */}
+                    <div className="absolute bottom-6 left-6 px-4 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-widest">
+                      Live Preview: {project.adminPanel.capabilities[activeAdminTab].label}
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
-          )}
+          </div>
+        )}
         </div>
       </section>
 

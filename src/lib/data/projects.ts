@@ -10,15 +10,37 @@ export const projects = [
     hero: "/images/portfolio/web/delegatespace.png",
     adminPanel: {
       description: "A comprehensive management suite designed for non-technical administrators to maintain the entire digital ecosystem without touching a single line of code.",
-      image: "/images/portfolio/web/ds/admin.png",
       capabilities: [
-        { label: "Content Engine", feature: "Real-time CMS for dynamic case studies and service updates." },
-        { label: "Lead Tracking", feature: "Integrated dashboard to view and export inquiries from enterprise funnels." },
-        { label: "Asset Manager", feature: "Drag-and-drop media library with automated image optimization." },
-        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." },
-        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." },
-        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." }
-
+        { 
+          label: "Dashboard", 
+          feature: "Real-time analytics and overview of system-wide activity at a glance.",
+          image: "/images/portfolio/web/ds/dashboard.png" 
+        },
+        { 
+          label: "Users", 
+          feature: "Granular user management with role-based access control and activity logs.",
+          image: "/images/portfolio/web/ds/users.png" 
+        },
+        { 
+          label: "Events", 
+          feature: "Complete event lifecycle management from creation to attendee tracking.",
+          image: "/images/portfolio/web/ds/events.png" 
+        },
+        { 
+          label: "Jobs", 
+          feature: "Enterprise-grade career portal management and applicant tracking system.",
+          image: "/images/portfolio/web/ds/jobs.png" 
+        },
+        { 
+          label: "Notes", 
+          feature: "Interactive Q&A engine to manage community engagement and knowledge base.",
+          image: "/images/portfolio/web/ds/notes.png" 
+        },
+        { 
+          label: "Polls", 
+          feature: "Real-time polling system with automated data visualization and export.",
+          image: "/images/portfolio/web/ds/polls.png" 
+        }
       ]
     },
     gallery: [
