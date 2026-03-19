@@ -124,7 +124,7 @@ export default function ProjectDetails() {
           <div className="max-w-7xl mx-auto space-y-4">
             <BorderCard title="The Mission" icon={Layers} borderColor={borderColor} textPrimary={textPrimary} cardBg={cardBg}>
               <div className="relative">
-                <p className="leading-relaxed  font-medium opacity-90" style={{ color: textSecondary }}>
+                <p className="leading-relaxed text-[16px] font-medium opacity-90" style={{ color: textSecondary }}>
                   {project.overview}
                 </p>
               </div>
@@ -229,8 +229,8 @@ export default function ProjectDetails() {
               </div>
 
               <div className={`grid gap-6 ${project.deviceType === 'mobile'
-                  ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                 }`}>
                 {project.gallery.map((img, index) => (
                   <motion.div
@@ -280,10 +280,72 @@ export default function ProjectDetails() {
               </div>
             </section>
           )}
+
+          {project.adminPanel && (
+            <div className="my-15">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-purple-500/10">
+                  <Server className="text-purple-500" size={20} />
+                </div>
+                <h2 className="text-2xl font-black tracking-tight">Admin Control Center</h2>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-5">
+                  <div className="py-2">
+                    <p className="text-lg opacity-70 leading-relaxed" style={{ color: textSecondary }}>
+                      {project.adminPanel.description}
+                    </p>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {project.adminPanel.capabilities.map((cap: any, index: number) => (
+                      <div
+                        key={index}
+                        className="p-5 rounded-2xl border transition-all"
+                        style={{
+                          borderColor,
+                          background: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.02)'
+                        }}
+                      >
+                        <span className="text-[10px] uppercase tracking-widest text-purple-500 font-black block mb-2">
+                          {cap.label}
+                        </span>
+                        <p className="text-xs font-medium leading-relaxed opacity-80">
+                          {cap.feature}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="relative group"
+                >
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-[2.5rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
+                  <div
+                    className="relative rounded-[2rem] overflow-hidden border aspect-[16/10] shadow-2xl"
+                    style={{ borderColor }}
+                  >
+                    <Image
+                      src={project.adminPanel.image}
+                      alt="Admin Dashboard"
+                      fill
+                      className="object-cover object-top hover:scale-105 transition duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="py-10 pb-30 text-center relative overflow-hidden">
+      <section className="py-20 pb-30 text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-purple-600/[0.03] -z-10"></div>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
           <h3 className="text-5xl md:text-5xl font-black mb-8 tracking-tighter">

@@ -8,6 +8,19 @@ export const projects = [
     category: "web",
     deviceType: "web",
     hero: "/images/portfolio/web/delegatespace.png",
+    adminPanel: {
+      description: "A comprehensive management suite designed for non-technical administrators to maintain the entire digital ecosystem without touching a single line of code.",
+      image: "/images/portfolio/web/ds/admin.png",
+      capabilities: [
+        { label: "Content Engine", feature: "Real-time CMS for dynamic case studies and service updates." },
+        { label: "Lead Tracking", feature: "Integrated dashboard to view and export inquiries from enterprise funnels." },
+        { label: "Asset Manager", feature: "Drag-and-drop media library with automated image optimization." },
+        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." },
+        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." },
+        { label: "SEO Dashboard", feature: "Instant metadata and OG tag management for every single page." }
+
+      ]
+    },
     gallery: [
       "/images/portfolio/web/ds/1.png",
       "/images/portfolio/web/ds/2.png",
