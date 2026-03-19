@@ -1,88 +1,79 @@
+// @/lib/data/projects.ts
+import { Globe, Code2, Palette, Zap, Server, Smartphone } from 'lucide-react'
+
 export const projects = [
-    {
-      slug: "delegatespaces",
-      title: "DelegateSpaces",
-      category: "web",
+  {
+    slug: "delegatespaces",
+    title: "DelegateSpaces",
+    category: "web",
+    deviceType: "web",
+    hero: "/images/portfolio/web/delegatespace.png",
+    gallery: [
+      "/images/portfolio/web/ds/1.png",
+      "/images/portfolio/web/ds/2.png",
+      "/images/portfolio/web/ds/3.png"
+    ],
+    demoVideo: "/videos/demo.mp4",
+    description: 
+      "A premium digital ecosystem engineered for a global IT consultancy, focusing on high-conversion storytelling, ultra-fast performance, and a sophisticated brand identity that resonates with enterprise-level clients.",
     
-      hero: "/images/portfolio/web/delegatespace.png",
+    overview: 
+      `DelegateSpaces was architected to serve as more than just a website—it is a digital headquarters. The primary goal was to bridge the gap between complex software solutions and executive-level decision-making. 
+
+      The project involved creating a custom design system from the ground up, ensuring every interaction felt intentional. By leveraging Next.js App Router and Server Components, we achieved a near-instantaneous browsing experience. We focused heavily on "Information Architecture," ensuring that a CTO looking for technical depth and a CEO looking for business value could both find their answers within three clicks.`,
     
-      gallery: [
-        "/images/portfolio/web/delegatespace.png",
-        "/images/portfolio/web/delegatespace-2.png",
-        "/images/portfolio/web/delegatespace-3.png"
-      ],
+    problem: 
+      `The previous digital presence faced three critical bottlenecks:
+      • Credibility Gap: The design didn't reflect the high-end nature of their software engineering capabilities.
+      • Performance Friction: High-resolution assets were causing significant layout shifts and slow time-to-interactive scores.
+      • Lead Decay: The contact flow was generic, failing to capture specific project requirements from high-intent enterprise leads.`,
     
-      demoVideo: "/videos/demo.mp4",
+    solution: 
+      `We implemented a "Performance-First" design philosophy. This included:
+      • Hybrid Rendering: Using SSR for dynamic service pages and SSG for static educational content to ensure 100/100 Lighthouse scores.
+      • Motion Storytelling: Using Framer Motion to create "Scroll-Triggered Declarations" that highlight key statistics as the user explores.
+      • Enterprise Lead Funnels: A multi-step, logic-based contact system that categorizes leads by industry and budget before they even reach the sales team.`,
     
-      description:
-        "DelegateSpaces is a modern IT services and software development company website built to showcase enterprise digital capabilities, technical expertise, and scalable solutions through a fast, responsive, and visually refined platform.",
+    techStack: [
+      { name: "Next.js 14", icon: "Globe" },
+      { name: "TypeScript", icon: "Code2" },
+      { name: "TailwindCSS", icon: "Palette" },
+      { name: "Framer Motion", icon: "Zap" },
+      { name: "Node.js API", icon: "Server" },
+      { name: "Mobile First", icon: "Smartphone" }
+    ],
     
-      overview:
-    `DelegateSpaces was designed and developed as a high-performance digital presence for a modern technology company. 
-    The objective of the platform is not only to present services, but to communicate credibility, innovation, and technical expertise to potential enterprise clients. The website focuses on strong visual hierarchy, clean layouts, modern typography, and subtle motion design to create an engaging browsing experience. Each section is structured to guide users through the company’s story — from services and solutions to technical expertise and client engagement.
+    features: [
+      "Dynamic Case Study CMS for real-time project updates",
+      "Interactive Tech-Stack visualization components",
+      "Advanced SEO orchestration with automated Metadata generation",
+      "Global Edge Middleware for localized content delivery",
+      "Custom-built Iconography and 3D Asset integration",
+      "Accessible UI (WCAG 2.1 compliant) for inclusive browsing"
+    ],
     
-    Performance was also a core requirement. By using Next.js server rendering, optimized images, and modern frontend practices, the platform ensures extremely fast page loads while maintaining rich visual presentation.
-    
-    The final result is a scalable corporate website that successfully combines design elegance with technical performance.`,
-    
-      problem:
-    `Many IT service company websites fail to properly communicate their expertise. 
-    
-    Common problems include:
-    • Slow loading pages due to unoptimized assets  
-    • Overly complex layouts that confuse visitors  
-    • Lack of clear service explanations  
-    • Poor mobile responsiveness  
-    • Weak brand storytelling
-    
-    These issues often reduce credibility and cause potential clients to leave the website before understanding the company’s capabilities.`,
-    
-      solution:
-    `The platform was built with a performance-first approach using modern web technologies. Next.js was selected for its powerful server rendering and optimization capabilities. TailwindCSS enabled the creation of a scalable design system while maintaining development speed and consistency across components.
-    
-    Framer Motion was used to introduce subtle animations that enhance user engagement without sacrificing performance.
-    
-    The final solution delivers:
-    • Fast loading pages  
-    • Clean and structured service presentation  
-    • Fully responsive layouts  
-    • Smooth interactive UI  
-    • A strong modern brand identity`,
-    
-      techStack: [
-        "Next.js",
-        "TypeScript",
-        "TailwindCSS",
-        "Framer Motion",
-        "Vercel",
-        "Responsive Design"
-      ],
-    
-      features: [
-        "Fully responsive multi-page layout",
-        "Modern UI with dark & light theme support",
-        "Smooth animations powered by Framer Motion",
-        "Optimized SEO page structure",
-        "Fast loading performance with optimized images",
-        "Service and solutions showcase",
-        "Lead generation contact forms",
-        "Reusable design system components"
-      ],
-    
-      useCases: [
-        "IT service companies",
-        "Software development agencies",
-        "Technology startups",
-        "Digital consulting firms"
-      ],
-    
-      results: [
-        "Website loads in under 1 second",
-        "Improved client engagement through modern UI",
-        "SEO optimized architecture for search visibility",
-        "Professional digital presence for enterprise clients"
-      ],
-    
-      link: "https://delegatespace.vercel.app/"
-    }
-    ]
+    impact: [
+      { 
+        label: "Lead Generation", 
+        value: "Convert Leads", 
+        description: "Multi-step logic funnels designed to capture enterprise-grade inquiries effortlessly." 
+      },
+      { 
+        label: "SEO Engine", 
+        value: "Scale Content", 
+        description: "Built-in dynamic metadata orchestration to rank high-intent keywords automatically." 
+      },
+      { 
+        label: "Performance", 
+        value: "Global Speed", 
+        description: "Hybrid rendering ensures the product scales across regions without latency." 
+      },
+      { 
+        label: "Brand Identity", 
+        value: "Executive UI", 
+        description: "A design system that adapts to light/dark modes while maintaining premium authority." 
+      }
+    ],
+    link: "https://delegatespace.vercel.app/"
+  }
+]
