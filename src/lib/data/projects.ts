@@ -19,10 +19,7 @@ export const projects = [
     
       overview:
     `DelegateSpaces was designed and developed as a high-performance digital presence for a modern technology company. 
-    
-    The objective of the platform is not only to present services, but to communicate credibility, innovation, and technical expertise to potential enterprise clients.
-    
-    The website focuses on strong visual hierarchy, clean layouts, modern typography, and subtle motion design to create an engaging browsing experience. Each section is structured to guide users through the company’s story — from services and solutions to technical expertise and client engagement.
+    The objective of the platform is not only to present services, but to communicate credibility, innovation, and technical expertise to potential enterprise clients. The website focuses on strong visual hierarchy, clean layouts, modern typography, and subtle motion design to create an engaging browsing experience. Each section is structured to guide users through the company’s story — from services and solutions to technical expertise and client engagement.
     
     Performance was also a core requirement. By using Next.js server rendering, optimized images, and modern frontend practices, the platform ensures extremely fast page loads while maintaining rich visual presentation.
     
@@ -32,7 +29,6 @@ export const projects = [
     `Many IT service company websites fail to properly communicate their expertise. 
     
     Common problems include:
-    
     • Slow loading pages due to unoptimized assets  
     • Overly complex layouts that confuse visitors  
     • Lack of clear service explanations  
@@ -42,14 +38,11 @@ export const projects = [
     These issues often reduce credibility and cause potential clients to leave the website before understanding the company’s capabilities.`,
     
       solution:
-    `The platform was built with a performance-first approach using modern web technologies.
-    
-    Next.js was selected for its powerful server rendering and optimization capabilities. TailwindCSS enabled the creation of a scalable design system while maintaining development speed and consistency across components.
+    `The platform was built with a performance-first approach using modern web technologies. Next.js was selected for its powerful server rendering and optimization capabilities. TailwindCSS enabled the creation of a scalable design system while maintaining development speed and consistency across components.
     
     Framer Motion was used to introduce subtle animations that enhance user engagement without sacrificing performance.
     
     The final solution delivers:
-    
     • Fast loading pages  
     • Clean and structured service presentation  
     • Fully responsive layouts  

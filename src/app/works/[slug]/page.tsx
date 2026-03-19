@@ -91,11 +91,8 @@ export default function ProjectDetails() {
             priority
             className="rounded-3xl hover:scale-[1.02] transition"
           />
-
         </div>
-
       </section>
-
 
       <section className="py-24 max-w-6xl mx-auto px-6">
 
@@ -114,9 +111,7 @@ export default function ProjectDetails() {
           <p className="leading-relaxed text-lg whitespace-pre-line" style={{ color: textSecondary }}>
             {project.overview}
           </p>
-
         </motion.div>
-
       </section>
 
 
@@ -145,11 +140,8 @@ export default function ProjectDetails() {
           <p className="whitespace-pre-line" style={{ color: textSecondary }}>
             {project.solution}
           </p>
-
         </motion.div>
-
       </section>
-
 
       <section className="py-24 max-w-7xl mx-auto px-6">
 
@@ -158,30 +150,18 @@ export default function ProjectDetails() {
           <h2 className="text-3xl font-bold">Tech Stack</h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-
+        <div className="flex flex-wrap gap-3">
           {project.techStack.map((tech) => (
-
             <div
               key={tech}
-              className="flex items-center gap-4 p-6 rounded-2xl border transition hover:shadow-xl hover:-translate-y-1"
-              style={{borderColor,background:cardBg}}
+              className="flex items-center gap-2 px-4 py-2 rounded-full border text-sm hover:shadow-sm transition"
+              style={{ borderColor, background: cardBg }}
             >
-
-              <div className="text-xl">
-                {techIcons[tech]}
-              </div>
-
-              <span className="font-semibold">
-                {tech}
-              </span>
-
+              {techIcons[tech]}
+              {tech}
             </div>
-
           ))}
-
         </div>
-
       </section>
 
 
@@ -192,30 +172,15 @@ export default function ProjectDetails() {
           <h2 className="text-3xl font-bold">Key Features</h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-
-          {project.features.map(feature => (
-
-            <div
-              key={feature}
-              className="p-6 rounded-2xl border transition hover:shadow-xl hover:-translate-y-1"
-              style={{borderColor,background:cardBg}}
-            >
-
-              <CheckCircle2 className="text-purple-500 mb-3" />
-
-              <p style={{color:textSecondary}}>
-                {feature}
-              </p>
-
+        <div className="grid md:grid-cols-2 gap-4">
+          {project.features.map((f) => (
+            <div key={f} className="flex gap-3">
+              <CheckCircle2 className="text-purple-500 mt-1" size={18} />
+              <p style={{ color: textSecondary }}>{f}</p>
             </div>
-
           ))}
-
         </div>
-
       </section>
-
 
       {project.useCases && (
 
@@ -227,9 +192,7 @@ export default function ProjectDetails() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-
             {project.useCases.map(use => (
-
               <div
                 key={use}
                 className="p-6 rounded-2xl border"
@@ -239,15 +202,10 @@ export default function ProjectDetails() {
                 <p style={{color:textSecondary}}>
                   {use}
                 </p>
-
               </div>
-
             ))}
-
           </div>
-
         </section>
-
       )}
 
 
@@ -261,9 +219,7 @@ export default function ProjectDetails() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-
             {project.gallery.map((img) => (
-
               <Image
                 key={img}
                 src={img}
@@ -274,30 +230,23 @@ export default function ProjectDetails() {
               />
 
             ))}
-
           </div>
-
         </section>
-
       )}
-
 
       {project.demoVideo && (
 
         <section className="py-24 max-w-4xl mx-auto px-6">
-
           <div className="flex items-center gap-3 mb-12">
             <Video className="text-purple-500" />
             <h2 className="text-3xl font-bold">Demo Video</h2>
           </div>
 
           <div className="flex justify-center">
-
             <div
               className="w-[320px] md:w-[380px] rounded-3xl overflow-hidden border"
               style={{borderColor}}
             >
-
               <video
                 controls
                 playsInline
@@ -305,15 +254,10 @@ export default function ProjectDetails() {
               >
                 <source src={project.demoVideo} type="video/mp4" />
               </video>
-
             </div>
-
           </div>
-
         </section>
-
       )}
-
 
       <section className="py-24 max-w-7xl mx-auto px-6">
 
@@ -337,13 +281,9 @@ export default function ProjectDetails() {
               <p style={{color:textSecondary}}>
                 {result}
               </p>
-
             </div>
-
           ))}
-
         </div>
-
       </section>
 
 
@@ -364,9 +304,7 @@ export default function ProjectDetails() {
         >
           Visit Live Website
         </Link>
-
       </section>
-
     </div>
   )
 }
