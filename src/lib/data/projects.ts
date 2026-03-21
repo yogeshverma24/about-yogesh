@@ -857,37 +857,37 @@ export const projects = [
     hero: "/images/portfolio/product/campus.png",
   
     adminPanel: {
-      description: "A centralized control system designed to manage a full-scale community ecosystem, enabling administrators to oversee users, content, and platform activities seamlessly.",
+      description: "A comprehensive management suite designed for non-technical administrators to maintain the entire digital ecosystem without touching a single line of code.",
       capabilities: [
         { 
           label: "Dashboard", 
-          feature: "Real-time overview of user engagement, posts, events, and platform activity.",
-          image: "/images/portfolio/product/campus/dashboard.png" 
+          feature: "Real-time analytics and overview of system-wide activity at a glance.",
+          image: "/images/portfolio/web/ds/dashboard.png" 
         },
         { 
           label: "Users", 
-          feature: "Manage user profiles, roles, permissions, and activity monitoring.",
-          image: "/images/portfolio/product/campus/users.png" 
-        },
-        { 
-          label: "Posts", 
-          feature: "Moderate and manage user-generated content, feeds, and discussions.",
-          image: "/images/portfolio/product/campus/posts.png" 
-        },
-        { 
-          label: "Jobs", 
-          feature: "Create and manage job listings and applications within the platform.",
-          image: "/images/portfolio/product/campus/jobs.png" 
+          feature: "Granular user management with role-based access control and activity logs.",
+          image: "/images/portfolio/web/ds/users.png" 
         },
         { 
           label: "Events", 
-          feature: "Organize and track events with registrations and participation data.",
-          image: "/images/portfolio/product/campus/events.png" 
+          feature: "Complete event lifecycle management from creation to attendee tracking.",
+          image: "/images/portfolio/web/ds/events.png" 
         },
         { 
-          label: "Polls & Blogs", 
-          feature: "Control engagement features like polls, articles, and community content.",
-          image: "/images/portfolio/product/campus/content.png" 
+          label: "Jobs", 
+          feature: "Enterprise-grade career portal management and applicant tracking system.",
+          image: "/images/portfolio/web/ds/jobs.png" 
+        },
+        { 
+          label: "Notes", 
+          feature: "Interactive Q&A engine to manage community engagement and knowledge base.",
+          image: "/images/portfolio/web/ds/notes.png" 
+        },
+        { 
+          label: "Polls", 
+          feature: "Real-time polling system with automated data visualization and export.",
+          image: "/images/portfolio/web/ds/polls.png" 
         }
       ]
     },
