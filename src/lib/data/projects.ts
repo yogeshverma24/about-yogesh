@@ -1144,7 +1144,7 @@ export const projects = [
       "/images/portfolio/mobile/social/3.png"
     ],
   
-    // demoVideo: "/videos/demo.mp4",
+    demoVideo: "/videos/demo.mp4",
   
     description: 
       "A modern social media mobile application designed to deliver a seamless content-sharing and interaction experience with real-time engagement, intuitive UI, and scalable architecture.",
