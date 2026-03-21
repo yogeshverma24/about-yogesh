@@ -183,7 +183,7 @@ export default function ProjectDetails() {
             </div>
           </div>
 
-          <div className="mt-24 max-w-7xl mx-auto">
+          <div className="py-25 max-w-7xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {project.impact?.map((item: any, index: number) => (
                 <motion.div
@@ -222,7 +222,7 @@ export default function ProjectDetails() {
           </div>
 
           {project.gallery && (
-            <div className="mt-32">
+            <div className="py-25">
               <div className="flex items-center gap-3 mb-10">
                 <div className="p-2 rounded-xl bg-purple-500/10">
                   <Images className="text-purple-500" size={20} />
@@ -260,7 +260,7 @@ export default function ProjectDetails() {
           )}
 
           {project.demoVideo && (
-            <section className="py-24 max-w-7xl mx-auto px-6">
+            <section className="py-25 max-w-7xl mx-auto px-6">
               <div className="flex items-center gap-3 mb-12">
                 <Video className="text-purple-500" />
                 <h2 className="text-2xl font-bold">Demo Video</h2>
@@ -284,7 +284,7 @@ export default function ProjectDetails() {
           )}
 
         {project.adminPanel && (
-          <div className="mt-32">
+          <div className="py-25">
             <div className="flex items-center gap-3 mb-10">
               <div className="p-2 rounded-xl bg-purple-500/10">
                 <Server className="text-purple-500" size={20} />

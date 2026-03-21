@@ -14,6 +14,7 @@ import { colors } from '@/lib/constants/colors'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { projects } from '../../lib/data/projects'
 
 const easeOut = [0.22, 1, 0.36, 1] as const
 
@@ -189,53 +190,6 @@ const categories = [
 //   }
 // ]
 
-export const projects = [
-  {
-    slug: "delegatespaces",
-    title: "DelegateSpaces",
-    category: "web",
-    hero: "/images/portfolio/web/delegatespace.png",
-    demoVideo: "/videos/delegatespace-demo.mp4",
-
-    description:
-      "DelegateSpaces is a modern IT company website designed to present software services, solutions, and expertise with a professional digital presence.",
-
-    overview:
-      "The project focuses on creating a high-performance corporate website with clean UI, responsive layouts, and structured service pages that allow potential clients to explore offerings easily.",
-
-    techStack: [
-      "Next.js",
-      "TypeScript",
-      "TailwindCSS",
-      "Framer Motion",
-      "Vercel",
-    ],
-
-    features: [
-      "Modern responsive UI",
-      "SEO optimized architecture",
-      "Animated sections with Framer Motion",
-      "Service showcase pages",
-      "Dark & Light mode",
-      "Fast loading and optimized assets",
-    ],
-
-    useCases: [
-      "Software companies",
-      "IT service providers",
-      "Startup agencies",
-      "Product companies",
-    ],
-
-    challenges:
-      "Maintaining high performance while integrating smooth animations and responsive layouts.",
-
-    solution:
-      "Used Next.js server components with optimized images and lazy animations.",
-
-    link: "https://delegatespace.vercel.app/",
-  },
-]
 
 export default function OurWorks() {
   const { resolvedTheme } = useTheme()
@@ -409,7 +363,7 @@ export default function OurWorks() {
                     <div className="relative h-[270px] overflow-hidden">
 
                       <Image
-                        src={project.image}
+                        src={project.hero}
                         alt={project.title}
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
