@@ -601,7 +601,7 @@ export const projects = [
       }
     ],
   
-    link: "https://core-ecommerce-web.vercel.app/"
+    link: "https://ds-spinnyclone.vercel.app/"
   },
 
 
@@ -845,7 +845,7 @@ export const projects = [
       }
     ],
   
-    link: "/maintenance"
+    link: "https://ds-justhome.vercel.app/"
   },
 
 
