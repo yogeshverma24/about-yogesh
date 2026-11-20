@@ -11,6 +11,7 @@ export const initialProfile: PersonalProfile = {
   nightReviewCompleted: false,
   waterIntakeGlasses: 4,
   sleepHours: 7.5,
+  leetCodeSolved: 72,
 };
 
 export const initialTasks: TaskItem[] = [

@@ -117,6 +117,7 @@ export interface PersonalProfile {
   nightReviewCompleted: boolean;
   waterIntakeGlasses: number;
   sleepHours: number;
+  leetCodeSolved?: number;
 }
 
 export interface TodayDashboardState {
