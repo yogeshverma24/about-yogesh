@@ -8,8 +8,9 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isVendor = pathname?.startsWith('/vendor');
   const isAdmin = pathname?.startsWith('/admin');
+  const isToday = pathname?.startsWith('/today');
 
-  if (isVendor || isAdmin) {
+  if (isVendor || isAdmin || isToday) {
     return <>{children}</>;
   }
 
