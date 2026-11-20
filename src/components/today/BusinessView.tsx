@@ -3,7 +3,6 @@
 
 import React from 'react';
 import {
-  ExternalLink,
   Sparkles,
   Share2,
   Search,
@@ -100,18 +99,7 @@ export function BusinessView({
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] font-mono text-blue-400 font-semibold">{p.badge}</span>
-                {p.link && (
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-zinc-500 hover:text-blue-400"
-                    title={`Open ${p.link}`}
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
+                <span className="text-[10px] font-mono text-zinc-500">Active</span>
               </div>
               <h5 className="text-xs font-semibold text-zinc-100 truncate">{p.name}</h5>
               <p className="text-[10px] text-zinc-400 truncate">{p.desc}</p>

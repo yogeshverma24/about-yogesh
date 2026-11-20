@@ -73,6 +73,40 @@ export interface MilestoneItem {
   keyResults: string[];
 }
 
+export interface TimeBlock {
+  id: string;
+  title: string;
+  hours: number;
+  description: string;
+  category: string;
+}
+
+export interface DaySchedule {
+  dayKey: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  dayName: string;
+  shortDay: string;
+  focusTitle: string;
+  totalHours: number;
+  timeWindow: string;
+  isWeekend: boolean;
+  tag: string;
+  blocks: TimeBlock[];
+}
+
+export interface ProductRotationWeek {
+  weekNumber: 1 | 2 | 3 | 4;
+  title: string;
+  primaryFocus: string;
+  secondaryFocus: string;
+  description: string;
+}
+
+export interface FounderChecklistItem {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
 export interface PersonalProfile {
   name: string;
   role: string;
@@ -91,5 +125,8 @@ export interface TodayDashboardState {
   finances: FinancialRecord[];
   milestones: MilestoneItem[];
   profile: PersonalProfile;
+  founderChecklist?: FounderChecklistItem[];
+  activeRotationWeek?: number;
+  weeklyHoursLogged?: number;
 }
 

@@ -1,7 +1,7 @@
 // src/components/today/OverviewDashboard.tsx
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   TodayDashboardState,
   DashboardMode,
@@ -9,6 +9,7 @@ import {
   TaskStatus,
   ChecklistItem,
   PersonalProfile,
+  FounderChecklistItem,
 } from '@/lib/today/types';
 import {
   Sparkles,
@@ -16,8 +17,6 @@ import {
   CheckCircle2,
   Circle,
   Clock,
-  ArrowUpRight,
-  ExternalLink,
   ChevronRight,
   Zap,
   TrendingUp,
@@ -30,8 +29,17 @@ import {
   CheckSquare,
   BarChart2,
   Calendar,
+  Compass,
+  Target,
+  ArrowRight,
+  ListTodo,
 } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
+import {
+  MASTER_WEEKLY_SCHEDULE,
+  PRODUCT_ROTATION_WEEKS,
+  INITIAL_FOUNDER_CHECKLIST,
+} from '@/lib/today/scheduleData';
 
 interface Props {
   state: TodayDashboardState;
@@ -41,6 +49,11 @@ interface Props {
   onTriggerAI: (topicOrProduct: string, actionType: string) => void;
   onUpdateProfile: (updates: Partial<PersonalProfile>) => void;
   onOpenTaskModal: () => void;
+  onUpdateSchedule?: (updates: {
+    founderChecklist?: FounderChecklistItem[];
+    activeRotationWeek?: number;
+    weeklyHoursLogged?: number;
+  }) => void;
 }
 
 export function OverviewDashboard({
@@ -51,6 +64,7 @@ export function OverviewDashboard({
   onTriggerAI,
   onUpdateProfile,
   onOpenTaskModal,
+  onUpdateSchedule,
 }: Props) {
   // 1. Time-aware Greeting
   const greeting = useMemo(() => {
@@ -60,7 +74,44 @@ export function OverviewDashboard({
     return 'Good evening';
   }, []);
 
-  // 2. Metrics across Modes
+  // 2. Day-of-Week index (Sunday = 0, Monday = 1, etc.)
+  const todayDayIndex = useMemo(() => {
+    const raw = new Date().getDay();
+    // Map to 0 = Monday, ..., 6 = Sunday
+    return raw === 0 ? 6 : raw - 1;
+  }, []);
+
+  // Selected day in the weekly schedule viewer
+  const [activeDayIdx, setActiveDayIdx] = useState<number>(todayDayIndex);
+
+  // Active Rotation Week (1, 2, 3, or 4)
+  const activeRotationWeek = state.activeRotationWeek || 1;
+
+  // Founder Checklist
+  const founderChecklist = state.founderChecklist && state.founderChecklist.length > 0
+    ? state.founderChecklist
+    : INITIAL_FOUNDER_CHECKLIST;
+
+  const completedChecklistCount = founderChecklist.filter((item) => item.done).length;
+
+  const handleToggleChecklist = (id: string) => {
+    playChime('click');
+    const updated = founderChecklist.map((item) =>
+      item.id === id ? { ...item, done: !item.done } : item
+    );
+    if (onUpdateSchedule) {
+      onUpdateSchedule({ founderChecklist: updated });
+    }
+  };
+
+  const handleSelectRotationWeek = (weekNum: number) => {
+    playChime('click');
+    if (onUpdateSchedule) {
+      onUpdateSchedule({ activeRotationWeek: weekNum });
+    }
+  };
+
+  // 3. Metrics across Modes
   const metrics = useMemo(() => {
     const all = state.tasks || [];
     const total = all.length;
@@ -90,13 +141,6 @@ export function OverviewDashboard({
     const monthCount = all.filter((t) => t.timeframe === 'month').length;
     const sixMonthsCount = all.filter((t) => t.timeframe === 'six_months').length;
 
-    // Composite momentum score (0 - 100)
-    const habitScore = state.profile.morningRoutineCompleted ? 95 : 85;
-    const compositeScore = Math.min(
-      100,
-      Math.round(completionRate * 0.4 + habitScore * 0.35 + 85 * 0.25)
-    );
-
     return {
       total,
       completed,
@@ -117,11 +161,14 @@ export function OverviewDashboard({
       weekCount,
       monthCount,
       sixMonthsCount,
-      compositeScore,
     };
-  }, [state.tasks, state.profile]);
+  }, [state.tasks]);
 
-  // 3. Weekly Activity Curve Data (Mon to Sun)
+  // Selected Day from Master Schedule
+  const selectedDaySchedule = MASTER_WEEKLY_SCHEDULE[activeDayIdx] || MASTER_WEEKLY_SCHEDULE[0];
+  const todaySchedule = MASTER_WEEKLY_SCHEDULE[todayDayIndex] || MASTER_WEEKLY_SCHEDULE[0];
+
+  // 4. Weekly Activity Curve Data (Mon to Sun)
   const weeklyData = [
     { day: 'Mon', count: 6, score: 75 },
     { day: 'Tue', count: 8, score: 88 },
@@ -158,7 +205,7 @@ export function OverviewDashboard({
 
   return (
     <div className="space-y-5 animate-in fade-in duration-300">
-      {/* 1. EXECUTIVE BANNER & HIGH-LEVEL BRIEFING */}
+      {/* 1. EXECUTIVE HEADER WITH 40-HOUR OPERATING CADENCE */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-zinc-900 via-[#0e0e1e] to-zinc-900 border border-indigo-500/20 p-5 sm:p-6 shadow-xl">
         <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -166,19 +213,14 @@ export function OverviewDashboard({
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono uppercase tracking-widest font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                Executive Overview
+                40h Founder Operating System
               </span>
               <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
                 <Flame className="w-3.5 h-3.5 fill-current" />
                 <span>{state.profile.currentStreak || 14}-Day Streak</span>
               </div>
-              <span className="text-[11px] text-zinc-400">
-                {new Date().toLocaleDateString('en-US', {
-                  weekday: 'short',
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+              <span className="text-[11px] text-zinc-400 font-mono">
+                Weekdays: 5 × 3.5h (17.5h) • Weekends: 2 × 11.0h (22.0h) = 39.5h Total
               </span>
             </div>
 
@@ -208,13 +250,243 @@ export function OverviewDashboard({
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-zinc-850 hover:bg-zinc-800 text-zinc-200 border border-zinc-750 transition-all active:scale-95"
             >
               <Zap className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Quick Action</span>
+              <span>+ Add Task</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 2. TOP 4 EXECUTIVE KPI CARDS */}
+      {/* 2. THE MASTER 40-HOUR WEEKLY OPERATING SCHEDULE COMPONENT */}
+      <div className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-3">
+          <div className="space-y-0.5">
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5" />
+              Weekly Operating Schedule (39.5 Hours Target)
+            </h3>
+            <p className="text-[11px] text-zinc-400">
+              Balanced operating cadence designed for full-time job + 40-hour founder commitment
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-300 border border-zinc-700">
+              Today: <strong className="text-emerald-400">{todaySchedule.dayName}</strong> ({todaySchedule.totalHours}h)
+            </span>
+          </div>
+        </div>
+
+        {/* 7-Day Interactive Day Switcher */}
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+          {MASTER_WEEKLY_SCHEDULE.map((item, idx) => {
+            const isToday = idx === todayDayIndex;
+            const isSelected = idx === activeDayIdx;
+
+            return (
+              <button
+                key={item.dayKey}
+                onClick={() => {
+                  playChime('click');
+                  setActiveDayIdx(idx);
+                }}
+                className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all duration-200 relative flex flex-col justify-between ${
+                  isSelected
+                    ? 'bg-indigo-950/60 border-indigo-500 shadow-md shadow-indigo-950/40 text-white'
+                    : isToday
+                    ? 'bg-zinc-900 border-emerald-500/40 text-zinc-200 hover:border-emerald-500/60'
+                    : 'bg-zinc-950/60 border-zinc-850 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                }`}
+              >
+                {isToday && (
+                  <span className="absolute -top-1.5 right-2 px-1.5 py-0.2 rounded text-[8px] font-mono font-bold uppercase bg-emerald-500 text-zinc-950">
+                    Today
+                  </span>
+                )}
+                <div>
+                  <span className="block text-xs font-bold font-mono uppercase">{item.shortDay}</span>
+                  <span className="block text-[10px] text-zinc-500 truncate mt-0.5">{item.totalHours}h</span>
+                </div>
+                <div className="mt-2">
+                  <span
+                    className={`block w-1.5 h-1.5 rounded-full ${
+                      item.isWeekend ? 'bg-amber-400' : 'bg-indigo-400'
+                    }`}
+                  />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Detailed Inspection of Selected Day */}
+        <div className="p-4 rounded-xl bg-zinc-950/70 border border-zinc-800/80 space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-zinc-850 pb-2.5">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white font-mono">
+                  {selectedDaySchedule.dayName}
+                </span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                  {selectedDaySchedule.tag}
+                </span>
+              </div>
+              <p className="text-xs text-zinc-300 font-medium">
+                {selectedDaySchedule.focusTitle}
+              </p>
+            </div>
+
+            <div className="text-right text-xs font-mono">
+              <span className="text-emerald-400 font-bold">{selectedDaySchedule.totalHours} Hours</span>
+              <span className="block text-[11px] text-zinc-500">{selectedDaySchedule.timeWindow}</span>
+            </div>
+          </div>
+
+          {/* Time Blocks for Selected Day */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
+            {selectedDaySchedule.blocks.map((block, bIdx) => (
+              <div
+                key={block.id}
+                className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1.5 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="font-mono text-[11px] font-bold text-indigo-300">
+                      Block {bIdx + 1}
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-zinc-800 text-zinc-200">
+                      {block.hours}h
+                    </span>
+                  </div>
+                  <h5 className="text-xs font-semibold text-zinc-100">{block.title}</h5>
+                  <p className="text-[11px] text-zinc-400 leading-snug mt-1">{block.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4-Week Product Development Rotation & Founder Checklist Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
+          {/* LEFT: 4-WEEK ROTATION MATRIX (6 COLS) */}
+          <div className="lg:col-span-6 p-4 rounded-xl bg-zinc-950/70 border border-zinc-800/80 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-200 flex items-center gap-1.5">
+                <Compass className="w-3.5 h-3.5 text-amber-400" />
+                4-Week Product Development Rotation
+              </span>
+              <span className="text-[10px] font-mono text-zinc-500">Sunday Sprint Target</span>
+            </div>
+
+            {/* Rotation Selector Tabs */}
+            <div className="grid grid-cols-4 gap-1 bg-zinc-900/80 p-1 rounded-xl border border-zinc-800">
+              {[1, 2, 3, 4].map((w) => (
+                <button
+                  key={w}
+                  onClick={() => handleSelectRotationWeek(w)}
+                  className={`py-1 text-xs font-mono font-bold rounded-lg transition-all ${
+                    activeRotationWeek === w
+                      ? 'bg-amber-500 text-zinc-950 shadow-sm'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Week {w}
+                </button>
+              ))}
+            </div>
+
+            {/* Current Rotation Detail Card */}
+            {(() => {
+              const currentRot =
+                PRODUCT_ROTATION_WEEKS.find((r) => r.weekNumber === activeRotationWeek) ||
+                PRODUCT_ROTATION_WEEKS[0];
+
+              return (
+                <div className="p-3 rounded-xl bg-zinc-900/60 border border-amber-500/20 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-amber-400 font-mono">
+                      {currentRot.title}
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                      Active Cycle
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-baseline justify-between text-zinc-300">
+                      <span className="text-zinc-500 text-[11px]">Primary Focus (6h):</span>
+                      <strong className="text-white text-right">{currentRot.primaryFocus}</strong>
+                    </div>
+                    <div className="flex items-baseline justify-between text-zinc-300">
+                      <span className="text-zinc-500 text-[11px]">Secondary Focus (2h):</span>
+                      <span className="text-zinc-300 text-right">{currentRot.secondaryFocus}</span>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/60 leading-relaxed">
+                    {currentRot.description}
+                  </p>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* RIGHT: FOUNDER WEEKLY REVIEW CHECKLIST (6 COLS) */}
+          <div className="lg:col-span-6 p-4 rounded-xl bg-zinc-950/70 border border-zinc-800/80 space-y-3 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-200 flex items-center gap-1.5">
+                  <ListTodo className="w-3.5 h-3.5 text-emerald-400" />
+                  Founder Weekly Review Checklist
+                </span>
+                <span className="text-xs font-mono font-bold text-emerald-400">
+                  {completedChecklistCount} of {founderChecklist.length}
+                </span>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden mb-2.5">
+                <div
+                  className="h-full bg-emerald-400 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(completedChecklistCount / founderChecklist.length) * 100}%`,
+                  }}
+                />
+              </div>
+
+              {/* Checklist Items */}
+              <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                {founderChecklist.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleToggleChecklist(item.id)}
+                    className="flex items-center gap-2 p-1.5 rounded-lg text-xs cursor-pointer hover:bg-zinc-900 transition-colors"
+                  >
+                    {item.done ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    ) : (
+                      <Circle className="w-4 h-4 text-zinc-600 hover:text-zinc-400 flex-shrink-0" />
+                    )}
+                    <span
+                      className={`text-xs ${
+                        item.done ? 'line-through text-zinc-500' : 'text-zinc-300'
+                      }`}
+                    >
+                      {item.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
+              <span>Weekly Cadence: 39.5h</span>
+              <span>Sunday Review Milestone</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. TOP 4 EXECUTIVE KPI CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         {/* KPI 1: Overall Execution Rate */}
         <div className="p-4 rounded-2xl bg-zinc-900/60 border border-indigo-500/15 hover:border-indigo-500/30 transition-all flex flex-col justify-between">
@@ -307,7 +579,7 @@ export function OverviewDashboard({
               </span>
             </div>
             <div className="mt-1 text-[11px] text-zinc-400 truncate">
-              Delegatework • Fasly • Campus • Studio
+              Delegatework • Fasly • Campus • Delegatespace
             </div>
           </div>
           <div className="mt-3 w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
@@ -350,7 +622,7 @@ export function OverviewDashboard({
         </div>
       </div>
 
-      {/* 3. CLASSIC ANALYTICS & VISUAL GRAPHS (2-COLUMN GRID) */}
+      {/* 4. CLASSIC ANALYTICS & VISUAL GRAPHS (2-COLUMN GRID) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* GRAPH 1: CROSS-PILLAR EXECUTION VELOCITY (7 COLS) */}
         <div className="lg:col-span-7 p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 space-y-4">
@@ -558,7 +830,7 @@ export function OverviewDashboard({
         </div>
       </div>
 
-      {/* 4. MULTI-PILLAR DEEP-DIVE CARDS (3 COLUMNS) */}
+      {/* 5. MULTI-PILLAR DEEP-DIVE CARDS (3 COLUMNS) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* PILLAR 1: PERSONAL MASTERY */}
         <div className="p-5 rounded-2xl bg-zinc-900/50 border border-emerald-500/20 space-y-4 flex flex-col justify-between">
@@ -620,7 +892,7 @@ export function OverviewDashboard({
           </button>
         </div>
 
-        {/* PILLAR 2: BUSINESS ECOSYSTEM */}
+        {/* PILLAR 2: BUSINESS ECOSYSTEM (NO EXTERNAL REDIRECTS) */}
         <div className="p-5 rounded-2xl bg-zinc-900/50 border border-sky-500/20 space-y-4 flex flex-col justify-between">
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2.5">
@@ -635,28 +907,28 @@ export function OverviewDashboard({
               </span>
             </div>
 
-            {/* 4 Products Matrix */}
+            {/* 4 Products Matrix without external links */}
             <div className="space-y-2">
               {[
                 {
                   name: 'Delegatework',
                   focus: 'Teams App • SEO & LinkedIn',
-                  url: 'https://delegatework.in/',
+                  tag: 'delegatework.in',
                 },
                 {
                   name: 'Fasly',
                   focus: 'Agriculture App • Advisory & Facebook',
-                  url: 'https://fasly.in/',
+                  tag: 'fasly.in',
                 },
                 {
                   name: 'Campus',
                   focus: 'Student Community • Jobs & Instagram',
-                  url: 'https://delegatecampus.in/',
+                  tag: 'delegatecampus.in',
                 },
                 {
                   name: 'Delegatespace',
                   focus: 'Parent Studio • Client Engineering',
-                  url: 'https://www.delegatespace.com/',
+                  tag: 'delegatespace.com',
                 },
               ].map((p) => (
                 <div
@@ -667,14 +939,9 @@ export function OverviewDashboard({
                     <span className="font-semibold text-zinc-200">{p.name}</span>
                     <span className="block text-[10px] text-zinc-400 truncate">{p.focus}</span>
                   </div>
-                  <a
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1 rounded-md text-zinc-400 hover:text-sky-300 hover:bg-sky-500/10 transition-colors"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+                    {p.tag}
+                  </span>
                 </div>
               ))}
             </div>
@@ -738,13 +1005,13 @@ export function OverviewDashboard({
         </div>
       </div>
 
-      {/* 5. TODAY'S MULTI-MODE ACTION STREAM */}
+      {/* 6. TODAY'S MULTI-PILLAR ACTION STREAM (PURE TASK MANAGEMENT - NO EXTERNAL LINKS) */}
       <div className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 space-y-3.5">
         <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
           <div className="space-y-0.5">
             <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-200 flex items-center gap-1.5">
               <CheckSquare className="w-3.5 h-3.5 text-indigo-400" />
-              Today&apos;s Multi-Pillar Action Stream
+              Today&apos;s High-Impact Execution Stream
             </h3>
             <p className="text-[11px] text-zinc-500">
               High-priority tasks scheduled for today across Personal, Business, and Job Prep
@@ -826,17 +1093,6 @@ export function OverviewDashboard({
                       )}
                     </div>
                   </div>
-
-                  {task.externalLink && (
-                    <a
-                      href={task.externalLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1 rounded text-zinc-500 hover:text-white transition-colors flex-shrink-0"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
                 </div>
               );
             })}
@@ -844,7 +1100,7 @@ export function OverviewDashboard({
         )}
       </div>
 
-      {/* 6. STRATEGIC 6-MONTH MILESTONES OVERVIEW */}
+      {/* 7. STRATEGIC 6-MONTH MILESTONES OVERVIEW */}
       <div className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 space-y-3.5">
         <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2.5">
           <div className="space-y-0.5">
@@ -911,4 +1167,3 @@ export function OverviewDashboard({
     </div>
   );
 }
-

@@ -22,7 +22,6 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
   const [timeframe, setTimeframe] = useState<Timeframe>(initialTimeframe);
   const [priority, setPriority] = useState<TaskPriority>('medium');
   const [reminderTime, setReminderTime] = useState('');
-  const [externalLink, setExternalLink] = useState('');
   const [subtasks, setSubtasks] = useState<string[]>([]);
   const [newSubtask, setNewSubtask] = useState('');
 
@@ -77,7 +76,6 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
       timeframe,
       priority,
       reminderTime: reminderTime.trim() || undefined,
-      externalLink: externalLink.trim() || undefined,
       checklist: subtasks.map((st, i) => ({
         id: `sub-${Date.now()}-${i}`,
         text: st,
@@ -236,20 +234,6 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
                 className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
               />
             </div>
-          </div>
-
-          {/* External Link */}
-          <div>
-            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
-              External URL (e.g. https://delegatework.in/)
-            </label>
-            <input
-              type="url"
-              placeholder="https://..."
-              value={externalLink}
-              onChange={(e) => setExternalLink(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
-            />
           </div>
 
           {/* Checklist Subtasks */}

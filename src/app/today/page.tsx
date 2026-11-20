@@ -10,6 +10,7 @@ import {
   ChecklistItem,
   FinancialRecord,
   PersonalProfile,
+  FounderChecklistItem,
 } from '@/lib/today/types';
 import { modeThemes } from '@/lib/today/theme';
 import { TodayNavbar } from '@/components/today/TodayNavbar';
@@ -329,6 +330,24 @@ export default function TodayPage() {
     setShowAIModal(true);
   };
 
+  // Update Founder Schedule & Checklist
+  const handleUpdateSchedule = async (updates: {
+    founderChecklist?: FounderChecklistItem[];
+    activeRotationWeek?: number;
+    weeklyHoursLogged?: number;
+  }) => {
+    setState((prev) => (prev ? { ...prev, ...updates } : prev));
+    try {
+      await fetch('/api/today/schedule', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (err) {
+      console.error('Failed to update schedule:', err);
+    }
+  };
+
   // Filter Tasks by Mode, Timeframe, Category, Status, Search
   const filteredTasks = useMemo(() => {
     if (!state) return [];
@@ -444,6 +463,7 @@ export default function TodayPage() {
             onTriggerAI={handleTriggerAI}
             onUpdateProfile={handleUpdateProfile}
             onOpenTaskModal={() => setShowTaskModal(true)}
+            onUpdateSchedule={handleUpdateSchedule}
           />
         ) : (
           <>
@@ -697,15 +717,9 @@ export default function TodayPage() {
                           <span className="font-semibold text-zinc-200 block">{p.name}</span>
                           <span className="text-[10px] text-zinc-500">{p.tag}</span>
                         </div>
-                        <a
-                          href={p.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1 rounded text-zinc-500 hover:text-sky-400 hover:bg-zinc-800 transition-colors"
-                          title={`Open ${p.link}`}
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
+                          Active
+                        </span>
                       </div>
                     ))}
                   </div>

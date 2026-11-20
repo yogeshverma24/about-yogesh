@@ -9,6 +9,7 @@ import {
   MilestoneItem,
   PersonalProfile,
   TodayDashboardState,
+  FounderChecklistItem,
 } from './types';
 import {
   initialProfile,
@@ -17,6 +18,7 @@ import {
   initialFinances,
   initialMilestones,
 } from './seed';
+import { INITIAL_FOUNDER_CHECKLIST } from './scheduleData';
 import {
   TaskModel,
   HabitModel,
@@ -103,6 +105,9 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       habits: parsed.habits || initialHabits,
       finances: parsed.finances || initialFinances,
       milestones: parsed.milestones || initialMilestones,
+      founderChecklist: parsed.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
+      activeRotationWeek: parsed.activeRotationWeek || 1,
+      weeklyHoursLogged: parsed.weeklyHoursLogged || 14.5,
       settings: parsed.settings || {},
     };
   } catch {
@@ -112,6 +117,9 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       habits: initialHabits,
       finances: initialFinances,
       milestones: initialMilestones,
+      founderChecklist: INITIAL_FOUNDER_CHECKLIST,
+      activeRotationWeek: 1,
+      weeklyHoursLogged: 14.5,
       settings: {},
     };
   }
@@ -192,6 +200,36 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
     finances: local.finances,
     milestones: local.milestones,
     profile: local.profile,
+    founderChecklist: local.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
+    activeRotationWeek: local.activeRotationWeek || 1,
+    weeklyHoursLogged: local.weeklyHoursLogged || 14.5,
+  };
+}
+
+export async function updateFounderSchedule(updates: {
+  founderChecklist?: FounderChecklistItem[];
+  activeRotationWeek?: number;
+  weeklyHoursLogged?: number;
+}): Promise<{
+  founderChecklist: FounderChecklistItem[];
+  activeRotationWeek: number;
+  weeklyHoursLogged: number;
+}> {
+  const local = getLocalState();
+  if (updates.founderChecklist) local.founderChecklist = updates.founderChecklist;
+  if (updates.activeRotationWeek !== undefined) local.activeRotationWeek = updates.activeRotationWeek;
+  if (updates.weeklyHoursLogged !== undefined) local.weeklyHoursLogged = updates.weeklyHoursLogged;
+
+  saveLocalState({
+    founderChecklist: local.founderChecklist,
+    activeRotationWeek: local.activeRotationWeek,
+    weeklyHoursLogged: local.weeklyHoursLogged,
+  });
+
+  return {
+    founderChecklist: local.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
+    activeRotationWeek: local.activeRotationWeek || 1,
+    weeklyHoursLogged: local.weeklyHoursLogged || 14.5,
   };
 }
 

@@ -130,12 +130,15 @@ function generateOfflineFallback(prompt: string): string {
    - Leverage code-generated providers (\`@riverpod\`) for compile-time safety and automatic dispose.`;
   }
 
-  // Default balanced daily briefing
-  return `### ⚡ Yogesh's AI Daily Strategic Blueprint
-- **Morning Deep Work (09:00 - 12:00):** Business growth focus — Delegatework SEO audit & LinkedIn post + Fasly Facebook farmer advisory update.
-- **Afternoon Delivery (14:00 - 17:00):** Delegatespace client sprint deliverables + Campus community engagement & job drops.
-- **Evening Mastery (18:00 - 21:00):** High-impact Job Prep — 2 LeetCode Mediums on Graphs + System Design distributed cache architecture.
-- **Night Wind Down (21:30 - 22:30):** Financial check, 15m English STAR communication practice, and tomorrow's roadmap review.`;
+  // Default balanced daily briefing aligned with Yogesh's 40-hour founder cadence
+  return `### ⚡ Yogesh's 40-Hour Operating System — Daily Strategic Blueprint
+- **Daytime Focus (09:00 - 18:30):** Full-time day job commitments + passive mental preparation.
+- **Weekday Founder Sprint (19:30 - 23:00 • 3.5 Hours Dedicated):**
+  - **19:30 - 20:45:** Primary Day Focus (e.g., Friday: Campus user growth & tech job board curation).
+  - **20:45 - 22:00:** Secondary Product Focus (e.g., Fasly agriculture community advisory & farmer feedback).
+  - **22:00 - 23:00:** Growth Analytics & Next-Day Architecture Preparation.
+- **Night Wind Down (23:00 - 23:30):** Habit consistency review, 500ml hydration, and next-day milestone confirmation.
+- **Weekend Horizon:** Saturday 11h client project delivery + Sunday 11h primary product development sprint.`;
 }
 
 /**
@@ -147,17 +150,22 @@ export async function generateSmartSchedule(tasks: TaskItem[], energyLevel: stri
     .map((t) => `- [${t.priority.toUpperCase()}] (${t.mode.toUpperCase()}) ${t.title}`)
     .join('\n');
 
-  const prompt = `You are Yogesh Verma's elite executive AI strategist.
-Yogesh is balancing 3 lives simultaneously:
-1. Personal (Health, ₹50k SIP/Finance, Life goals)
-2. Business (Founder of Delegatespace, Delegatework teams platform, Fasly agriculture app, Campus student community)
-3. Job Preparation (DSA, System Design, Flutter, React Native, iOS Swift 6, Communication).
+  const prompt = `You are Yogesh Verma's elite executive AI operating strategist.
+Yogesh balances a full-time job with a rigorous 40-hour weekly founder operating schedule:
+- Weekdays: 5 days × 3.5 hours = 17.5 hours (Evening window: 7:30 PM – 11:00 PM)
+- Weekends: 2 days × 11 hours = 22.0 hours (Saturday: Client delivery & existing product improvements; Sunday: Deep product sprint & testing)
+- Total: 39.5 hours per week dedicated to Delegatespace, Delegatework, Fasly, Campus, and career depth.
+
+His 3 Core Founder Priorities:
+1. Bring in revenue: sales, client projects and service delivery.
+2. Build valuable products: consistent development sprints with measurable outcomes.
+3. Grow audience: marketing, SEO, and active user feedback for Campus, Fasly, Delegatework.
 
 His current energy level today is: "${energyLevel}".
 Here are his tasks scheduled for today:
 ${taskSummary || 'No specific tasks provided yet.'}
 
-Create a crisp, inspiring, time-blocked daily schedule (Morning, Afternoon, Evening, Night) with exact times, focus blocks, breaks, and high-leverage execution advice. Keep it actionable and formatted with markdown.`;
+Create a crisp, inspiring, time-blocked schedule specifically designed for his 3.5-hour weekday evening block (7:30 PM - 11:00 PM) or weekend sprint, including exact minute breakdowns, focused work intervals, breaks, and high-leverage execution advice. Format with markdown.`;
 
-  return await callGemini(prompt, 'You are a high-performance productivity coach and tech executive assistant.');
+  return await callGemini(prompt, 'You are an elite productivity strategist for tech founders balancing a full-time job.');
 }

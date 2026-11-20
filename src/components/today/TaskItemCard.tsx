@@ -175,18 +175,6 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-1 flex-shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
-          {task.externalLink && (
-            <a
-              href={task.externalLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`p-1.5 rounded-lg text-zinc-400 hover:${theme.textPrimary} hover:bg-zinc-800 transition-colors`}
-              title={`Open ${task.externalLink}`}
-            >
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          )}
-
           <button
             onClick={() => onDelete(task.id)}
             className="p-1.5 rounded-lg text-zinc-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"

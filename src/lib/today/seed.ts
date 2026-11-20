@@ -140,7 +140,6 @@ export const initialTasks: TaskItem[] = [
     priority: 'high',
     dueDate: '2026-11-20',
     reminderTime: '11:00 AM',
-    externalLink: 'https://delegatework.in/',
     checklist: [
       { id: 'dw-1', text: 'Hook: "Why high-velocity teams are abandoning 10am Zoom syncs"', done: false },
       { id: 'dw-2', text: 'Include screenshot of Delegatework dashboard UI', done: false },
@@ -161,7 +160,6 @@ export const initialTasks: TaskItem[] = [
     priority: 'high',
     dueDate: '2026-11-20',
     reminderTime: '02:00 PM',
-    externalLink: 'https://delegatework.in/',
     checklist: [
       { id: 'dw-seo1', text: 'Audit homepage keyword density and page speed', done: true },
       { id: 'dw-seo2', text: 'Add structured FAQ schema markup for Google rich snippets', done: false },
@@ -184,7 +182,6 @@ export const initialTasks: TaskItem[] = [
     priority: 'high',
     dueDate: '2026-11-20',
     reminderTime: '12:30 PM',
-    externalLink: 'https://fasly.in/',
     checklist: [
       { id: 'fa-1', text: 'Draft advisory blog on "Winter Crop Pest Management & Soil Care"', done: false },
       { id: 'fa-2', text: 'Design simple Canva graphic for Facebook farmer groups', done: false },
@@ -207,7 +204,6 @@ export const initialTasks: TaskItem[] = [
     priority: 'high',
     dueDate: '2026-11-20',
     reminderTime: '03:30 PM',
-    externalLink: 'https://delegatecampus.in/',
     checklist: [
       { id: 'ca-1', text: 'Post Software Engineer Intern opening at DelegateCampus', done: false },
       { id: 'ca-2', text: 'In-app poll: "What is your hardest challenge in DSA right now?"', done: false },
@@ -230,7 +226,6 @@ export const initialTasks: TaskItem[] = [
     priority: 'medium',
     dueDate: '2026-11-20',
     reminderTime: '04:30 PM',
-    externalLink: 'https://www.delegatespace.com/',
     tags: ['agency', 'client-work', 'delegatespace'],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
