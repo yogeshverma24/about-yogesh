@@ -2,16 +2,20 @@
 'use client';
 
 import React from 'react';
-import { Timeframe } from '@/lib/today/types';
-import { Sun, CalendarDays, CalendarRange, Compass, CheckCircle2 } from 'lucide-react';
+import { Timeframe, DashboardMode } from '@/lib/today/types';
+import { modeThemes } from '@/lib/today/theme';
+import { Sun, CalendarDays, CalendarRange, Compass } from 'lucide-react';
 
 interface Props {
   currentTimeframe: Timeframe;
   onSelectTimeframe: (tf: Timeframe) => void;
   counts: Record<Timeframe, { total: number; completed: number }>;
+  currentMode: DashboardMode;
 }
 
-export function TimeframeNav({ currentTimeframe, onSelectTimeframe, counts }: Props) {
+export function TimeframeNav({ currentTimeframe, onSelectTimeframe, counts, currentMode }: Props) {
+  const theme = modeThemes[currentMode];
+
   const tabs: Array<{
     id: Timeframe;
     title: string;
@@ -20,97 +24,60 @@ export function TimeframeNav({ currentTimeframe, onSelectTimeframe, counts }: Pr
   }> = [
     {
       id: 'today',
-      title: 'Aaj Kya Hai (Today)',
-      sublabel: 'Daily Execution & Routine',
+      title: 'Today',
+      sublabel: 'Daily Execution',
       icon: Sun,
     },
     {
       id: 'week',
-      title: 'Is Week Mein',
-      sublabel: 'Weekly Sprint Goals',
+      title: 'This Week',
+      sublabel: 'Sprint Goals',
       icon: CalendarDays,
     },
     {
       id: 'month',
-      title: 'Is Month Mein',
-      sublabel: 'Monthly Deliverables & SEO',
+      title: 'This Month',
+      sublabel: 'Deliverables & SEO',
       icon: CalendarRange,
     },
     {
       id: 'six_months',
       title: '6 Month Vision',
-      sublabel: 'Career & Product Roadmap',
+      sublabel: 'Long-term Roadmap',
       icon: Compass,
     },
   ];
 
   return (
-    <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 my-4">
+    <div className="w-full flex items-center justify-between gap-1.5 sm:gap-2 p-1.5 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl">
       {tabs.map((tab) => {
         const active = currentTimeframe === tab.id;
         const Icon = tab.icon;
         const countInfo = counts[tab.id] || { total: 0, completed: 0 };
-        const percent = countInfo.total > 0 ? Math.round((countInfo.completed / countInfo.total) * 100) : 0;
 
         return (
           <button
             key={tab.id}
             onClick={() => onSelectTimeframe(tab.id)}
-            className={`group relative text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-200 overflow-hidden ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl transition-all duration-200 ${
               active
-                ? 'bg-[#0f1713] border-emerald-500/40 shadow-lg shadow-emerald-950/30 ring-1 ring-emerald-500/20'
-                : 'bg-zinc-900/40 border-zinc-800/70 hover:border-zinc-700/80 hover:bg-zinc-900/70'
+                ? `${theme.activePill}`
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
             }`}
           >
-            {/* Top Indicator bar */}
-            {active && (
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-emerald-400" />
-            )}
-
-            <div className="flex items-center justify-between mb-2.5">
-              <div
-                className={`p-2 rounded-xl transition-colors ${
-                  active
-                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-zinc-800/60 text-zinc-400 group-hover:text-zinc-200'
-                }`}
-              >
-                <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs font-mono">
-                <span
-                  className={`px-2 py-0.5 rounded-md font-semibold text-[11px] ${
-                    percent === 100
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                      : active
-                      ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/20'
-                      : 'bg-zinc-800/60 text-zinc-400'
-                  }`}
-                >
-                  {countInfo.completed}/{countInfo.total} Done
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-0.5">
-              <h3
-                className={`text-xs sm:text-sm font-bold tracking-tight line-clamp-1 ${
-                  active ? 'text-zinc-100' : 'text-zinc-300 group-hover:text-zinc-100'
-                }`}
-              >
-                {tab.title}
-              </h3>
-              <p className="text-[11px] text-zinc-400 line-clamp-1">{tab.sublabel}</p>
-            </div>
-
-            {/* Clean Emerald Progress bar */}
-            <div className="mt-3 w-full h-1 bg-zinc-800/80 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
-                style={{ width: `${percent}%` }}
-              />
-            </div>
+            <Icon className="w-3.5 h-3.5" />
+            <span className="text-xs font-semibold tracking-tight whitespace-nowrap">
+              {tab.title}
+            </span>
+            <span
+              className={`text-[10px] font-mono px-1.5 py-0.2 rounded-md ${
+                active
+                  ? 'bg-black/25 text-zinc-950 font-bold'
+                  : 'bg-zinc-800 text-zinc-400'
+              }`}
+            >
+              {countInfo.completed}/{countInfo.total}
+            </span>
           </button>
         );
       })}

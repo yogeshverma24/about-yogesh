@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
     if (action === 'business_content') {
       const productNames: Record<string, string> = {
-        fasly: 'Fasly Kisan App (https://fasly.in/) - Agri/Farmer app',
+        fasly: 'Fasly Agriculture App (https://fasly.in/) - Agri/Farmer app',
         campus: 'Campus Student Community (https://delegatecampus.in/) - College & Student platform',
         delegatework: 'Delegatework (https://delegatework.in/) - Modern Teams & Async Collaboration platform',
         delegatespace: 'Delegatespace (https://www.delegatespace.com/) - Software Development & Product Studio',

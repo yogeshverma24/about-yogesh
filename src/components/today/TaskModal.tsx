@@ -17,7 +17,7 @@ interface Props {
 export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimeframe }: Props) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [mode, setMode] = useState<DashboardMode>(initialMode);
+  const [mode, setMode] = useState<DashboardMode>(initialMode === 'overview' ? 'personal' : initialMode);
   const [category, setCategory] = useState('general');
   const [timeframe, setTimeframe] = useState<Timeframe>(initialTimeframe);
   const [priority, setPriority] = useState<TaskPriority>('medium');
@@ -29,6 +29,9 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
   if (!isOpen) return null;
 
   const categoriesByMode: Record<DashboardMode, Array<{ id: string; label: string }>> = {
+    overview: [
+      { id: 'general', label: 'General Action Item' },
+    ],
     personal: [
       { id: 'info', label: 'Personal Routine & Bio' },
       { id: 'finance', label: 'Financial Plan & Wealth' },
@@ -36,7 +39,7 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
     ],
     business: [
       { id: 'delegatework', label: 'Delegatework (Teams App)' },
-      { id: 'fasly', label: 'Fasly (Kisan App)' },
+      { id: 'fasly', label: 'Fasly (Agriculture App)' },
       { id: 'campus', label: 'Campus (Student Community)' },
       { id: 'delegatespace', label: 'Delegatespace (Company Agency)' },
     ],
@@ -154,7 +157,7 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { id: 'today', label: 'Today (Aaj)' },
+                { id: 'today', label: 'Today' },
                 { id: 'week', label: 'This Week' },
                 { id: 'month', label: 'This Month' },
                 { id: 'six_months', label: '6 Months' },

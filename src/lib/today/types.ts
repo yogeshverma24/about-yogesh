@@ -1,6 +1,6 @@
 // src/lib/today/types.ts
 
-export type DashboardMode = 'personal' | 'business' | 'job';
+export type DashboardMode = 'overview' | 'personal' | 'business' | 'job';
 
 export type Timeframe = 'today' | 'week' | 'month' | 'six_months';
 

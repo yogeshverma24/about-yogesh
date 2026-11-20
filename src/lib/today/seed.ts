@@ -175,7 +175,7 @@ export const initialTasks: TaskItem[] = [
   // 2. Fasly
   {
     id: 'b-fa1',
-    title: 'Fasly: Publish Weekly Kisan Agricultural Advisory Blog & Facebook Post',
+    title: 'Fasly: Publish Weekly Agricultural Advisory Blog & Facebook Post',
     description: 'Post seasonal crop guidance for winter rabi crops on https://fasly.in/ and share digestible graphic on Facebook page.',
     mode: 'business',
     category: 'fasly',
@@ -186,11 +186,11 @@ export const initialTasks: TaskItem[] = [
     reminderTime: '12:30 PM',
     externalLink: 'https://fasly.in/',
     checklist: [
-      { id: 'fa-1', text: 'Draft Hindi/English blog on "Winter Crop Pest Management & Soil Care"', done: false },
+      { id: 'fa-1', text: 'Draft advisory blog on "Winter Crop Pest Management & Soil Care"', done: false },
       { id: 'fa-2', text: 'Design simple Canva graphic for Facebook farmer groups', done: false },
-      { id: 'fa-3', text: 'Post with direct download link to Fasly Kisan app', done: false },
+      { id: 'fa-3', text: 'Post with direct download link to Fasly Agriculture app', done: false },
     ],
-    tags: ['fasly', 'kisan', 'facebook', 'seo', 'blog'],
+    tags: ['fasly', 'agriculture', 'facebook', 'seo', 'blog'],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -266,7 +266,7 @@ export const initialTasks: TaskItem[] = [
   {
     id: 'b-w3',
     title: 'Fasly: SEO Backlink Outreach to 5 Regional Agri-Portals',
-    description: 'Gain high-authority backlinks for Fasly Kisan portal to boost organic Google rank.',
+    description: 'Gain high-authority backlinks for Fasly Agriculture portal to boost organic Google rank.',
     mode: 'business',
     category: 'fasly',
     timeframe: 'week',
@@ -619,7 +619,7 @@ export const initialMilestones: MilestoneItem[] = [
   },
   {
     id: 'm-b2',
-    title: 'Fasly Kisan App: Expand to 50,000 Registered Farmers',
+    title: 'Fasly Agriculture App: Expand to 50,000 Registered Farmers',
     mode: 'business',
     timeframe: 'six_months',
     category: 'fasly',
@@ -628,8 +628,8 @@ export const initialMilestones: MilestoneItem[] = [
     metric: '19,000 / 50,000 Farmers',
     status: 'in_progress',
     keyResults: [
-      'Daily Hindi farming tips and pest detection updates',
-      'Partner with 10 regional agricultural mandi cooperatives',
+      'Daily actionable farming tips and pest detection updates',
+      'Partner with 10 regional agricultural market cooperatives',
       'Maintain 4.7+ star rating on Google Play Store',
     ],
   },

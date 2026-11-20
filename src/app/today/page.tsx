@@ -11,9 +11,11 @@ import {
   FinancialRecord,
   PersonalProfile,
 } from '@/lib/today/types';
+import { modeThemes } from '@/lib/today/theme';
 import { TodayNavbar } from '@/components/today/TodayNavbar';
 import { TimeframeNav } from '@/components/today/TimeframeNav';
 import { TaskItemCard } from '@/components/today/TaskItemCard';
+import { OverviewDashboard } from '@/components/today/OverviewDashboard';
 import { PersonalView } from '@/components/today/PersonalView';
 import { BusinessView } from '@/components/today/BusinessView';
 import { JobView } from '@/components/today/JobView';
@@ -26,6 +28,13 @@ import {
   Plus,
   Bell,
   CheckCircle2,
+  CheckSquare,
+  BarChart2,
+  Flame,
+  Droplets,
+  ExternalLink,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
 
@@ -35,12 +44,16 @@ export default function TodayPage() {
   const [loading, setLoading] = useState<boolean>(true);
 
   // Active view filters
-  const [currentMode, setCurrentMode] = useState<DashboardMode>('personal');
+  const [currentMode, setCurrentMode] = useState<DashboardMode>('overview');
   const [currentTimeframe, setCurrentTimeframe] = useState<Timeframe>('today');
+  const [viewTab, setViewTab] = useState<'tasks' | 'insights'>('tasks');
   const [businessCategory, setBusinessCategory] = useState<string>('all');
   const [jobCategory, setJobCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'completed'>('all');
+
+  // Quick inline task creation
+  const [quickTaskTitle, setQuickTaskTitle] = useState<string>('');
 
   // Modals
   const [showTaskModal, setShowTaskModal] = useState<boolean>(false);
@@ -51,6 +64,8 @@ export default function TodayPage() {
   const [aiTopic, setAiTopic] = useState<string>('');
   const [aiAction, setAiAction] = useState<string>('');
 
+  const theme = modeThemes[currentMode];
+
   // 1. Check Authentication on Mount
   useEffect(() => {
     const savedToken = typeof window !== 'undefined' ? localStorage.getItem('today_token') : null;
@@ -58,7 +73,6 @@ export default function TodayPage() {
       setIsAuthenticated(true);
       fetchDashboardState();
     } else {
-      // Auto-check session cookie via verify endpoint
       fetch('/api/today/auth/verify')
         .then((res) => res.json())
         .then((data) => {
@@ -106,7 +120,6 @@ export default function TodayPage() {
   // 2. Task Actions
   const handleToggleTaskComplete = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === 'completed' ? 'pending' : 'completed';
-    // Optimistic UI update
     setState((prev) => {
       if (!prev) return prev;
       return {
@@ -190,7 +203,24 @@ export default function TodayPage() {
     }
   };
 
-  // 3. Habit Actions
+  const handleQuickAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickTaskTitle.trim()) return;
+
+    playChime('success');
+    const title = quickTaskTitle.trim();
+    setQuickTaskTitle('');
+
+    await handleCreateTask({
+      title,
+      mode: currentMode,
+      timeframe: currentTimeframe,
+      priority: 'medium',
+      category: currentMode === 'business' ? (businessCategory === 'all' ? 'delegatework' : businessCategory) : currentMode === 'job' ? (jobCategory === 'all' ? 'dsa' : jobCategory) : 'info',
+    });
+  };
+
+  // 3. Habit & Health Actions
   const handleToggleHabit = async (id: string, date: string) => {
     try {
       const res = await fetch('/api/today/habits', {
@@ -210,6 +240,26 @@ export default function TodayPage() {
       }
     } catch (err) {
       console.error('Error toggling habit:', err);
+    }
+  };
+
+  const handleUpdateProfile = async (updates: Partial<PersonalProfile>) => {
+    setState((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        profile: { ...prev.profile, ...updates },
+      };
+    });
+
+    try {
+      await fetch('/api/today/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (err) {
+      console.error('Error updating profile:', err);
     }
   };
 
@@ -252,7 +302,6 @@ export default function TodayPage() {
     }
   };
 
-  // 5. Milestone Actions
   const handleUpdateMilestone = async (id: string, progress: number) => {
     setState((prev) => {
       if (!prev) return prev;
@@ -273,27 +322,6 @@ export default function TodayPage() {
     }
   };
 
-  // 6. Profile Actions
-  const handleUpdateProfile = async (updates: Partial<PersonalProfile>) => {
-    setState((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        profile: { ...prev.profile, ...updates },
-      };
-    });
-
-    try {
-      await fetch('/api/today/profile', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
-    } catch (err) {
-      console.error('Error updating profile:', err);
-    }
-  };
-
   // Trigger AI with Context
   const handleTriggerAI = (topicOrProduct: string, actionType: string) => {
     setAiTopic(topicOrProduct);
@@ -305,13 +333,9 @@ export default function TodayPage() {
   const filteredTasks = useMemo(() => {
     if (!state) return [];
     return state.tasks.filter((task) => {
-      // Mode match
       if (task.mode !== currentMode) return false;
-
-      // Timeframe match
       if (task.timeframe !== currentTimeframe) return false;
 
-      // Category match
       if (currentMode === 'business' && businessCategory !== 'all') {
         if (task.category !== businessCategory) return false;
       }
@@ -319,11 +343,9 @@ export default function TodayPage() {
         if (task.category !== jobCategory) return false;
       }
 
-      // Status filter
       if (statusFilter === 'pending' && task.status === 'completed') return false;
       if (statusFilter === 'completed' && task.status !== 'completed') return false;
 
-      // Search match
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const inTitle = task.title.toLowerCase().includes(q);
@@ -348,7 +370,7 @@ export default function TodayPage() {
     if (!state) return counts;
 
     state.tasks
-      .filter((t) => t.mode === currentMode)
+      .filter((t) => currentMode === 'overview' || t.mode === currentMode)
       .forEach((t) => {
         if (counts[t.timeframe]) {
           counts[t.timeframe].total += 1;
@@ -369,6 +391,9 @@ export default function TodayPage() {
     );
   }, [state]);
 
+  // Today string
+  const todayStr = new Date().toISOString().split('T')[0];
+
   // Show Lock Screen if not authenticated
   if (isAuthenticated === false) {
     return <LockScreen onUnlock={handleUnlock} />;
@@ -377,17 +402,17 @@ export default function TodayPage() {
   // Loading Skeleton
   if (loading || !state) {
     return (
-      <div className="min-h-screen bg-[#080c0a] text-zinc-100 flex flex-col items-center justify-center gap-3">
-        <div className="w-8 h-8 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+      <div className={`min-h-screen ${theme.bgCanvas} text-zinc-100 flex flex-col items-center justify-center gap-3 transition-colors duration-500`}>
+        <div className={`w-7 h-7 rounded-full border-2 ${theme.textPrimary} border-t-transparent animate-spin`} />
         <p className="text-xs font-mono text-zinc-400 animate-pulse">
-          Loading /today OS...
+          Opening /today OS...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#070b09] text-zinc-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-zinc-950">
+    <div className={`min-h-screen ${theme.bgCanvas} text-zinc-100 flex flex-col font-sans transition-colors duration-500`}>
       {/* 1. TOP NAVBAR */}
       <TodayNavbar
         currentMode={currentMode}
@@ -403,172 +428,386 @@ export default function TodayPage() {
           setShowAIModal(true);
         }}
         onOpenTimerModal={() => setShowTimerModal(true)}
-        onLock={handleLock}
-        streak={state.profile.currentStreak || 14}
       />
 
-      {/* Main Workspace Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* 2. TIMEFRAME HORIZONS SWITCHER */}
-        <TimeframeNav
-          currentTimeframe={currentTimeframe}
-          onSelectTimeframe={(tf) => {
-            playChime('click');
-            setCurrentTimeframe(tf);
-          }}
-          counts={timeframeCounts}
-        />
-
-        {/* 3. UPCOMING REMINDERS BANNER (IF ANY) */}
-        {upcomingReminders.length > 0 && currentTimeframe === 'today' && (
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/20 text-xs text-emerald-300 shadow-sm animate-fade-in">
-            <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-emerald-400 animate-bounce" />
-              <span className="font-semibold text-zinc-200">Today&apos;s Active Reminders:</span>
-              <span className="text-emerald-400">
-                {upcomingReminders
-                  .slice(0, 2)
-                  .map((r) => `${r.title} (${r.reminderTime})`)
-                  .join(' • ')}
-              </span>
-            </div>
-            <span className="text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md">
-              {upcomingReminders.length} Active
-            </span>
-          </div>
-        )}
-
-        {/* 4. MODE SPECIFIC VIEWS */}
-        {currentMode === 'personal' && (
-          <PersonalView
-            profile={state.profile}
-            habits={state.habits}
-            finances={state.finances}
-            milestones={state.milestones}
+      {/* Main Container */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
+        {currentMode === 'overview' ? (
+          <OverviewDashboard
+            state={state}
+            onSelectMode={(mode) => {
+              playChime('click');
+              setCurrentMode(mode);
+            }}
+            onToggleTaskComplete={handleToggleTaskComplete}
+            onUpdateSubtasks={handleUpdateSubtasks}
+            onTriggerAI={handleTriggerAI}
             onUpdateProfile={handleUpdateProfile}
-            onToggleHabit={handleToggleHabit}
-            onAddFinance={handleAddFinance}
-            onDeleteFinance={handleDeleteFinance}
-            onUpdateMilestone={handleUpdateMilestone}
+            onOpenTaskModal={() => setShowTaskModal(true)}
           />
-        )}
+        ) : (
+          <>
+            {/* 2. TOP COMPACT TIMEFRAME HORIZONS */}
+            <TimeframeNav
+              currentTimeframe={currentTimeframe}
+              onSelectTimeframe={(tf) => {
+                playChime('click');
+                setCurrentTimeframe(tf);
+              }}
+              counts={timeframeCounts}
+              currentMode={currentMode}
+            />
 
-        {currentMode === 'business' && (
-          <BusinessView
-            milestones={state.milestones}
-            habits={state.habits}
-            selectedCategory={businessCategory}
-            onSelectCategory={setBusinessCategory}
-            onTriggerAI={handleTriggerAI}
-          />
-        )}
+        {/* 3. SUB-HEADER: VIEW SWITCHER (TASKS VS INSIGHTS HUB) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                playChime('click');
+                setViewTab('tasks');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                viewTab === 'tasks'
+                  ? `${theme.activePill}`
+                  : 'text-zinc-400 hover:text-white bg-zinc-900/60 border border-zinc-800'
+              }`}
+            >
+              <CheckSquare className="w-3.5 h-3.5" />
+              <span>Tasks & Action Items</span>
+              <span className="text-[10px] opacity-75 font-mono">({filteredTasks.length})</span>
+            </button>
 
-        {currentMode === 'job' && (
-          <JobView
-            milestones={state.milestones}
-            selectedCategory={jobCategory}
-            onSelectCategory={setJobCategory}
-            onTriggerAI={handleTriggerAI}
-          />
-        )}
-
-        {/* 5. TASKS SECTION (FILTERED BY TIMEFRAME & MODE) */}
-        <div className="bg-zinc-900/40 border border-zinc-800/80 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
-          {/* Section Header & Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
-            <div>
-              <h3 className="text-sm sm:text-base font-bold text-zinc-100 tracking-tight flex items-center gap-2">
-                <span>
-                  {currentTimeframe === 'today'
-                    ? 'Aaj Ke Tasks (Today)'
-                    : currentTimeframe === 'week'
-                    ? 'This Week Sprint'
-                    : currentTimeframe === 'month'
-                    ? 'This Month Deliverables'
-                    : '6 Month Vision Roadmap'}
-                </span>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-950/40 text-emerald-400 border border-emerald-500/20">
-                  {filteredTasks.length}
-                </span>
-              </h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
+            <button
+              onClick={() => {
+                playChime('click');
+                setViewTab('insights');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                viewTab === 'insights'
+                  ? `${theme.activePill}`
+                  : 'text-zinc-400 hover:text-white bg-zinc-900/60 border border-zinc-800'
+              }`}
+            >
+              <BarChart2 className="w-3.5 h-3.5" />
+              <span>
                 {currentMode === 'personal'
-                  ? 'Personal Health, Finance & Routine execution'
+                  ? 'Financial & Routine Hub'
                   : currentMode === 'business'
-                  ? 'Fasly, Campus, Delegatework, & Delegatespace deliverables'
-                  : 'DSA, System Design, Mobile (Flutter/RN/iOS), & Communication mastery'}
-              </p>
-            </div>
-
-            {/* Search & Status Filters */}
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
-                <input
-                  type="text"
-                  placeholder="Filter tasks..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-xs rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 w-36 sm:w-44"
-                />
-              </div>
-
-              <select
-                value={statusFilter}
-                onChange={(e: any) => setStatusFilter(e.target.value)}
-                className="px-2.5 py-1.5 text-xs rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-300 focus:outline-none focus:border-emerald-500"
-              >
-                <option value="all">All</option>
-                <option value="pending">Pending</option>
-                <option value="completed">Done</option>
-              </select>
-
-              <button
-                onClick={() => setShowTaskModal(true)}
-                className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-zinc-950 shadow-md shadow-emerald-500/15 transition-all active:scale-95"
-              >
-                <Plus className="w-3.5 h-3.5 text-zinc-950" />
-                <span className="hidden sm:inline">Add Task</span>
-              </button>
-            </div>
+                  ? 'Products & Marketing Hub'
+                  : 'Competencies & Interview Hub'}
+              </span>
+            </button>
           </div>
 
-          {/* Tasks List */}
-          {filteredTasks.length === 0 ? (
-            <div className="py-12 text-center space-y-3">
-              <div className="w-12 h-12 mx-auto rounded-2xl bg-zinc-800/40 flex items-center justify-center text-zinc-500">
-                <CheckCircle2 className="w-6 h-6 text-zinc-600" />
-              </div>
-              <h4 className="text-sm font-semibold text-zinc-300">All clear for this view</h4>
-              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                No tasks match your current filter. Add a new task or generate one with Gemini AI!
-              </p>
-              <button
-                onClick={() => setShowTaskModal(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-400 text-zinc-950 hover:bg-emerald-300"
-              >
-                <Plus className="w-3.5 h-3.5 text-zinc-950" />
-                <span>Create Task</span>
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-2.5">
-              {filteredTasks.map((task) => (
-                <TaskItemCard
-                  key={task.id}
-                  task={task}
-                  onToggleComplete={handleToggleTaskComplete}
-                  onUpdateSubtasks={handleUpdateSubtasks}
-                  onDelete={handleDeleteTask}
-                />
-              ))}
+          {/* Active Reminder Pill */}
+          {upcomingReminders.length > 0 && currentTimeframe === 'today' && (
+            <div className={`flex items-center gap-2 px-3 py-1 rounded-xl text-xs ${theme.badge}`}>
+              <Bell className="w-3 h-3 animate-pulse" />
+              <span className="font-medium text-zinc-200 truncate max-w-[260px]">
+                {upcomingReminders[0]?.title} ({upcomingReminders[0]?.reminderTime})
+              </span>
             </div>
           )}
         </div>
+
+        {/* 4. MAIN VIEW CONTENT */}
+        {viewTab === 'tasks' ? (
+          /* BALANCED 2-COLUMN LAYOUT: TASKS (LEFT 65%) + CONTEXT SIDEBAR (RIGHT 35%) */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+            {/* LEFT STREAM: TASKS (8 COLS) */}
+            <div className="lg:col-span-8 space-y-3">
+              {/* Quick Inline Add Input */}
+              <form onSubmit={handleQuickAdd} className="relative">
+                <input
+                  type="text"
+                  placeholder={`+ Add a task to ${theme.name} for ${currentTimeframe === 'today' ? 'Today' : currentTimeframe}... [Press Enter]`}
+                  value={quickTaskTitle}
+                  onChange={(e) => setQuickTaskTitle(e.target.value)}
+                  className={`w-full px-4 py-2.5 rounded-2xl bg-zinc-900/60 border ${theme.borderSubtle} text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:${theme.borderActive} transition-all`}
+                />
+              </form>
+
+              {/* Filter Bar */}
+              <div className="flex items-center justify-between gap-2 px-1">
+                <div className="flex items-center gap-1 text-xs">
+                  {(['all', 'pending', 'completed'] as const).map((st) => (
+                    <button
+                      key={st}
+                      onClick={() => setStatusFilter(st)}
+                      className={`px-2.5 py-1 rounded-lg capitalize text-[11px] font-medium transition-all ${
+                        statusFilter === st
+                          ? 'bg-zinc-800 text-zinc-100 border border-zinc-700'
+                          : 'text-zinc-500 hover:text-zinc-300'
+                      }`}
+                    >
+                      {st}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative">
+                  <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-7 pr-2.5 py-1 text-xs rounded-xl bg-zinc-900/60 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none w-32 sm:w-40"
+                  />
+                </div>
+              </div>
+
+              {/* Task Cards */}
+              {filteredTasks.length === 0 ? (
+                <div className="py-12 text-center rounded-2xl border border-dashed border-zinc-850 bg-zinc-900/20 space-y-2">
+                  <div className="w-8 h-8 mx-auto rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-600">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <h4 className="text-xs font-semibold text-zinc-300">All clear for this view</h4>
+                  <p className="text-[11px] text-zinc-500 max-w-xs mx-auto">
+                    Type a task title above and press enter to add it instantly.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {filteredTasks.map((task) => (
+                    <TaskItemCard
+                      key={task.id}
+                      task={task}
+                      onToggleComplete={handleToggleTaskComplete}
+                      onUpdateSubtasks={handleUpdateSubtasks}
+                      onDelete={handleDeleteTask}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* RIGHT SIDEBAR: EXECUTIVE CONTEXT WIDGET (4 COLS) */}
+            <div className="lg:col-span-4 space-y-3">
+              {/* Personal Context Widget */}
+              {currentMode === 'personal' && (
+                <div className="p-4 rounded-2xl bg-zinc-900/50 border border-emerald-500/15 space-y-3">
+                  <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                    <span className="text-[11px] font-mono font-semibold text-emerald-400 uppercase tracking-wider">
+                      Daily Routine
+                    </span>
+                    <div className="flex items-center gap-1 text-[11px] font-mono text-emerald-300">
+                      <Flame className="w-3.5 h-3.5 fill-current" />
+                      <span>{state.profile.currentStreak || 14}d</span>
+                    </div>
+                  </div>
+
+                  {/* Routine Checkboxes */}
+                  <div className="space-y-1.5 text-xs">
+                    <label
+                      onClick={() => {
+                        playChime('click');
+                        handleUpdateProfile({ morningRoutineCompleted: !state.profile.morningRoutineCompleted });
+                      }}
+                      className="flex items-center gap-2 p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 cursor-pointer hover:border-emerald-500/30 transition-all"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={state.profile.morningRoutineCompleted}
+                        readOnly
+                        className="rounded border-zinc-700 text-emerald-500 focus:ring-0"
+                      />
+                      <span className="text-zinc-200 text-xs">Morning Awakening Routine</span>
+                    </label>
+
+                    <label
+                      onClick={() => {
+                        playChime('click');
+                        handleUpdateProfile({ nightReviewCompleted: !state.profile.nightReviewCompleted });
+                      }}
+                      className="flex items-center gap-2 p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 cursor-pointer hover:border-emerald-500/30 transition-all"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={state.profile.nightReviewCompleted}
+                        readOnly
+                        className="rounded border-zinc-700 text-emerald-500 focus:ring-0"
+                      />
+                      <span className="text-zinc-200 text-xs">Night Day Review Protocol</span>
+                    </label>
+                  </div>
+
+                  {/* Water counter */}
+                  <div className="flex items-center justify-between p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 text-xs">
+                    <span className="flex items-center gap-1.5 text-zinc-400">
+                      <Droplets className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Water Intake</span>
+                    </span>
+                    <div className="flex items-center gap-1.5 font-mono">
+                      <button
+                        onClick={() => state.profile.waterIntakeGlasses > 0 && handleUpdateProfile({ waterIntakeGlasses: state.profile.waterIntakeGlasses - 1 })}
+                        className="w-5 h-5 rounded bg-zinc-800 text-white font-bold"
+                      >
+                        -
+                      </button>
+                      <span className="font-bold text-zinc-100">{state.profile.waterIntakeGlasses || 4}/8</span>
+                      <button
+                        onClick={() => handleUpdateProfile({ waterIntakeGlasses: (state.profile.waterIntakeGlasses || 0) + 1 })}
+                        className="w-5 h-5 rounded bg-emerald-500 text-zinc-950 font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setViewTab('insights')}
+                    className="w-full py-1.5 text-xs text-emerald-400 hover:text-emerald-300 flex items-center justify-center gap-1 font-medium"
+                  >
+                    <span>View Financial Plan & Ledger</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+
+              {/* Business Context Widget */}
+              {currentMode === 'business' && (
+                <div className="p-4 rounded-2xl bg-zinc-900/50 border border-sky-500/15 space-y-3">
+                  <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                    <span className="text-[11px] font-mono font-semibold text-sky-400 uppercase tracking-wider">
+                      Ecosystem Products
+                    </span>
+                    <button
+                      onClick={() => handleTriggerAI('delegatework', 'business_content')}
+                      className="text-[10px] font-medium text-sky-300 hover:text-white flex items-center gap-1"
+                    >
+                      <Sparkles className="w-3 h-3 text-sky-400" />
+                      <span>AI Growth</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs">
+                    {[
+                      { name: 'Delegatework', link: 'https://delegatework.in/', tag: 'Teams & SEO' },
+                      { name: 'Fasly', link: 'https://fasly.in/', tag: 'Agriculture' },
+                      { name: 'Campus', link: 'https://delegatecampus.in/', tag: 'Student Jobs' },
+                      { name: 'Delegatespace', link: 'https://www.delegatespace.com/', tag: 'Parent Studio' },
+                    ].map((p) => (
+                      <div
+                        key={p.name}
+                        className="flex items-center justify-between p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 text-xs"
+                      >
+                        <div>
+                          <span className="font-semibold text-zinc-200 block">{p.name}</span>
+                          <span className="text-[10px] text-zinc-500">{p.tag}</span>
+                        </div>
+                        <a
+                          href={p.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 rounded text-zinc-500 hover:text-sky-400 hover:bg-zinc-800 transition-colors"
+                          title={`Open ${p.link}`}
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setViewTab('insights')}
+                    className="w-full py-1.5 text-xs text-sky-400 hover:text-sky-300 flex items-center justify-center gap-1 font-medium"
+                  >
+                    <span>View Marketing Strategy & Hub</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+
+              {/* Job Prep Context Widget */}
+              {currentMode === 'job' && (
+                <div className="p-4 rounded-2xl bg-[#120f06]/75 border border-amber-500/25 space-y-3">
+                  <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                    <span className="text-[11px] font-mono font-semibold text-amber-400 uppercase tracking-wider">
+                      Technical Track
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/50 text-amber-300 border border-amber-500/30 font-semibold">
+                      72/100 Solved
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs">
+                    <div className="p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 flex items-center justify-between">
+                      <span className="text-zinc-300">DSA Blind 75</span>
+                      <span className="text-amber-400 font-semibold font-mono">Graphs / DP</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 flex items-center justify-between">
+                      <span className="text-zinc-300">HLD System Design</span>
+                      <span className="text-amber-400 font-semibold font-mono">Distributed Cache</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-zinc-950/60 border border-zinc-850 flex items-center justify-between">
+                      <span className="text-zinc-300">Communication STAR</span>
+                      <span className="text-amber-400 font-semibold font-mono">20m Daily Drill</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleTriggerAI('dsa', 'job_prep')}
+                    className="w-full py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Generate AI Coach Drill</span>
+                  </button>
+
+                  <button
+                    onClick={() => setViewTab('insights')}
+                    className="w-full py-1 text-xs text-amber-400 hover:text-amber-300 flex items-center justify-center gap-1 font-medium"
+                  >
+                    <span>View All 6 Competency Pillars</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* DEDICATED FULL-WIDTH HUB VIEW (WHEN SWITCHED TO INSIGHTS) */
+          <div>
+            {currentMode === 'personal' && (
+              <PersonalView
+                profile={state.profile}
+                habits={state.habits}
+                finances={state.finances}
+                milestones={state.milestones}
+                onUpdateProfile={handleUpdateProfile}
+                onToggleHabit={handleToggleHabit}
+                onAddFinance={handleAddFinance}
+                onDeleteFinance={handleDeleteFinance}
+                onUpdateMilestone={handleUpdateMilestone}
+              />
+            )}
+
+            {currentMode === 'business' && (
+              <BusinessView
+                milestones={state.milestones}
+                habits={state.habits}
+                selectedCategory={businessCategory}
+                onSelectCategory={setBusinessCategory}
+                onTriggerAI={handleTriggerAI}
+              />
+            )}
+
+            {currentMode === 'job' && (
+              <JobView
+                milestones={state.milestones}
+                selectedCategory={jobCategory}
+                onSelectCategory={setJobCategory}
+                onTriggerAI={handleTriggerAI}
+              />
+            )}
+          </div>
+        )}
+          </>
+        )}
       </main>
 
-      {/* 6. MODALS */}
-      {/* Task Creation Modal */}
+      {/* 5. MODALS */}
       <TaskModal
         isOpen={showTaskModal}
         onClose={() => setShowTaskModal(false)}
@@ -577,7 +816,6 @@ export default function TodayPage() {
         initialTimeframe={currentTimeframe}
       />
 
-      {/* AI Copilot Modal */}
       <AICopilotModal
         isOpen={showAIModal}
         onClose={() => setShowAIModal(false)}
@@ -595,7 +833,6 @@ export default function TodayPage() {
         initialAction={aiAction}
       />
 
-      {/* Focus Timer Modal */}
       <FocusTimerModal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}

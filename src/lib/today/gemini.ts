@@ -72,16 +72,16 @@ export async function callGemini(prompt: string, systemInstruction?: string): Pr
 function generateOfflineFallback(prompt: string): string {
   const lower = prompt.toLowerCase();
 
-  if (lower.includes('fasly') || lower.includes('kisan') || lower.includes('farmer')) {
-    return `### 🌾 Fasly Kisan App — Marketing & SEO Action Plan
+  if (lower.includes('fasly') || lower.includes('agriculture') || lower.includes('farmer')) {
+    return `### 🌾 Fasly Agriculture App — Marketing & SEO Action Plan
 1. **Facebook Community Post Hook:**
-   - *"किसान भाइयों, इस मौसम में गेहूं और सरसों की फसल को कीटों से बचाने का आसान उपाय! जानिये सही खाद और सिंचाई का सटीक समय।"*
-   - CTA: *"अपनी फसल की सेहत जांचने के लिए Fasly App अभी डाउनलोड करें: https://fasly.in/"*
+   - *"Attention farmers: Proven methods to protect your winter crops from seasonal pests and optimize irrigation timing for maximum yield!"*
+   - CTA: *"Download the Fasly Agriculture App today to diagnose crop health instantly: https://fasly.in/"*
 2. **High-Traffic SEO Blog Title Ideas:**
    - *"Rabi Crop Diseases 2026: Prevention, Organic Remedies & Yield Boosting Guide"*
-   - *"Top 5 Digital Tools Every Modern Kisan Must Use in India (Fasly Review)"*
+   - *"Top 5 Digital Tools Every Modern Farmer Must Use in India (Fasly Review)"*
 3. **Core Target Keywords:**
-   - \`kisan mobile app india\`, \`fasly kisan\`, \`gehu ki kheti tips\`, \`crop disease detection\``;
+   - \`agriculture mobile app india\`, \`fasly agriculture\`, \`wheat farming tips\`, \`crop disease detection\``;
   }
 
   if (lower.includes('delegatework') || lower.includes('teams') || lower.includes('linkedin')) {
@@ -150,7 +150,7 @@ export async function generateSmartSchedule(tasks: TaskItem[], energyLevel: stri
   const prompt = `You are Yogesh Verma's elite executive AI strategist.
 Yogesh is balancing 3 lives simultaneously:
 1. Personal (Health, ₹50k SIP/Finance, Life goals)
-2. Business (Founder of Delegatespace, Delegatework teams platform, Fasly Kisan app, Campus student community)
+2. Business (Founder of Delegatespace, Delegatework teams platform, Fasly agriculture app, Campus student community)
 3. Job Preparation (DSA, System Design, Flutter, React Native, iOS Swift 6, Communication).
 
 His current energy level today is: "${energyLevel}".
