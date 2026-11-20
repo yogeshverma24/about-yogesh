@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 import {
   User,
-  Heart,
   Wallet,
   Target,
   Droplets,
@@ -16,7 +15,6 @@ import {
   CheckCircle,
   Flame,
   Award,
-  DollarSign,
 } from 'lucide-react';
 import { PersonalProfile, FinancialRecord, HabitItem, MilestoneItem } from '@/lib/today/types';
 import { playChime } from '@/lib/today/sound';
@@ -102,40 +100,40 @@ export function PersonalView({
   return (
     <div className="space-y-6">
       {/* Sub-navigation for Personal Mode */}
-      <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+      <div className="flex items-center gap-2 border-b border-zinc-800/80 pb-3">
         <button
           onClick={() => setActiveTab('info')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             activeTab === 'info'
-              ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
           }`}
         >
-          <User className="w-4 h-4 text-purple-400" />
-          <span>Personal Info & Routine</span>
+          <User className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Routine & Bio</span>
         </button>
 
         <button
           onClick={() => setActiveTab('finance')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             activeTab === 'finance'
-              ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
           }`}
         >
-          <Wallet className="w-4 h-4 text-emerald-400" />
+          <Wallet className="w-3.5 h-3.5 text-emerald-400" />
           <span>Financial Plan</span>
         </button>
 
         <button
           onClick={() => setActiveTab('goals')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
             activeTab === 'goals'
-              ? 'bg-amber-600/20 text-amber-300 border border-amber-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40'
           }`}
         >
-          <Target className="w-4 h-4 text-amber-400" />
+          <Target className="w-3.5 h-3.5 text-emerald-400" />
           <span>Goals & Habits</span>
         </button>
       </div>
@@ -144,23 +142,23 @@ export function PersonalView({
       {activeTab === 'info' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Daily State Card */}
-          <div className="md:col-span-2 bg-slate-900/80 border border-white/10 rounded-3xl p-5 space-y-4">
+          <div className="md:col-span-2 bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-bold text-white">{profile.name}</h3>
-                <p className="text-xs text-slate-400">{profile.role}</p>
+                <h3 className="text-base sm:text-lg font-bold text-zinc-100">{profile.name}</h3>
+                <p className="text-xs text-zinc-400">{profile.role}</p>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-bold">
-                <Flame className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/20 text-emerald-300 text-xs font-mono font-medium">
+                <Flame className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
                 <span>{profile.currentStreak || 14}d Focus Streak</span>
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/5 rounded-2xl p-4">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block mb-1">
+            <div className="bg-zinc-950/60 border border-zinc-800/60 rounded-2xl p-4">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 block mb-1">
                 Daily Focus Statement
               </span>
-              <p className="text-sm font-medium text-slate-200 italic">
+              <p className="text-sm font-medium text-zinc-200 italic">
                 &ldquo;{profile.dailyFocusStatement}&rdquo;
               </p>
             </div>
@@ -168,9 +166,9 @@ export function PersonalView({
             {/* Daily Energy & Health Widgets */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
               {/* Energy Level */}
-              <div className="bg-slate-950/60 border border-white/5 rounded-2xl p-3">
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-2">
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800/60 rounded-2xl p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400 mb-2">
+                  <Zap className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Energy Level</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -180,8 +178,8 @@ export function PersonalView({
                       onClick={() => onUpdateProfile({ energyLevel: level })}
                       className={`px-2.5 py-1 text-xs rounded-lg font-bold uppercase transition-all ${
                         profile.energyLevel === level
-                          ? 'bg-amber-500 text-slate-950 font-black'
-                          : 'bg-white/5 text-slate-400 hover:text-white'
+                          ? 'bg-emerald-500 text-zinc-950 font-black'
+                          : 'bg-zinc-800/50 text-zinc-400 hover:text-white'
                       }`}
                     >
                       {level}
@@ -191,25 +189,25 @@ export function PersonalView({
               </div>
 
               {/* Water Intake */}
-              <div className="bg-slate-950/60 border border-white/5 rounded-2xl p-3">
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
-                  <Droplets className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800/60 rounded-2xl p-3">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400 mb-1">
+                  <Droplets className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Water (Glasses)</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-black text-cyan-300">
-                    {profile.waterIntakeGlasses || 4} / 8
+                  <span className="text-xl font-bold font-mono text-zinc-100">
+                    {profile.waterIntakeGlasses || 4} <span className="text-xs text-zinc-500 font-normal">/ 8</span>
                   </span>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={handleWaterDecrement}
-                      className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-xs"
+                      className="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs"
                     >
                       -
                     </button>
                     <button
                       onClick={handleWaterIncrement}
-                      className="w-7 h-7 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs"
+                      className="w-7 h-7 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs"
                     >
                       +
                     </button>
@@ -218,23 +216,23 @@ export function PersonalView({
               </div>
 
               {/* Sleep Hours */}
-              <div className="bg-slate-950/60 border border-white/5 rounded-2xl p-3 col-span-2 sm:col-span-1">
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
-                  <Moon className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800/60 rounded-2xl p-3 col-span-2 sm:col-span-1">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-400 mb-1">
+                  <Moon className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Sleep Last Night</span>
                 </div>
-                <span className="text-xl font-black text-indigo-300">
-                  {profile.sleepHours || 7.5} hrs
+                <span className="text-xl font-bold font-mono text-zinc-100">
+                  {profile.sleepHours || 7.5} <span className="text-xs text-zinc-500 font-normal">hrs</span>
                 </span>
                 <span className="text-[10px] text-emerald-400 block mt-0.5">Optimal recovery</span>
               </div>
             </div>
           </div>
 
-          {/* Daily Routine Checklist */}
-          <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-5 space-y-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-purple-400" />
+          {/* Daily Routine Protocols */}
+          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5 space-y-3">
+            <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-emerald-400" />
               <span>Daily Routine Protocols</span>
             </h4>
 
@@ -244,17 +242,17 @@ export function PersonalView({
                   playChime('click');
                   onUpdateProfile({ morningRoutineCompleted: !profile.morningRoutineCompleted });
                 }}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 cursor-pointer transition-colors border border-white/5"
+                className="flex items-center gap-3 p-3 rounded-xl bg-zinc-950/60 hover:bg-zinc-950 cursor-pointer transition-colors border border-zinc-800/60"
               >
                 <input
                   type="checkbox"
                   checked={profile.morningRoutineCompleted}
                   readOnly
-                  className="rounded border-slate-700 text-purple-600 focus:ring-0"
+                  className="rounded border-zinc-700 text-emerald-500 focus:ring-0"
                 />
                 <div>
-                  <h5 className="text-xs font-bold text-white">Morning Awakening Routine</h5>
-                  <p className="text-[11px] text-slate-400">Hydration, 15m mobility, no screen first 20m</p>
+                  <h5 className="text-xs font-semibold text-zinc-200">Morning Awakening Routine</h5>
+                  <p className="text-[11px] text-zinc-400">Hydration, 15m mobility, review top 3 must-wins</p>
                 </div>
               </label>
 
@@ -263,17 +261,17 @@ export function PersonalView({
                   playChime('click');
                   onUpdateProfile({ nightReviewCompleted: !profile.nightReviewCompleted });
                 }}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 cursor-pointer transition-colors border border-white/5"
+                className="flex items-center gap-3 p-3 rounded-xl bg-zinc-950/60 hover:bg-zinc-950 cursor-pointer transition-colors border border-zinc-800/60"
               >
                 <input
                   type="checkbox"
                   checked={profile.nightReviewCompleted}
                   readOnly
-                  className="rounded border-slate-700 text-purple-600 focus:ring-0"
+                  className="rounded border-zinc-700 text-emerald-500 focus:ring-0"
                 />
                 <div>
-                  <h5 className="text-xs font-bold text-white">Night Protocol & Day Review</h5>
-                  <p className="text-[11px] text-slate-400">Review wins, set top 3 priorities for tomorrow</p>
+                  <h5 className="text-xs font-semibold text-zinc-200">Night Protocol & Day Review</h5>
+                  <p className="text-[11px] text-zinc-400">Audit daily output, sleep peacefully, prepare tomorrow</p>
                 </div>
               </label>
             </div>
@@ -286,72 +284,72 @@ export function PersonalView({
         <div className="space-y-5">
           {/* Top Metric Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-4">
-              <span className="text-xs text-slate-400 font-medium">Monthly Inflow</span>
-              <h4 className="text-lg sm:text-2xl font-black text-emerald-400 mt-1">
+            <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
+              <span className="text-xs text-zinc-400 font-medium">Monthly Inflow</span>
+              <h4 className="text-lg sm:text-2xl font-bold font-mono text-emerald-400 mt-1">
                 ₹{totalIncome.toLocaleString('en-IN')}
               </h4>
-              <span className="text-[10px] text-slate-500">Agency + Products</span>
+              <span className="text-[10px] text-zinc-500">Agency & Products</span>
             </div>
 
-            <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-4">
-              <span className="text-xs text-slate-400 font-medium">Monthly Outflow / Burn</span>
-              <h4 className="text-lg sm:text-2xl font-black text-rose-400 mt-1">
+            <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
+              <span className="text-xs text-zinc-400 font-medium">Monthly Outflow / Burn</span>
+              <h4 className="text-lg sm:text-2xl font-bold font-mono text-zinc-300 mt-1">
                 ₹{totalExpense.toLocaleString('en-IN')}
               </h4>
-              <span className="text-[10px] text-slate-500">Servers, Ads & Living</span>
+              <span className="text-[10px] text-zinc-500">Servers, Ads & Living</span>
             </div>
 
-            <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-4">
-              <span className="text-xs text-slate-400 font-medium">Monthly SIP / Investments</span>
-              <h4 className="text-lg sm:text-2xl font-black text-indigo-400 mt-1">
+            <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
+              <span className="text-xs text-zinc-400 font-medium">Monthly SIP / Investments</span>
+              <h4 className="text-lg sm:text-2xl font-bold font-mono text-emerald-300 mt-1">
                 ₹{totalInvestment.toLocaleString('en-IN')}
               </h4>
-              <span className="text-[10px] text-emerald-400">Discipline Index Funds</span>
+              <span className="text-[10px] text-emerald-400">Index Funds & Stocks</span>
             </div>
 
-            <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-4">
-              <span className="text-xs text-slate-400 font-medium">Net Monthly Surplus</span>
-              <h4 className="text-lg sm:text-2xl font-black text-cyan-400 mt-1">
+            <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
+              <span className="text-xs text-zinc-400 font-medium">Net Monthly Surplus</span>
+              <h4 className="text-lg sm:text-2xl font-bold font-mono text-emerald-400 mt-1">
                 ₹{netSavings.toLocaleString('en-IN')}
               </h4>
-              <span className="text-[10px] text-cyan-300">Available for reinvestment</span>
+              <span className="text-[10px] text-emerald-400">Available capital</span>
             </div>
           </div>
 
           {/* Emergency Fund & Goal Progress */}
-          <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-5">
+          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <Award className="w-4 h-4 text-emerald-400" />
-                  <span>Liquid Emergency Reserve (6-Month Buffer)</span>
+                  <span>Liquid Emergency Reserve (6-Month Runway)</span>
                 </h4>
-                <p className="text-xs text-slate-400">Target ₹3,00,000 for peace of mind</p>
+                <p className="text-xs text-zinc-400">Target ₹3,00,000 liquid capital</p>
               </div>
               <span className="text-sm font-mono font-bold text-emerald-300">₹1,80,000 / ₹3,00,000 (60%)</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-white/5">
-              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-[60%] rounded-full" />
+            <div className="w-full h-2 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800/80">
+              <div className="h-full bg-emerald-500 w-[60%] rounded-full" />
             </div>
           </div>
 
           {/* Financial Transactions & Add Record */}
-          <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-5 space-y-4">
+          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-bold text-white">Current Month Financial Ledger</h4>
+              <h4 className="text-sm font-bold text-zinc-100">Monthly Financial Ledger</h4>
               <button
                 onClick={() => setShowFinanceForm(!showFinanceForm)}
-                className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-all"
+                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all active:scale-95"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3.5 h-3.5 text-zinc-950" />
                 <span>{showFinanceForm ? 'Cancel' : 'Add Entry'}</span>
               </button>
             </div>
 
             {/* Quick Add Form */}
             {showFinanceForm && (
-              <form onSubmit={handleAddFinance} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+              <form onSubmit={handleAddFinance} className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800 space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                   <input
                     type="text"
@@ -359,7 +357,7 @@ export function PersonalView({
                     value={finTitle}
                     onChange={(e) => setFinTitle(e.target.value)}
                     required
-                    className="sm:col-span-2 px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                    className="sm:col-span-2 px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
                   />
                   <input
                     type="number"
@@ -367,12 +365,12 @@ export function PersonalView({
                     value={finAmount}
                     onChange={(e) => setFinAmount(e.target.value)}
                     required
-                    className="px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                    className="px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
                   />
                   <select
                     value={finType}
                     onChange={(e: any) => setFinType(e.target.value)}
-                    className="px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white focus:outline-none focus:border-emerald-500"
+                    className="px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="income">Income (+)</option>
                     <option value="expense">Expense (-)</option>
@@ -382,7 +380,7 @@ export function PersonalView({
                 </div>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400"
+                  className="px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-400 text-zinc-950 hover:bg-emerald-300"
                 >
                   Save Record
                 </button>
@@ -390,12 +388,12 @@ export function PersonalView({
             )}
 
             {/* List */}
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-zinc-850">
               {finances.map((f) => (
                 <div key={f.id} className="py-2.5 flex items-center justify-between text-xs">
                   <div>
-                    <h5 className="font-semibold text-white">{f.title}</h5>
-                    <span className="text-[10px] text-slate-400">
+                    <h5 className="font-semibold text-zinc-200">{f.title}</h5>
+                    <span className="text-[10px] text-zinc-500">
                       {f.date} &bull; {f.category}
                     </span>
                   </div>
@@ -405,8 +403,8 @@ export function PersonalView({
                         f.type === 'income'
                           ? 'text-emerald-400'
                           : f.type === 'expense'
-                          ? 'text-rose-400'
-                          : 'text-indigo-400'
+                          ? 'text-zinc-400'
+                          : 'text-emerald-300'
                       }`}
                     >
                       {f.type === 'income' ? '+' : f.type === 'expense' ? '-' : ''}₹
@@ -414,7 +412,7 @@ export function PersonalView({
                     </span>
                     <button
                       onClick={() => onDeleteFinance(f.id)}
-                      className="text-slate-500 hover:text-rose-400"
+                      className="text-zinc-600 hover:text-rose-400"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -430,9 +428,9 @@ export function PersonalView({
       {activeTab === 'goals' && (
         <div className="space-y-5">
           {/* Daily Habit Streaks */}
-          <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-5 space-y-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              <Flame className="w-4 h-4 text-amber-400" />
+          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5 space-y-3">
+            <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
+              <Flame className="w-4 h-4 text-emerald-400" />
               <span>Daily Personal Habit Streaks (Click to check today)</span>
             </h4>
 
@@ -448,27 +446,27 @@ export function PersonalView({
                       onClick={() => onToggleHabit(habit.id, todayStr)}
                       className={`p-4 rounded-2xl border cursor-pointer transition-all ${
                         doneToday
-                          ? 'bg-purple-950/30 border-purple-500/40'
-                          : 'bg-white/5 border-white/5 hover:border-white/15'
+                          ? 'bg-[#0f1914] border-emerald-500/30'
+                          : 'bg-zinc-950/60 border-zinc-800/80 hover:border-zinc-700'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white">{habit.title}</span>
+                        <span className="text-xs font-semibold text-zinc-200">{habit.title}</span>
                         <span
-                          className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          className={`text-xs font-semibold px-2 py-0.5 rounded-md ${
                             doneToday
-                              ? 'bg-emerald-500/20 text-emerald-400'
-                              : 'bg-white/5 text-slate-400'
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-zinc-800/50 text-zinc-400'
                           }`}
                         >
-                          {doneToday ? 'Done Today' : 'Pending'}
+                          {doneToday ? 'Done' : 'Pending'}
                         </span>
                       </div>
-                      <div className="mt-2 flex items-center gap-2 text-xs font-mono text-amber-300">
-                        <Flame className="w-3.5 h-3.5 fill-amber-400" />
+                      <div className="mt-2 flex items-center gap-2 text-xs font-mono text-emerald-400">
+                        <Flame className="w-3.5 h-3.5 fill-emerald-400" />
                         <span>{habit.streak} days streak (Best: {habit.bestStreak}d)</span>
                       </div>
-                      {habit.notes && <p className="text-[11px] text-slate-400 mt-1">{habit.notes}</p>}
+                      {habit.notes && <p className="text-[11px] text-zinc-500 mt-1">{habit.notes}</p>}
                     </div>
                   );
                 })}
@@ -476,9 +474,9 @@ export function PersonalView({
           </div>
 
           {/* 6-Month Personal Milestones */}
-          <div className="bg-slate-900/80 border border-white/10 rounded-3xl p-5 space-y-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              <Target className="w-4 h-4 text-purple-400" />
+          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-3xl p-5 space-y-3">
+            <h4 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
+              <Target className="w-4 h-4 text-emerald-400" />
               <span>Personal 6-Month Vision Milestones</span>
             </h4>
 
@@ -486,20 +484,20 @@ export function PersonalView({
               {milestones
                 .filter((m) => m.mode === 'personal')
                 .map((m) => (
-                  <div key={m.id} className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                  <div key={m.id} className="p-4 rounded-2xl bg-zinc-950/60 border border-zinc-800/60 space-y-2">
                     <div className="flex items-center justify-between">
-                      <h5 className="text-xs sm:text-sm font-bold text-white">{m.title}</h5>
-                      <span className="text-xs font-mono text-purple-300">{m.progress}%</span>
+                      <h5 className="text-xs sm:text-sm font-semibold text-zinc-200">{m.title}</h5>
+                      <span className="text-xs font-mono font-semibold text-emerald-400">{m.progress}%</span>
                     </div>
 
-                    <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-purple-500 transition-all duration-500"
+                        className="h-full bg-emerald-500 transition-all duration-500"
                         style={{ width: `${m.progress}%` }}
                       />
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-500">
                       <span>Target: {m.targetDate}</span>
                       <span>Metric: {m.metric}</span>
                     </div>
@@ -512,4 +510,3 @@ export function PersonalView({
     </div>
   );
 }
-

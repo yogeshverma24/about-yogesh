@@ -10,8 +10,6 @@ import {
   ChevronDown,
   ChevronUp,
   Trash2,
-  Tag,
-  AlertCircle,
   Sparkles,
 } from 'lucide-react';
 import { TaskItem, ChecklistItem } from '@/lib/today/types';
@@ -47,15 +45,9 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
   };
 
   const priorityStyles: Record<string, string> = {
-    high: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-    medium: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-    low: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-  };
-
-  const modeBadge: Record<string, { label: string; color: string }> = {
-    personal: { label: 'Personal', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
-    business: { label: 'Business', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
-    job: { label: 'Job Prep', color: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' },
+    high: 'text-emerald-400 bg-emerald-950/40 border-emerald-500/30',
+    medium: 'text-zinc-300 bg-zinc-800/60 border-zinc-700/60',
+    low: 'text-zinc-400 bg-zinc-900 border-zinc-800',
   };
 
   const completedSubtasks = (task.checklist || []).filter((c) => c.done).length;
@@ -65,21 +57,21 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
     <div
       className={`group relative rounded-2xl border p-4 transition-all duration-200 ${
         isCompleted
-          ? 'bg-slate-900/40 border-white/5 opacity-75'
-          : 'bg-slate-900/80 border-white/10 hover:border-white/20 hover:shadow-lg'
+          ? 'bg-zinc-900/30 border-zinc-800/40 opacity-70'
+          : 'bg-zinc-900/60 border-zinc-800/80 hover:border-emerald-500/30 hover:bg-[#0d1410]/70 hover:shadow-lg hover:shadow-emerald-950/20'
       }`}
     >
       <div className="flex items-start gap-3.5">
         {/* Toggle Checkbox Button */}
         <button
           onClick={handleToggle}
-          className="mt-0.5 text-slate-400 hover:text-emerald-400 transition-colors flex-shrink-0"
+          className="mt-0.5 text-zinc-500 hover:text-emerald-400 transition-colors flex-shrink-0"
           title={isCompleted ? 'Mark pending' : 'Mark completed'}
         >
           {isCompleted ? (
             <CheckCircle2 className="w-5 h-5 text-emerald-400 fill-emerald-500/20" />
           ) : (
-            <Circle className="w-5 h-5 text-slate-500 hover:text-emerald-400 hover:scale-110 transition-transform" />
+            <Circle className="w-5 h-5 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
           )}
         </button>
 
@@ -87,22 +79,18 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
             {/* Mode Tag */}
-            <span
-              className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                modeBadge[task.mode]?.color || 'bg-slate-800 text-slate-300'
-              }`}
-            >
-              {modeBadge[task.mode]?.label || task.mode}
+            <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-950/50 text-emerald-300 border border-emerald-500/20">
+              {task.mode}
             </span>
 
             {/* Category */}
-            <span className="text-[11px] font-semibold text-slate-300 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md">
+            <span className="text-[11px] font-medium text-zinc-300 bg-zinc-800/60 border border-zinc-700/50 px-2 py-0.5 rounded-md">
               {task.category}
             </span>
 
             {/* Priority */}
             <span
-              className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
+              className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-md border ${
                 priorityStyles[task.priority] || priorityStyles.medium
               }`}
             >
@@ -111,17 +99,17 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
 
             {/* Reminder Time */}
             {task.reminderTime && (
-              <span className="flex items-center gap-1 text-[11px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
-                <Clock className="w-3 h-3" />
+              <span className="flex items-center gap-1 text-[11px] font-mono text-emerald-300 bg-emerald-950/30 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                <Clock className="w-3 h-3 text-emerald-400" />
                 <span>{task.reminderTime}</span>
               </span>
             )}
 
             {/* AI badge if generated */}
             {task.aiGenerated && (
-              <span className="flex items-center gap-1 text-[10px] text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">
-                <Sparkles className="w-2.5 h-2.5 text-indigo-400" />
-                <span>AI Plan</span>
+              <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                <Sparkles className="w-2.5 h-2.5 text-emerald-400" />
+                <span>AI</span>
               </span>
             )}
           </div>
@@ -129,7 +117,7 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
           {/* Title */}
           <h4
             className={`text-sm sm:text-base font-semibold leading-snug tracking-tight ${
-              isCompleted ? 'line-through text-slate-500' : 'text-white'
+              isCompleted ? 'line-through text-zinc-500' : 'text-zinc-100 group-hover:text-white'
             }`}
           >
             {task.title}
@@ -137,7 +125,7 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
 
           {/* Description */}
           {task.description && (
-            <p className={`text-xs mt-1 leading-relaxed ${isCompleted ? 'text-slate-600' : 'text-slate-400'}`}>
+            <p className={`text-xs mt-1 leading-relaxed ${isCompleted ? 'text-zinc-600' : 'text-zinc-400'}`}>
               {task.description}
             </p>
           )}
@@ -147,31 +135,31 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
             <div className="mt-2.5 flex items-center gap-3">
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="flex items-center gap-1 text-xs font-semibold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg border border-white/10 transition-colors"
+                className="flex items-center gap-1 text-xs font-medium text-zinc-300 hover:text-emerald-300 bg-zinc-800/60 hover:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-700/50 transition-colors"
               >
                 <span>
                   Checklist ({completedSubtasks}/{totalSubtasks})
                 </span>
-                {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                {expanded ? <ChevronUp className="w-3.5 h-3.5 text-emerald-400" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-400" />}
               </button>
             </div>
           )}
 
           {/* Expanded Checklist Subtasks */}
           {expanded && totalSubtasks > 0 && (
-            <div className="mt-3 space-y-1.5 pl-2 border-l-2 border-indigo-500/30">
+            <div className="mt-3 space-y-1.5 pl-3 border-l-2 border-emerald-500/30">
               {task.checklist!.map((sub) => (
                 <div
                   key={sub.id}
                   onClick={() => handleToggleSubtask(sub.id)}
-                  className="flex items-center gap-2 text-xs cursor-pointer py-1 text-slate-300 hover:text-white group/sub"
+                  className="flex items-center gap-2 text-xs cursor-pointer py-1 text-zinc-300 hover:text-white group/sub"
                 >
                   {sub.done ? (
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                   ) : (
-                    <Circle className="w-3.5 h-3.5 text-slate-500 group-hover/sub:text-slate-300 flex-shrink-0" />
+                    <Circle className="w-3.5 h-3.5 text-zinc-600 group-hover/sub:text-emerald-400 flex-shrink-0" />
                   )}
-                  <span className={sub.done ? 'line-through text-slate-500' : 'text-slate-300'}>{sub.text}</span>
+                  <span className={sub.done ? 'line-through text-zinc-500' : 'text-zinc-300'}>{sub.text}</span>
                 </div>
               ))}
             </div>
@@ -183,7 +171,7 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
               {task.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[10px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded-full"
+                  className="text-[10px] font-mono text-zinc-400 bg-zinc-800/40 border border-zinc-800 px-2 py-0.5 rounded-md"
                 >
                   #{tag}
                 </span>
@@ -193,13 +181,13 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
         </div>
 
         {/* Right Action Buttons */}
-        <div className="flex items-center gap-1 flex-shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 flex-shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
           {task.externalLink && (
             <a
               href={task.externalLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-white/5 transition-colors"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-emerald-950/30 transition-colors"
               title={`Open ${task.externalLink}`}
             >
               <ExternalLink className="w-4 h-4" />
@@ -208,7 +196,7 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
 
           <button
             onClick={() => onDelete(task.id)}
-            className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
             title="Delete task"
           >
             <Trash2 className="w-4 h-4" />
@@ -218,4 +206,3 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
     </div>
   );
 }
-

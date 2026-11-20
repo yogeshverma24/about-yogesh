@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Plus, Trash2, Clock, Link as LinkIcon, Sparkles } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 import { TaskItem, DashboardMode, Timeframe, TaskPriority } from '@/lib/today/types';
 import { playChime } from '@/lib/today/sound';
 
@@ -87,15 +87,15 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-slate-950/60">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <span>Create New High-Impact Task</span>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-[#0d1410]/90">
+          <h3 className="text-sm sm:text-base font-bold text-zinc-100 flex items-center gap-2">
+            <span>New Task or Sprint Item</span>
           </h3>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-xl text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -105,7 +105,7 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
           {/* Mode Selector */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               Target Mode
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -117,17 +117,13 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
                     setMode(m);
                     setCategory(categoriesByMode[m][0]?.id || 'general');
                   }}
-                  className={`py-2 px-3 text-xs font-bold rounded-xl capitalize transition-all ${
+                  className={`py-2 px-3 text-xs font-semibold rounded-xl capitalize transition-all ${
                     mode === m
-                      ? m === 'personal'
-                        ? 'bg-purple-600 text-white'
-                        : m === 'business'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-emerald-600 text-white'
-                      : 'bg-white/5 text-slate-400 hover:text-white'
+                      ? 'bg-emerald-500 text-zinc-950 font-bold shadow-md shadow-emerald-500/20'
+                      : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  {m}
+                  {m === 'job' ? 'Job Prep' : m}
                 </button>
               ))}
             </div>
@@ -135,13 +131,13 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
 
           {/* Category Dropdown */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 focus:outline-none focus:border-emerald-500"
             >
               {categoriesByMode[mode].map((c) => (
                 <option key={c.id} value={c.id}>
@@ -153,12 +149,12 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
 
           {/* Timeframe */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               Timeframe Horizon
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { id: 'today', label: 'Aaj (Today)' },
+                { id: 'today', label: 'Today (Aaj)' },
                 { id: 'week', label: 'This Week' },
                 { id: 'month', label: 'This Month' },
                 { id: 'six_months', label: '6 Months' },
@@ -167,10 +163,10 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
                   type="button"
                   key={tf.id}
                   onClick={() => setTimeframe(tf.id as Timeframe)}
-                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
+                  className={`py-1.5 px-2 text-xs font-medium rounded-lg transition-all ${
                     timeframe === tf.id
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-white/5 text-slate-400 hover:text-white'
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold'
+                      : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   {tf.label}
@@ -181,7 +177,7 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
 
           {/* Title */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               Task Title *
             </label>
             <input
@@ -190,34 +186,34 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               Description / Notes (Optional)
             </label>
             <textarea
-              placeholder="Key notes, requirements, or links..."
+              placeholder="Key notes, context, or requirements..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
-              className="w-full px-4 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           {/* Priority & Reminder Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
                 Priority
               </label>
               <select
                 value={priority}
                 onChange={(e: any) => setPriority(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 focus:outline-none focus:border-emerald-500"
               >
                 <option value="high">High Priority</option>
                 <option value="medium">Medium Priority</option>
@@ -226,7 +222,7 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
             </div>
 
             <div>
-              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+              <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
                 Reminder Time
               </label>
               <input
@@ -234,14 +230,14 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
                 placeholder="e.g. 11:30 AM"
                 value={reminderTime}
                 onChange={(e) => setReminderTime(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
           {/* External Link */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
               External URL (e.g. https://delegatework.in/)
             </label>
             <input
@@ -249,14 +245,14 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
               placeholder="https://..."
               value={externalLink}
               onChange={(e) => setExternalLink(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           {/* Checklist Subtasks */}
           <div>
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
-              Checklist Subtasks ({subtasks.length})
+            <label className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-1.5">
+              Checklist Steps ({subtasks.length})
             </label>
             <div className="flex items-center gap-2 mb-2">
               <input
@@ -270,12 +266,12 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
                     handleAddSubtask();
                   }
                 }}
-                className="flex-1 px-3 py-1.5 text-xs rounded-lg bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="flex-1 px-3 py-1.5 text-xs rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
               />
               <button
                 type="button"
                 onClick={handleAddSubtask}
-                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold"
+                className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold"
               >
                 Add
               </button>
@@ -285,13 +281,13 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
               {subtasks.map((st, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-2 rounded-lg bg-white/5 text-xs text-slate-300"
+                  className="flex items-center justify-between p-2 rounded-lg bg-zinc-900/60 text-xs text-zinc-300 border border-zinc-800/60"
                 >
                   <span>{st}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveSubtask(i)}
-                    className="text-slate-500 hover:text-rose-400"
+                    className="text-zinc-600 hover:text-rose-400"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -304,9 +300,9 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all active:scale-[0.98]"
+              className="w-full py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-zinc-950 font-bold text-sm shadow-md shadow-emerald-500/15 transition-all active:scale-[0.98]"
             >
-              Add To Roadmap
+              Add To Plan
             </button>
           </div>
         </form>
@@ -314,4 +310,3 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
     </div>
   );
 }
-

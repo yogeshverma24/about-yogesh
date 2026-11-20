@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Calendar,
   Flame,
+  CheckCircle2,
 } from 'lucide-react';
 import { DashboardMode } from '@/lib/today/types';
 import { playChime } from '@/lib/today/sound';
@@ -64,100 +65,105 @@ export function TodayNavbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-slate-950/80 border-b border-white/10 px-4 sm:px-6 py-3 transition-all">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-2xl bg-[#090d0b]/85 border-b border-emerald-500/10 px-4 sm:px-6 py-3 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
         {/* Left: Brand, Clock, Streak */}
-        <div className="flex items-center justify-between md:justify-start gap-4">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between md:justify-start gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5">
             <Link
               href="/"
-              className="text-xs font-semibold px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 transition-colors flex items-center gap-1"
-              title="Return to public portfolio"
+              className="text-[11px] font-mono tracking-tight px-2.5 py-1 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/40 text-emerald-400 border border-emerald-500/20 transition-all flex items-center gap-1 active:scale-95"
+              title="Return to portfolio"
             >
               <span>Portfolio</span>
-              <ArrowUpRight className="w-3 h-3" />
+              <ArrowUpRight className="w-3 h-3 text-emerald-400" />
             </Link>
 
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
-              <h1 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1.5">
+            <div className="flex items-center gap-2 pl-1 border-l border-emerald-500/15">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <h1 className="text-sm sm:text-base font-bold tracking-tight text-zinc-100 flex items-center gap-1.5">
                 <span>/today</span>
-                <span className="text-xs font-mono font-medium text-slate-400 hidden sm:inline">OS</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Workspace
+                </span>
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-300 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg shadow-inner">
-            <Calendar className="w-3.5 h-3.5 text-blue-400" />
-            <span>{currentDate}</span>
-            <span className="text-slate-600">|</span>
-            <span className="font-bold text-white tracking-wider">{currentTime}</span>
+          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900/80 border border-zinc-800/80 px-2.5 sm:px-3 py-1 rounded-lg shadow-sm">
+            <Calendar className="w-3 h-3 text-emerald-400" />
+            <span className="text-[11px] text-zinc-300">{currentDate}</span>
+            <span className="text-zinc-600">|</span>
+            <span className="text-[11px] font-semibold text-emerald-400 tracking-wider">{currentTime}</span>
           </div>
 
           {streak > 0 && (
             <div
-              className="hidden lg:flex items-center gap-1 text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full"
-              title={`${streak} Days Productive Streak`}
+              className="hidden lg:flex items-center gap-1.5 text-xs font-mono font-medium text-emerald-300 bg-emerald-950/30 border border-emerald-500/20 px-2.5 py-1 rounded-lg"
+              title={`${streak} Days Streak`}
             >
-              <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <Flame className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
               <span>{streak}d streak</span>
             </div>
           )}
         </div>
 
-        {/* Center: 3 Modes Switcher */}
-        <div className="flex items-center justify-center bg-slate-900/90 p-1 rounded-xl border border-white/10 shadow-lg">
+        {/* Center: 3 Modes Segmented Control */}
+        <div className="flex items-center justify-center bg-zinc-900/90 p-1 rounded-xl border border-zinc-800/80 shadow-inner">
           {/* Mode 1: Personal */}
           <button
             onClick={() => handleModeChange('personal')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-medium tracking-tight transition-all duration-200 ${
               currentMode === 'personal'
-                ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                ? 'bg-emerald-500 text-zinc-950 font-bold shadow-md shadow-emerald-500/20'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
           >
             <User className="w-3.5 h-3.5" />
-            <span>1. Personal</span>
+            <span>Personal</span>
           </button>
 
           {/* Mode 2: Business */}
           <button
             onClick={() => handleModeChange('business')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-medium tracking-tight transition-all duration-200 ${
               currentMode === 'business'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                ? 'bg-emerald-500 text-zinc-950 font-bold shadow-md shadow-emerald-500/20'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
           >
             <Briefcase className="w-3.5 h-3.5" />
-            <span>2. Business</span>
+            <span>Business</span>
           </button>
 
           {/* Mode 3: Job Prep */}
           <button
             onClick={() => handleModeChange('job')}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-medium tracking-tight transition-all duration-200 ${
               currentMode === 'job'
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                ? 'bg-emerald-500 text-zinc-950 font-bold shadow-md shadow-emerald-500/20'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
           >
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>3. Job Prep</span>
+            <span>Job Prep</span>
           </button>
         </div>
 
-        {/* Right: AI Copilot, Timer, New Task, Lock */}
-        <div className="flex items-center justify-end gap-2">
+        {/* Right: AI Assistant, Focus Timer, New Task, Sound & Lock */}
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2">
           {/* AI Copilot */}
           <button
             onClick={() => {
               if (soundEnabled) playChime('click');
               onOpenAIModal();
             }}
-            className="group relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-md shadow-indigo-600/25 border border-indigo-400/30 transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-300 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/30 transition-all shadow-sm active:scale-95"
           >
-            <Sparkles className="w-3.5 h-3.5 text-yellow-300 animate-spin-slow" />
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             <span className="hidden sm:inline">Gemini AI</span>
             <span className="sm:hidden">AI</span>
           </button>
@@ -168,37 +174,37 @@ export function TodayNavbar({
               if (soundEnabled) playChime('click');
               onOpenTimerModal();
             }}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-colors"
+            className="p-2 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-emerald-400 border border-zinc-800 transition-colors"
             title="Focus Timer (Pomodoro)"
           >
-            <Timer className="w-4 h-4 text-emerald-400" />
+            <Timer className="w-4 h-4" />
           </button>
 
-          {/* New Task */}
+          {/* Add Task */}
           <button
             onClick={() => {
               if (soundEnabled) playChime('click');
               onOpenTaskModal();
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-900 bg-white hover:bg-slate-200 shadow transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-zinc-950 bg-emerald-400 hover:bg-emerald-300 shadow-md shadow-emerald-500/15 transition-all active:scale-95"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-zinc-950" />
             <span>Add Task</span>
           </button>
 
           {/* Sound Toggle */}
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white border border-white/10 transition-colors"
+            className="p-2 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-zinc-800 transition-colors"
             title={soundEnabled ? 'Mute Sounds' : 'Enable Audio Chimes'}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4 text-blue-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-zinc-600" />}
           </button>
 
-          {/* Lock / Security */}
+          {/* Lock */}
           <button
             onClick={onLock}
-            className="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/10 transition-colors"
+            className="p-2 rounded-lg bg-zinc-900/80 hover:bg-rose-500/10 text-zinc-400 hover:text-rose-400 border border-zinc-800 transition-colors"
             title="Lock Dashboard"
           >
             <Lock className="w-4 h-4" />
@@ -208,4 +214,3 @@ export function TodayNavbar({
     </header>
   );
 }
-

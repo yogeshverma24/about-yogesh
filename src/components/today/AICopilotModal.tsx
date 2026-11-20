@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sparkles, X, Send, Bot, Copy, Check, Plus, RefreshCw } from 'lucide-react';
+import { Sparkles, X, Send, Bot, Copy, Check } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
 
 interface Props {
@@ -16,9 +16,6 @@ interface Props {
 export function AICopilotModal({
   isOpen,
   onClose,
-  onAddTaskFromAI,
-  initialTopic,
-  initialAction,
 }: Props) {
   const [prompt, setPrompt] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +26,7 @@ export function AICopilotModal({
 
   const quickPrompts = [
     {
-      label: '⚡ Optimize My Schedule for Today',
+      label: '⚡ Optimize My Schedule Today',
       action: 'schedule',
     },
     {
@@ -43,27 +40,27 @@ export function AICopilotModal({
       product: 'fasly',
     },
     {
-      label: '🎓 Campus: 3 Internship Drops & Community Poll',
+      label: '🎓 Campus: 3 Internship Drops & Poll',
       action: 'business_content',
       product: 'campus',
     },
     {
-      label: '🧠 DSA: Graph / DP LeetCode Pattern Drill',
+      label: '🧠 DSA: Graph / DP LeetCode Drill',
       action: 'job_prep',
       topic: 'dsa',
     },
     {
-      label: '📐 System Design: Distributed Caching Architecture',
+      label: '📐 System Design: Distributed Caching',
       action: 'job_prep',
       topic: 'system_design',
     },
     {
-      label: '🎙 Communication: Behavioral STAR Interview Scenario',
+      label: '🎙 Communication: STAR Behavioral Drill',
       action: 'job_prep',
       topic: 'communication',
     },
     {
-      label: '📊 Review Today Progress & Next Steps',
+      label: '📊 Review Today Progress & Wins',
       action: 'daily_review',
     },
   ];
@@ -92,7 +89,7 @@ export function AICopilotModal({
       } else {
         setResponse(data.error || 'Failed to process AI request.');
       }
-    } catch (err: any) {
+    } catch {
       setResponse('Connection failed. Please ensure the server is running.');
     } finally {
       setLoading(false);
@@ -108,29 +105,29 @@ export function AICopilotModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-3xl bg-slate-900 border border-indigo-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-3xl bg-zinc-950 border border-emerald-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-slate-950/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-[#0d1410]/90">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-md shadow-indigo-500/20">
-              <Sparkles className="w-5 h-5 text-yellow-300" />
+            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <span>Gemini Executive AI Copilot</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                  Online
+              <h3 className="text-sm sm:text-base font-bold text-zinc-100 flex items-center gap-2">
+                <span>Gemini Intelligence Assistant</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  Ready
                 </span>
               </h3>
-              <p className="text-xs text-slate-400">
-                Strategic assistant tailored to Yogesh&apos;s products, job prep & personal goals
+              <p className="text-xs text-zinc-400">
+                Customized for Yogesh&apos;s products, job prep & personal roadmap
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-2 rounded-xl text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -140,7 +137,7 @@ export function AICopilotModal({
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {/* Quick preset pills */}
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/90 block mb-2">
               Instant Strategic Actions
             </span>
             <div className="flex flex-wrap gap-2">
@@ -149,7 +146,7 @@ export function AICopilotModal({
                   key={idx}
                   onClick={() => handleSend(q.action, q.product, q.topic)}
                   disabled={loading}
-                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-all active:scale-95 disabled:opacity-50"
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium bg-zinc-900/80 hover:bg-emerald-950/40 text-zinc-300 hover:text-emerald-300 border border-zinc-800 hover:border-emerald-500/30 transition-all active:scale-95 disabled:opacity-50"
                 >
                   {q.label}
                 </button>
@@ -159,31 +156,29 @@ export function AICopilotModal({
 
           {/* AI Output Display */}
           {loading && (
-            <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-400">
-              <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
-              <p className="text-xs font-mono animate-pulse">Gemini AI is analyzing your goals & synthesizing...</p>
+            <div className="py-12 flex flex-col items-center justify-center gap-3 text-zinc-400">
+              <div className="w-7 h-7 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+              <p className="text-xs font-mono text-emerald-400/80 animate-pulse">Gemini AI is analyzing & generating...</p>
             </div>
           )}
 
           {!loading && response && (
-            <div className="relative p-5 rounded-2xl bg-slate-950/80 border border-indigo-500/20 space-y-3">
-              <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                <span className="text-xs font-mono text-indigo-400 font-bold flex items-center gap-1.5">
+            <div className="relative p-5 rounded-2xl bg-zinc-900/60 border border-emerald-500/20 space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
                   <Bot className="w-4 h-4" />
-                  <span>Gemini Intelligence Result</span>
+                  <span>Intelligence Response</span>
                 </span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1 text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg border border-white/10 transition-colors"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copied ? 'Copied!' : 'Copy'}</span>
-                  </button>
-                </div>
+                <button
+                  onClick={handleCopy}
+                  className="flex items-center gap-1 text-xs text-zinc-400 hover:text-emerald-300 bg-zinc-800/80 hover:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-700/60 transition-colors"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied' : 'Copy'}</span>
+                </button>
               </div>
 
-              <div className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap font-sans">
+              <div className="text-xs sm:text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans">
                 {response}
               </div>
             </div>
@@ -191,7 +186,7 @@ export function AICopilotModal({
         </div>
 
         {/* Footer Input */}
-        <div className="p-4 border-t border-white/10 bg-slate-950/80">
+        <div className="p-4 border-t border-zinc-800 bg-[#0c120f]/90">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -204,12 +199,12 @@ export function AICopilotModal({
               placeholder="Ask anything: 'Suggest 3 high-converting SEO keywords for Delegatework', 'DSA Graph pattern'..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-zinc-100 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30"
             />
             <button
               type="submit"
               disabled={loading || !prompt.trim()}
-              className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all disabled:opacity-50"
+              className="p-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 transition-all disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -219,4 +214,3 @@ export function AICopilotModal({
     </div>
   );
 }
-

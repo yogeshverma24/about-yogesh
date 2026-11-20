@@ -24,12 +24,7 @@ import { LockScreen } from '@/components/today/LockScreen';
 import {
   Search,
   Plus,
-  Sparkles,
   Bell,
-  Clock,
-  Layers,
-  CheckCircle,
-  Filter,
   CheckCircle2,
 } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
@@ -382,18 +377,18 @@ export default function TodayPage() {
   // Loading Skeleton
   if (loading || !state) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center gap-3">
-        <div className="w-10 h-10 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
-        <p className="text-xs font-mono text-slate-400 animate-pulse">
-          Loading Yogesh Verma /today OS...
+      <div className="min-h-screen bg-[#080c0a] text-zinc-100 flex flex-col items-center justify-center gap-3">
+        <div className="w-8 h-8 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
+        <p className="text-xs font-mono text-zinc-400 animate-pulse">
+          Loading /today OS...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
-      {/* 1. TOP EXECUTIVE NAVBAR */}
+    <div className="min-h-screen bg-[#070b09] text-zinc-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-zinc-950">
+      {/* 1. TOP NAVBAR */}
       <TodayNavbar
         currentMode={currentMode}
         onSelectMode={(mode) => {
@@ -426,18 +421,18 @@ export default function TodayPage() {
 
         {/* 3. UPCOMING REMINDERS BANNER (IF ANY) */}
         {upcomingReminders.length > 0 && currentTimeframe === 'today' && (
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 shadow-sm animate-fade-in">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/20 text-xs text-emerald-300 shadow-sm animate-fade-in">
             <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-amber-400 animate-bounce" />
-              <span className="font-bold">Scheduled Reminders Today:</span>
-              <span className="text-amber-200">
+              <Bell className="w-4 h-4 text-emerald-400 animate-bounce" />
+              <span className="font-semibold text-zinc-200">Today&apos;s Active Reminders:</span>
+              <span className="text-emerald-400">
                 {upcomingReminders
                   .slice(0, 2)
                   .map((r) => `${r.title} (${r.reminderTime})`)
                   .join(' • ')}
               </span>
             </div>
-            <span className="text-[10px] font-mono font-bold bg-amber-500/20 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md">
               {upcomingReminders.length} Active
             </span>
           </div>
@@ -478,25 +473,25 @@ export default function TodayPage() {
         )}
 
         {/* 5. TASKS SECTION (FILTERED BY TIMEFRAME & MODE) */}
-        <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/40 border border-zinc-800/80 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl">
           {/* Section Header & Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-zinc-100 tracking-tight flex items-center gap-2">
                 <span>
                   {currentTimeframe === 'today'
-                    ? '⚡ Aaj Ke Tasks & Schedule'
+                    ? 'Aaj Ke Tasks (Today)'
                     : currentTimeframe === 'week'
-                    ? '📅 Is Week Ke Sprints & Goals'
+                    ? 'This Week Sprint'
                     : currentTimeframe === 'month'
-                    ? '🗓️ Is Month Ke Deliverables'
-                    : '🔭 6 Month Long-Term Vision'}
+                    ? 'This Month Deliverables'
+                    : '6 Month Vision Roadmap'}
                 </span>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-950/40 text-emerald-400 border border-emerald-500/20">
                   {filteredTasks.length}
                 </span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-zinc-400 mt-0.5">
                 {currentMode === 'personal'
                   ? 'Personal Health, Finance & Routine execution'
                   : currentMode === 'business'
@@ -508,20 +503,20 @@ export default function TodayPage() {
             {/* Search & Status Filters */}
             <div className="flex items-center gap-2">
               <div className="relative">
-                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
                 <input
                   type="text"
                   placeholder="Filter tasks..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-xs rounded-xl bg-slate-950 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-36 sm:w-44"
+                  className="pl-8 pr-3 py-1.5 text-xs rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 w-36 sm:w-44"
                 />
               </div>
 
               <select
                 value={statusFilter}
                 onChange={(e: any) => setStatusFilter(e.target.value)}
-                className="px-2.5 py-1.5 text-xs rounded-xl bg-slate-950 border border-white/10 text-white focus:outline-none focus:border-indigo-500"
+                className="px-2.5 py-1.5 text-xs rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-300 focus:outline-none focus:border-emerald-500"
               >
                 <option value="all">All</option>
                 <option value="pending">Pending</option>
@@ -530,9 +525,9 @@ export default function TodayPage() {
 
               <button
                 onClick={() => setShowTaskModal(true)}
-                className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30 transition-all active:scale-95"
+                className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-zinc-950 shadow-md shadow-emerald-500/15 transition-all active:scale-95"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3.5 h-3.5 text-zinc-950" />
                 <span className="hidden sm:inline">Add Task</span>
               </button>
             </div>
@@ -541,23 +536,23 @@ export default function TodayPage() {
           {/* Tasks List */}
           {filteredTasks.length === 0 ? (
             <div className="py-12 text-center space-y-3">
-              <div className="w-12 h-12 mx-auto rounded-2xl bg-white/5 flex items-center justify-center text-slate-500">
-                <CheckCircle2 className="w-6 h-6" />
+              <div className="w-12 h-12 mx-auto rounded-2xl bg-zinc-800/40 flex items-center justify-center text-zinc-500">
+                <CheckCircle2 className="w-6 h-6 text-zinc-600" />
               </div>
-              <h4 className="text-sm font-bold text-white">No tasks found for this view</h4>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Everything looks clear or no tasks match your current filter. Add a new task or generate one with Gemini AI!
+              <h4 className="text-sm font-semibold text-zinc-300">All clear for this view</h4>
+              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+                No tasks match your current filter. Add a new task or generate one with Gemini AI!
               </p>
               <button
                 onClick={() => setShowTaskModal(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-950 hover:bg-slate-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-400 text-zinc-950 hover:bg-emerald-300"
               >
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-3.5 h-3.5 text-zinc-950" />
                 <span>Create Task</span>
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2.5">
               {filteredTasks.map((task) => (
                 <TaskItemCard
                   key={task.id}
@@ -608,4 +603,3 @@ export default function TodayPage() {
     </div>
   );
 }
-
