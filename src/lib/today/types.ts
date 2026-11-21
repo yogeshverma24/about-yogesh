@@ -1,6 +1,6 @@
 // src/lib/today/types.ts
 
-export type DashboardMode = 'overview' | 'personal' | 'business' | 'job';
+export type DashboardMode = 'overview' | 'personal' | 'business' | 'job' | 'status';
 
 export type Timeframe = 'today' | 'week' | 'month' | 'six_months';
 
@@ -120,6 +120,50 @@ export interface PersonalProfile {
   leetCodeSolved?: number;
 }
 
+export interface DailyLogItem {
+  id: string;
+  date: string; // YYYY-MM-DD
+  personalSummary: string;
+  businessSummary: string;
+  jobSummary: string;
+  plannedNext?: string;
+  hoursWorked?: {
+    personal: number;
+    business: number;
+    job: number;
+    total: number;
+  };
+  productivityScore: number; // 1 - 10
+  keyTakeaway?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MonthlyAnalyticsReport {
+  id: string;
+  month: string; // YYYY-MM
+  generatedAt: string;
+  productivityScore: number; // 0 - 100
+  totalHoursLogged: number;
+  hoursBreakdown: {
+    personal: number;
+    business: number;
+    job: number;
+  };
+  totalDaysLogged: number;
+  tasksCompletedCount: number;
+  executiveSummary: string;
+  keyWins: string[];
+  areasToImprove: string[];
+  recommendations: string[];
+  modeBreakdown: {
+    personal: string;
+    business: string;
+    job: string;
+  };
+  rawAIOutput?: string;
+}
+
 export interface TodayDashboardState {
   tasks: TaskItem[];
   habits: HabitItem[];
@@ -129,5 +173,7 @@ export interface TodayDashboardState {
   founderChecklist?: FounderChecklistItem[];
   activeRotationWeek?: number;
   weeklyHoursLogged?: number;
+  dailyLogs?: DailyLogItem[];
+  monthlyReports?: MonthlyAnalyticsReport[];
 }
 

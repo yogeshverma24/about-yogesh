@@ -3,7 +3,7 @@ import { DashboardMode } from './types';
 
 export interface ModeTheme {
   name: string;
-  colorName: 'green' | 'blue' | 'yellow' | 'indigo';
+  colorName: 'green' | 'blue' | 'yellow' | 'indigo' | 'cyan';
   
   // Luxury hex palette
   accentHex: string;
@@ -120,5 +120,28 @@ export const modeThemes: Record<DashboardMode, ModeTheme> = {
     ring: 'ring-amber-500/25',
     progressBar: 'bg-amber-500',
     indicator: 'bg-amber-400',
+  },
+  status: {
+    name: 'Daily Status',
+    colorName: 'cyan',
+    accentHex: '#0ea5e9', // Ice Sky Blue
+    accentSoftHex: '#38bdf8',
+    bgHex: '#070a14',
+    cardHex: '#0b1120',
+    borderHex: 'rgba(14, 165, 233, 0.18)',
+
+    bgCanvas: 'bg-[#070a14]',
+    bgCard: 'bg-[#0b1120]/75',
+    bgCardHover: 'hover:bg-[#10182c]/85',
+    borderSubtle: 'border-sky-500/15',
+    borderActive: 'border-sky-400/40',
+    textPrimary: 'text-sky-400',
+    textMuted: 'text-sky-300/70',
+    badge: 'bg-sky-950/40 text-sky-300 border border-sky-500/25',
+    buttonPrimary: 'bg-sky-400 hover:bg-sky-300 text-zinc-950 font-bold shadow-sm',
+    activePill: 'bg-sky-400 text-zinc-950 font-bold shadow-md shadow-sky-950/40',
+    ring: 'ring-sky-500/20',
+    progressBar: 'bg-sky-400',
+    indicator: 'bg-sky-400',
   },
 };

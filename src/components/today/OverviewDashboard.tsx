@@ -33,6 +33,10 @@ import {
   Target,
   ArrowRight,
   ListTodo,
+  BookOpen,
+  Plus,
+  Star,
+  Database,
 } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
 import {
@@ -40,6 +44,7 @@ import {
   PRODUCT_ROTATION_WEEKS,
   INITIAL_FOUNDER_CHECKLIST,
 } from '@/lib/today/scheduleData';
+import { DailyLogItem } from '@/lib/today/types';
 
 interface Props {
   state: TodayDashboardState;
@@ -49,6 +54,8 @@ interface Props {
   onTriggerAI: (topicOrProduct: string, actionType: string) => void;
   onUpdateProfile: (updates: Partial<PersonalProfile>) => void;
   onOpenTaskModal: () => void;
+  onOpenLogModal?: (log?: DailyLogItem) => void;
+  onDeleteLog?: (id: string) => Promise<void>;
   onUpdateSchedule?: (updates: {
     founderChecklist?: FounderChecklistItem[];
     activeRotationWeek?: number;
@@ -64,6 +71,8 @@ export function OverviewDashboard({
   onTriggerAI,
   onUpdateProfile,
   onOpenTaskModal,
+  onOpenLogModal,
+  onDeleteLog,
   onUpdateSchedule,
 }: Props) {
   // 1. Time-aware Greeting
@@ -167,6 +176,23 @@ export function OverviewDashboard({
   // Selected Day from Master Schedule
   const selectedDaySchedule = MASTER_WEEKLY_SCHEDULE[activeDayIdx] || MASTER_WEEKLY_SCHEDULE[0];
   const todaySchedule = MASTER_WEEKLY_SCHEDULE[todayDayIndex] || MASTER_WEEKLY_SCHEDULE[0];
+
+  // Daily Status Snapshot metrics
+  const todayDateString = new Date().toISOString().split('T')[0];
+  const todayLogItem = state.dailyLogs?.find((l) => l.date === todayDateString);
+  const totalLogsCount = state.dailyLogs?.length || 0;
+
+  const weeklyHoursLogged = useMemo(() => {
+    if (!state.dailyLogs || state.dailyLogs.length === 0) return 0;
+    const now = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(now.getDate() - 7);
+    const recent = state.dailyLogs.filter((l) => new Date(l.date) >= sevenDaysAgo);
+    return recent.reduce((sum, l) => sum + (l.hoursWorked?.total || 0), 0);
+  }, [state.dailyLogs]);
+
+  const currentMonthKey = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+  const currentMonthCachedReport = state.monthlyReports?.find((r) => r.month === currentMonthKey);
 
   // 4. Weekly Activity Curve Data (Mon to Sun)
   const weeklyData = [
@@ -1001,6 +1027,177 @@ export function OverviewDashboard({
           >
             <span>Open Job Preparation Hub</span>
             <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* 5.5 EXECUTIVE DAILY STATUS & INTELLIGENCE SNAPSHOT */}
+      <div className="p-5 rounded-2xl bg-zinc-900/50 border border-sky-500/20 space-y-4">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/25 flex items-center justify-center text-sky-400">
+              <BookOpen className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-sky-400">
+                  Daily Status & Performance Intelligence
+                </h4>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-950 text-zinc-400 border border-zinc-800">
+                  {totalLogsCount} Logs Recorded
+                </span>
+              </div>
+              <p className="text-[11px] text-zinc-400">
+                Daily execution across Business, Job Prep, and Personal with monthly AI retrospectives
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <button
+              onClick={() => onOpenLogModal && onOpenLogModal(todayLogItem)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-400 hover:bg-sky-300 text-zinc-950 transition-all shadow-sm active:scale-95"
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>{todayLogItem ? 'Edit Today\'s Status' : 'Log Today\'s Status'}</span>
+            </button>
+            <button
+              onClick={() => onSelectMode('status')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-all"
+            >
+              <span>Open Daily Status Section</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* 3-Column Preview Grid (Same pattern as the 3-pillar preview cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {/* Col 1: Today's Status */}
+          <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-sky-400" />
+                <span>Today&apos;s Execution</span>
+              </span>
+              {todayLogItem ? (
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-500/30">
+                  Logged ({todayLogItem.hoursWorked?.total || 0}h)
+                </span>
+              ) : (
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/50 text-amber-300 border border-amber-500/30">
+                  Pending
+                </span>
+              )}
+            </div>
+
+            {todayLogItem ? (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-zinc-300 font-medium">Productivity Score:</span>
+                  <span className="text-amber-400 font-mono font-bold flex items-center gap-1">
+                    <Star className="w-3 h-3 fill-current text-amber-400" />
+                    {todayLogItem.productivityScore || 8}/10
+                  </span>
+                </div>
+                <div className="text-[11px] font-mono text-zinc-400 flex items-center gap-2">
+                  <span className="text-sky-300">B: {todayLogItem.hoursWorked?.business || 0}h</span>
+                  <span className="text-amber-300">J: {todayLogItem.hoursWorked?.job || 0}h</span>
+                  <span className="text-emerald-300">P: {todayLogItem.hoursWorked?.personal || 0}h</span>
+                </div>
+                {todayLogItem.keyTakeaway && (
+                  <p className="text-[11px] text-zinc-300 italic truncate pt-0.5">
+                    &quot;{todayLogItem.keyTakeaway}&quot;
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2 py-0.5">
+                <p className="text-[11px] text-zinc-400">
+                  No status logged yet for today. Track your 3.5h weekday or 11h weekend block.
+                </p>
+                <button
+                  onClick={() => onOpenLogModal && onOpenLogModal()}
+                  className="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1"
+                >
+                  <span>Record output now</span>
+                  <ChevronRight className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Col 2: Weekly Hours Progress */}
+          <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                <Clock className="w-3 h-3 text-indigo-400" />
+                <span>Weekly Founder Hours</span>
+              </span>
+              <span className="text-[10px] font-mono text-sky-400 font-bold">
+                {weeklyHoursLogged.toFixed(1)} / 39.5h
+              </span>
+            </div>
+
+            <div className="space-y-1">
+              <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden p-0.5 border border-zinc-800">
+                <div
+                  className="h-full bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, (weeklyHoursLogged / 39.5) * 100)}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-0.5">
+                <span>Weekdays: 17.5h</span>
+                <span>Weekend: 22.0h</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-zinc-400 leading-tight">
+              Aligned with your 3.5h Mon-Fri evenings and 11h Sat/Sun deep execution blocks.
+            </p>
+          </div>
+
+          {/* Col 3: Monthly AI Intelligence */}
+          <div className="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-amber-400" />
+                <span>Monthly AI Intelligence</span>
+              </span>
+              {currentMonthCachedReport ? (
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/50 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                  <Database className="w-2.5 h-2.5" />
+                  <span>Cached in DB</span>
+                </span>
+              ) : (
+                <span className="text-[10px] font-mono text-zinc-500">Ready</span>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <div className="text-xs font-semibold text-white truncate">
+                {currentMonthCachedReport?.executiveSummary
+                  ? currentMonthCachedReport.executiveSummary.slice(0, 75) + '...'
+                  : 'AI monthly synthesis available based on your recorded output.'}
+              </div>
+              <p className="text-[10px] text-zinc-400">
+                Persisted in DB to review trends, efficiency, and next-month priorities without re-fetching.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Link */}
+        <div className="pt-1 flex items-center justify-between border-t border-zinc-800/60 text-xs">
+          <span className="text-[11px] text-zinc-400">
+            {todayLogItem ? '✓ Today\'s execution logged' : '⚡ Complete daily entry to maintain streak'}
+          </span>
+          <button
+            onClick={() => onSelectMode('status')}
+            className="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1 group transition-all"
+          >
+            <span>Open Full Daily Status Hub & Analytics</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

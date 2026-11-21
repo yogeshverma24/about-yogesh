@@ -17,7 +17,9 @@ interface Props {
 export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimeframe }: Props) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [mode, setMode] = useState<DashboardMode>(initialMode === 'overview' ? 'personal' : initialMode);
+  const [mode, setMode] = useState<DashboardMode>(
+    initialMode === 'overview' || initialMode === 'status' ? 'personal' : initialMode
+  );
   const [category, setCategory] = useState('general');
   const [timeframe, setTimeframe] = useState<Timeframe>(initialTimeframe);
   const [priority, setPriority] = useState<TaskPriority>('medium');
@@ -30,6 +32,9 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
   const categoriesByMode: Record<DashboardMode, Array<{ id: string; label: string }>> = {
     overview: [
       { id: 'general', label: 'General Action Item' },
+    ],
+    status: [
+      { id: 'daily_status', label: 'Daily Execution' },
     ],
     personal: [
       { id: 'info', label: 'Personal Routine & Bio' },

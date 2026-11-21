@@ -10,6 +10,8 @@ import {
   PersonalProfile,
   TodayDashboardState,
   FounderChecklistItem,
+  DailyLogItem,
+  MonthlyAnalyticsReport,
 } from './types';
 import {
   initialProfile,
@@ -17,6 +19,8 @@ import {
   initialHabits,
   initialFinances,
   initialMilestones,
+  initialDailyLogs,
+  initialMonthlyReports,
 } from './seed';
 import { INITIAL_FOUNDER_CHECKLIST } from './scheduleData';
 import {
@@ -26,6 +30,8 @@ import {
   MilestoneModel,
   ProfileModel,
   SettingsModel,
+  DailyLogModel,
+  MonthlyReportModel,
 } from './models';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
@@ -88,6 +94,11 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       habits: initialHabits,
       finances: initialFinances,
       milestones: initialMilestones,
+      founderChecklist: INITIAL_FOUNDER_CHECKLIST,
+      activeRotationWeek: 1,
+      weeklyHoursLogged: 14.5,
+      dailyLogs: initialDailyLogs,
+      monthlyReports: initialMonthlyReports,
       settings: {},
     };
     try {
@@ -108,6 +119,8 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       founderChecklist: parsed.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
       activeRotationWeek: parsed.activeRotationWeek || 1,
       weeklyHoursLogged: parsed.weeklyHoursLogged || 14.5,
+      dailyLogs: parsed.dailyLogs || initialDailyLogs,
+      monthlyReports: parsed.monthlyReports || initialMonthlyReports,
       settings: parsed.settings || {},
     };
   } catch {
@@ -120,6 +133,8 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       founderChecklist: INITIAL_FOUNDER_CHECKLIST,
       activeRotationWeek: 1,
       weeklyHoursLogged: 14.5,
+      dailyLogs: initialDailyLogs,
+      monthlyReports: initialMonthlyReports,
       settings: {},
     };
   }
@@ -150,12 +165,14 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
 
   if (hasMongo) {
     try {
-      let [tasks, habits, finances, milestones, profileDoc] = await Promise.all([
+      let [tasks, habits, finances, milestones, profileDoc, dailyLogs, monthlyReports] = await Promise.all([
         TaskModel.find().lean(),
         HabitModel.find().lean(),
         FinanceModel.find().lean(),
         MilestoneModel.find().lean(),
         ProfileModel.findOne().lean(),
+        DailyLogModel.find().sort({ date: -1 }).limit(30).lean(),
+        MonthlyReportModel.find().sort({ month: -1 }).lean(),
       ]);
 
       // Seed MongoDB if empty
@@ -175,6 +192,14 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
         await MilestoneModel.insertMany(initialMilestones);
         milestones = await MilestoneModel.find().lean();
       }
+      if (dailyLogs.length === 0) {
+        await DailyLogModel.insertMany(initialDailyLogs);
+        dailyLogs = await DailyLogModel.find().sort({ date: -1 }).limit(30).lean();
+      }
+      if (monthlyReports.length === 0) {
+        await MonthlyReportModel.insertMany(initialMonthlyReports);
+        monthlyReports = await MonthlyReportModel.find().sort({ month: -1 }).lean();
+      }
       let profile = profileDoc as unknown as PersonalProfile;
       if (!profile) {
         const created = await ProfileModel.create(initialProfile);
@@ -187,6 +212,8 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
         finances: finances.map((f: any) => ({ ...f, id: f.id || f._id.toString() })),
         milestones: milestones.map((m: any) => ({ ...m, id: m.id || m._id.toString() })),
         profile: profile || initialProfile,
+        dailyLogs: dailyLogs.map((l: any) => ({ ...l, id: l.id || l._id.toString() })),
+        monthlyReports: monthlyReports.map((r: any) => ({ ...r, id: r.id || r._id.toString() })),
       };
     } catch {
       // Fall through to local state on mongo query error
@@ -203,6 +230,8 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
     founderChecklist: local.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
     activeRotationWeek: local.activeRotationWeek || 1,
     weeklyHoursLogged: local.weeklyHoursLogged || 14.5,
+    dailyLogs: local.dailyLogs || initialDailyLogs,
+    monthlyReports: local.monthlyReports || initialMonthlyReports,
   };
 }
 
@@ -516,5 +545,141 @@ export async function setAppSetting(key: string, value: any): Promise<void> {
       await SettingsModel.findOneAndUpdate({ key }, { value }, { upsert: true });
     } catch {}
   }
+}
+
+// ----------------- DAILY LOGS & MONTHLY PERFORMANCE PERSISTENCE -----------------
+
+export async function getDailyLogs(month?: string): Promise<DailyLogItem[]> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      const query = month ? { date: { $regex: `^${month}` } } : {};
+      const docs = await DailyLogModel.find(query).sort({ date: -1 }).lean();
+      if (docs.length > 0) {
+        return docs.map((d: any) => ({ ...d, id: d.id || d._id.toString() }));
+      }
+    } catch {}
+  }
+
+  const local = getLocalState();
+  const logs = local.dailyLogs || initialDailyLogs;
+  if (month) {
+    return logs.filter((l) => l.date.startsWith(month)).sort((a, b) => b.date.localeCompare(a.date));
+  }
+  return [...logs].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export async function saveDailyLog(log: Partial<DailyLogItem>): Promise<DailyLogItem> {
+  const now = new Date().toISOString();
+  const date = log.date || now.split('T')[0];
+  const id = log.id || `log-${date}-${Date.now().toString().slice(-4)}`;
+
+  const item: DailyLogItem = {
+    id,
+    date,
+    personalSummary: log.personalSummary || '',
+    businessSummary: log.businessSummary || '',
+    jobSummary: log.jobSummary || '',
+    plannedNext: log.plannedNext || '',
+    hoursWorked: {
+      personal: log.hoursWorked?.personal || 0,
+      business: log.hoursWorked?.business || 0,
+      job: log.hoursWorked?.job || 0,
+      total:
+        (log.hoursWorked?.personal || 0) +
+        (log.hoursWorked?.business || 0) +
+        (log.hoursWorked?.job || 0),
+    },
+    productivityScore: log.productivityScore ?? 8,
+    keyTakeaway: log.keyTakeaway || '',
+    createdAt: log.createdAt || now,
+    updatedAt: now,
+  };
+
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      await DailyLogModel.findOneAndUpdate({ date }, item, { upsert: true, new: true });
+    } catch {}
+  }
+
+  const local = getLocalState();
+  const list = local.dailyLogs || initialDailyLogs;
+  const idx = list.findIndex((l) => l.date === date || l.id === id);
+  if (idx !== -1) {
+    list[idx] = item;
+  } else {
+    list.unshift(item);
+  }
+  saveLocalState({ dailyLogs: list });
+  return item;
+}
+
+export async function deleteDailyLog(id: string): Promise<boolean> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      await DailyLogModel.deleteOne({ id });
+    } catch {}
+  }
+  const local = getLocalState();
+  const list = (local.dailyLogs || initialDailyLogs).filter((l) => l.id !== id);
+  saveLocalState({ dailyLogs: list });
+  return true;
+}
+
+export async function getMonthlyReport(month: string): Promise<MonthlyAnalyticsReport | null> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      const doc = await MonthlyReportModel.findOne({ month }).lean();
+      if (doc) {
+        return { ...(doc as any), id: (doc as any).id || (doc as any)._id.toString() };
+      }
+    } catch {}
+  }
+
+  const local = getLocalState();
+  const reports = local.monthlyReports || initialMonthlyReports;
+  const found = reports.find((r) => r.month === month);
+  return found || null;
+}
+
+export async function saveMonthlyReport(report: MonthlyAnalyticsReport): Promise<MonthlyAnalyticsReport> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      await MonthlyReportModel.findOneAndUpdate({ month: report.month }, report, {
+        upsert: true,
+        new: true,
+      });
+    } catch {}
+  }
+
+  const local = getLocalState();
+  const reports = local.monthlyReports || initialMonthlyReports;
+  const idx = reports.findIndex((r) => r.month === report.month);
+  if (idx !== -1) {
+    reports[idx] = report;
+  } else {
+    reports.unshift(report);
+  }
+  saveLocalState({ monthlyReports: reports });
+  return report;
+}
+
+export async function getAllMonthlyReports(): Promise<MonthlyAnalyticsReport[]> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      const docs = await MonthlyReportModel.find().sort({ month: -1 }).lean();
+      if (docs.length > 0) {
+        return docs.map((d: any) => ({ ...d, id: d.id || d._id.toString() }));
+      }
+    } catch {}
+  }
+
+  const local = getLocalState();
+  return (local.monthlyReports || initialMonthlyReports).sort((a, b) => b.month.localeCompare(a.month));
 }
 

@@ -19,10 +19,13 @@ import { OverviewDashboard } from '@/components/today/OverviewDashboard';
 import { BusinessWorkspace } from '@/components/today/BusinessWorkspace';
 import { PersonalWorkspace } from '@/components/today/PersonalWorkspace';
 import { JobWorkspace } from '@/components/today/JobWorkspace';
+import { DailyStatusWorkspace } from '@/components/today/DailyStatusWorkspace';
 import { AICopilotModal } from '@/components/today/AICopilotModal';
 import { TaskModal } from '@/components/today/TaskModal';
 import { FocusTimerModal } from '@/components/today/FocusTimerModal';
+import { DailyStatusModal } from '@/components/today/DailyStatusModal';
 import { LockScreen } from '@/components/today/LockScreen';
+import { DailyLogItem } from '@/lib/today/types';
 
 export default function TodayPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -37,6 +40,8 @@ export default function TodayPage() {
   const [showTaskModal, setShowTaskModal] = useState<boolean>(false);
   const [showAIModal, setShowAIModal] = useState<boolean>(false);
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
+  const [showLogModal, setShowLogModal] = useState<boolean>(false);
+  const [editingLog, setEditingLog] = useState<DailyLogItem | null>(null);
 
   // AI prompt helper state
   const [aiTopic, setAiTopic] = useState<string>('');
@@ -307,6 +312,63 @@ export default function TodayPage() {
     }
   };
 
+  // 5. Daily Task Status Log Actions
+  const handleOpenLogModal = (log?: DailyLogItem) => {
+    setEditingLog(log || null);
+    setShowLogModal(true);
+  };
+
+  const handleSaveDailyLog = async (logData: Partial<DailyLogItem>) => {
+    try {
+      const res = await fetch('/api/today/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(logData),
+      });
+      const data = await res.json();
+      if (data.success && data.log) {
+        setState((prev) => {
+          if (!prev) return prev;
+          const currentLogs = prev.dailyLogs || [];
+          const idx = currentLogs.findIndex(
+            (l) => l.id === data.log.id || l.date === data.log.date
+          );
+          let updatedLogs: DailyLogItem[];
+          if (idx !== -1) {
+            updatedLogs = [...currentLogs];
+            updatedLogs[idx] = data.log;
+          } else {
+            updatedLogs = [data.log, ...currentLogs];
+          }
+          return {
+            ...prev,
+            dailyLogs: updatedLogs,
+          };
+        });
+      }
+    } catch (err) {
+      console.error('Failed to save daily log:', err);
+    }
+  };
+
+  const handleDeleteDailyLog = async (id: string) => {
+    try {
+      const res = await fetch(`/api/today/logs?id=${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setState((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            dailyLogs: (prev.dailyLogs || []).filter((l) => l.id !== id),
+          };
+        });
+      }
+    } catch (err) {
+      console.error('Failed to delete daily log:', err);
+    }
+  };
+
   // Calculate Timeframe Counts across Current Mode
   const timeframeCounts = useMemo(() => {
     const counts: Record<Timeframe, { total: number; completed: number }> = {
@@ -370,6 +432,7 @@ export default function TodayPage() {
           setShowAIModal(true);
         }}
         onOpenTimerModal={() => setShowTimerModal(true)}
+        onOpenLogModal={() => handleOpenLogModal()}
       />
 
       {/* 2. MAIN CONTAINER */}
@@ -383,6 +446,8 @@ export default function TodayPage() {
             onTriggerAI={handleTriggerAI}
             onUpdateProfile={handleUpdateProfile}
             onOpenTaskModal={() => setShowTaskModal(true)}
+            onOpenLogModal={handleOpenLogModal}
+            onDeleteLog={handleDeleteDailyLog}
             onUpdateSchedule={handleUpdateSchedule}
           />
         )}
@@ -459,6 +524,19 @@ export default function TodayPage() {
             />
           </>
         )}
+
+        {currentMode === 'status' && (
+          <DailyStatusWorkspace
+            state={state}
+            onSelectMode={setCurrentMode}
+            onOpenLogModal={(log) => {
+              setEditingLog(log || null);
+              setShowLogModal(true);
+            }}
+            onDeleteLog={handleDeleteDailyLog}
+            onTriggerAI={handleTriggerAI}
+          />
+        )}
       </main>
 
       {/* 3. MODALS */}
@@ -490,6 +568,16 @@ export default function TodayPage() {
       <FocusTimerModal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
+      />
+
+      <DailyStatusModal
+        isOpen={showLogModal}
+        onClose={() => {
+          setShowLogModal(false);
+          setEditingLog(null);
+        }}
+        onSaveLog={handleSaveDailyLog}
+        existingLog={editingLog}
       />
     </div>
   );

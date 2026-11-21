@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 const JWT_SECRET = process.env.JWT_SECRET || 'yogesh-today-dashboard-secret-jwt-key-2026-secure-hash';
 const encodedSecret = new TextEncoder().encode(JWT_SECRET);
 
-export const DEFAULT_MASTER_PASSWORD = process.env.TODAY_PASSWORD || 'yogesh2026';
+export const DEFAULT_MASTER_PASSWORD = process.env.TODAY_PASSWORD || 'yogesh418806';
 
 export interface AuthSession {
   user: string;

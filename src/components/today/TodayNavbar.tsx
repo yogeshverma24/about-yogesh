@@ -10,6 +10,7 @@ import {
   User,
   Briefcase,
   GraduationCap,
+  BookOpen,
 } from 'lucide-react';
 import { DashboardMode } from '@/lib/today/types';
 import { modeThemes } from '@/lib/today/theme';
@@ -20,6 +21,7 @@ interface Props {
   onOpenTaskModal: () => void;
   onOpenAIModal: () => void;
   onOpenTimerModal: () => void;
+  onOpenLogModal?: () => void;
 }
 
 export function TodayNavbar({
@@ -28,6 +30,7 @@ export function TodayNavbar({
   onOpenTaskModal,
   onOpenAIModal,
   onOpenTimerModal,
+  onOpenLogModal,
 }: Props) {
   const theme = modeThemes[currentMode];
 
@@ -97,8 +100,32 @@ export function TodayNavbar({
           </button>
         </div>
 
-        {/* Right: AI Copilot, Timer, New Task (+) */}
+        {/* Right: Daily Status, AI Copilot, Timer, New Task (+) */}
         <div className="flex items-center justify-end gap-2 sm:gap-2.5">
+          {/* Daily Status Section Button (Same position, opens full section) */}
+          <button
+            onClick={() => {
+              if (currentMode !== 'status') {
+                onSelectMode('status');
+              } else if (onOpenLogModal) {
+                onOpenLogModal();
+              }
+            }}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 shadow-sm ${
+              currentMode === 'status'
+                ? 'bg-sky-400 text-zinc-950 font-bold border-sky-400 shadow-md shadow-sky-950/40'
+                : 'bg-zinc-900/90 hover:bg-zinc-800/90 text-zinc-300 hover:text-white border-zinc-800'
+            }`}
+            title={currentMode === 'status' ? 'Log Daily Status' : 'Open Daily Status Section'}
+          >
+            <BookOpen
+              className={`w-3.5 h-3.5 ${
+                currentMode === 'status' ? 'text-zinc-950' : 'text-sky-400'
+              }`}
+            />
+            <span className="hidden md:inline">Daily Status</span>
+          </button>
+
           {/* AI Copilot */}
           <button
             onClick={onOpenAIModal}

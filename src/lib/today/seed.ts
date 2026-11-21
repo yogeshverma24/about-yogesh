@@ -1,5 +1,13 @@
 // src/lib/today/seed.ts
-import { TaskItem, HabitItem, FinancialRecord, MilestoneItem, PersonalProfile } from './types';
+import {
+  TaskItem,
+  HabitItem,
+  FinancialRecord,
+  MilestoneItem,
+  PersonalProfile,
+  DailyLogItem,
+  MonthlyAnalyticsReport,
+} from './types';
 
 export const initialProfile: PersonalProfile = {
   name: 'Yogesh Verma',
@@ -677,5 +685,83 @@ export const initialMilestones: MilestoneItem[] = [
       'Flawless cross-platform mastery (Flutter, React Native, Native iOS/Swift 6)',
       'Exceptional English communication and executive presence in STAR interviews',
     ],
+  },
+];
+
+export const initialDailyLogs: DailyLogItem[] = [
+  {
+    id: 'log-2026-11-20',
+    date: '2026-11-20',
+    personalSummary: 'Completed morning hydration (500ml), 15m mobility stretch, 45m strength gym session, drank 7 glasses of water.',
+    businessSummary: 'Executed Thursday Delegatework SEO keyword audit, published LinkedIn article on async meetings, verified B2B prospect list.',
+    jobSummary: 'Solved LeetCode 210 (Course Schedule II - Topological Sort) in 22 mins, reviewed Distributed Caching and Redis eviction policies.',
+    plannedNext: 'Friday user growth sprint for Campus and Fasly, write seasonal advisory article, review weekly metrics.',
+    hoursWorked: {
+      personal: 1.5,
+      business: 3.5,
+      job: 1.0,
+      total: 6.0,
+    },
+    productivityScore: 9,
+    keyTakeaway: 'Focusing on one deep block per pillar eliminated distraction and kept energy high.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'log-2026-11-19',
+    date: '2026-11-19',
+    personalSummary: 'Read 20 pages of Designing Data-Intensive Applications on Partitioning, logged night review protocol.',
+    businessSummary: 'Wednesday client milestone delivery for Delegatespace studio: shipped mobile UI component and updated client invoice.',
+    jobSummary: 'Studied Swift 6 Concurrency strict data-race checks, @MainActor, and Actor isolation boundaries.',
+    plannedNext: 'Thursday SEO review and Delegatework comparison content.',
+    hoursWorked: {
+      personal: 1.0,
+      business: 3.5,
+      job: 1.5,
+      total: 6.0,
+    },
+    productivityScore: 8,
+    keyTakeaway: 'Writing down tomorrow top 3 outcomes during night review made morning startup effortless.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+export const initialMonthlyReports: MonthlyAnalyticsReport[] = [
+  {
+    id: 'rep-2026-11',
+    month: '2026-11',
+    generatedAt: new Date().toISOString(),
+    productivityScore: 89,
+    totalHoursLogged: 158.0,
+    hoursBreakdown: {
+      personal: 38.0,
+      business: 82.0,
+      job: 38.0,
+    },
+    totalDaysLogged: 20,
+    tasksCompletedCount: 42,
+    executiveSummary: 'November was a strong month characterized by disciplined execution of the 39.5-hour weekly founder cadence. Balanced evening business sprints with day-job responsibilities and technical depth in Mobile and Distributed Systems.',
+    keyWins: [
+      'Maintained consistent 3.5h weekday evening block (7:30 PM - 11:00 PM) with 90%+ adherence',
+      'Delegatework SEO rankings increased across modern team collaboration keywords',
+      'Solved 14 new LeetCode Medium/Hard problems bringing total to 72/100',
+      'Automated monthly mutual fund SIP of ₹50,000 executed seamlessly',
+    ],
+    areasToImprove: [
+      'Increase weekend uninterrupted deep sprints to full 11h blocks on Sundays',
+      'Ensure 8/8 glasses of water daily instead of averaging 6 glasses',
+      'Conduct more direct founder outbound reach-outs on Tuesdays',
+    ],
+    recommendations: [
+      'Double down on Delegatework SEO and high-intent inbound demos',
+      'Finalize DelegatePrep preparation journey for senior/lead software engineer interviews',
+      'Maintain 7.5h sleep hygiene before heavy weekend development sprints',
+    ],
+    modeBreakdown: {
+      personal: 'Consistency in morning routine and wealth compounding. Habit streak maintained at 14+ days.',
+      business: 'Delegatework inbound presence strengthened; consistent Tuesday outreach and Wednesday client delivery.',
+      job: 'Graph algorithms and Swift 6 concurrency mastered. Ready to transition into System Design distributed caching drills.',
+    },
   },
 ];

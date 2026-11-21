@@ -106,6 +106,56 @@ const SettingsSchema = new Schema(
   { timestamps: true }
 );
 
+// Daily Log Schema
+const DailyLogSchema = new Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    date: { type: String, required: true },
+    personalSummary: { type: String, default: '' },
+    businessSummary: { type: String, default: '' },
+    jobSummary: { type: String, default: '' },
+    plannedNext: { type: String, default: '' },
+    hoursWorked: {
+      personal: { type: Number, default: 0 },
+      business: { type: Number, default: 0 },
+      job: { type: Number, default: 0 },
+      total: { type: Number, default: 0 },
+    },
+    productivityScore: { type: Number, default: 8 },
+    keyTakeaway: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+// Monthly Analytics Report Schema
+const MonthlyReportSchema = new Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    month: { type: String, required: true, unique: true }, // e.g. "2026-11"
+    generatedAt: { type: String, required: true },
+    productivityScore: { type: Number, default: 80 },
+    totalHoursLogged: { type: Number, default: 0 },
+    hoursBreakdown: {
+      personal: { type: Number, default: 0 },
+      business: { type: Number, default: 0 },
+      job: { type: Number, default: 0 },
+    },
+    totalDaysLogged: { type: Number, default: 0 },
+    tasksCompletedCount: { type: Number, default: 0 },
+    executiveSummary: { type: String, default: '' },
+    keyWins: [String],
+    areasToImprove: [String],
+    recommendations: [String],
+    modeBreakdown: {
+      personal: { type: String, default: '' },
+      business: { type: String, default: '' },
+      job: { type: String, default: '' },
+    },
+    rawAIOutput: { type: String },
+  },
+  { timestamps: true }
+);
+
 export const TaskModel: Model<any> =
   mongoose.models.TodayTask || mongoose.model('TodayTask', TaskSchema);
 
@@ -123,3 +173,9 @@ export const ProfileModel: Model<any> =
 
 export const SettingsModel: Model<any> =
   mongoose.models.TodaySettings || mongoose.model('TodaySettings', SettingsSchema);
+
+export const DailyLogModel: Model<any> =
+  mongoose.models.TodayDailyLog || mongoose.model('TodayDailyLog', DailyLogSchema);
+
+export const MonthlyReportModel: Model<any> =
+  mongoose.models.TodayMonthlyReport || mongoose.model('TodayMonthlyReport', MonthlyReportSchema);
