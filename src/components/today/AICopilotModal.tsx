@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Send, Bot, Copy, Check } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
+import { FormattedAIResponse } from './FormattedAIResponse';
 
 interface Props {
   isOpen: boolean;
@@ -16,6 +17,8 @@ interface Props {
 export function AICopilotModal({
   isOpen,
   onClose,
+  initialTopic,
+  initialAction,
 }: Props) {
   const [prompt, setPrompt] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,6 +33,18 @@ export function AICopilotModal({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setResponse('');
+      setPrompt('');
+      return;
+    }
+
+    if (initialAction) {
+      handleSend(initialAction, initialTopic, initialTopic);
+    }
+  }, [isOpen, initialAction, initialTopic]);
 
   if (!isOpen) return null;
 
@@ -79,15 +94,19 @@ export function AICopilotModal({
     setResponse('');
     playChime('click');
 
+    const effectiveAction = actionParam || 'custom';
+    const effectiveProduct = effectiveAction === 'business_content' ? (productParam || initialTopic) : productParam;
+    const effectiveTopic = effectiveAction === 'job_prep' ? (topicParam || initialTopic) : topicParam;
+
     try {
       const res = await fetch('/api/today/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: actionParam || 'custom',
+          action: effectiveAction,
           prompt: customText || prompt,
-          product: productParam,
-          topic: topicParam,
+          product: effectiveProduct,
+          topic: effectiveTopic,
         }),
       });
 
@@ -195,8 +214,8 @@ export function AICopilotModal({
                 </button>
               </div>
 
-              <div className="text-xs sm:text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans">
-                {response}
+              <div className="text-zinc-200 leading-relaxed font-sans pt-1">
+                <FormattedAIResponse content={response} />
               </div>
             </div>
           )}
