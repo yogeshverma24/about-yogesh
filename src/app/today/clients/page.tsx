@@ -220,12 +220,12 @@ export default function ClientsPage() {
   const [newTaskPriority, setNewTaskPriority] = useState<'high' | 'medium' | 'low'>('high');
 
   const STAGES: Array<{ id: ClientProject['stage']; label: string; badge: string; color: string }> = [
-    { id: 'lead', label: '1. Inbound & Leads', badge: 'New', color: 'border-zinc-700 bg-zinc-900/60 text-zinc-300' },
-    { id: 'discovery', label: '2. Discovery & Demo', badge: 'Active', color: 'border-blue-500/30 bg-blue-500/10 text-blue-300' },
-    { id: 'proposal', label: '3. Proposal & Scope', badge: 'Sent', color: 'border-amber-500/30 bg-amber-500/10 text-amber-300' },
-    { id: 'sprint', label: '4. Active Sprint', badge: 'Delivery', color: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' },
-    { id: 'review', label: '5. Client QA / Demo', badge: 'Review', color: 'border-purple-500/30 bg-purple-500/10 text-purple-300' },
-    { id: 'delivered', label: '6. Retainer / Delivered', badge: 'Closed', color: 'border-sky-500/30 bg-sky-500/10 text-sky-300' },
+    { id: 'lead', label: 'Inbound', badge: 'New', color: 'border-zinc-700 bg-zinc-900/60 text-zinc-300' },
+    { id: 'discovery', label: 'Discovery', badge: 'Active', color: 'border-blue-500/30 bg-blue-500/10 text-blue-300' },
+    { id: 'proposal', label: 'Proposal', badge: 'Sent', color: 'border-amber-500/30 bg-amber-500/10 text-amber-300' },
+    { id: 'sprint', label: 'Active Sprint', badge: 'Delivery', color: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300' },
+    { id: 'review', label: 'QA / Demo', badge: 'Review', color: 'border-purple-500/30 bg-purple-500/10 text-purple-300' },
+    { id: 'delivered', label: 'Delivered', badge: 'Closed', color: 'border-sky-500/30 bg-sky-500/10 text-sky-300' },
   ];
 
   const handleCopyScript = (id: string, text: string) => {
@@ -386,62 +386,62 @@ export default function ClientsPage() {
 
       {/* 2. 4-PILLAR WORKSPACE NAV TABS */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-950/90 p-1.5 rounded-2xl border border-zinc-800">
-        <div className="flex items-center gap-1 overflow-x-auto">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveTab('pipeline')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
               activeTab === 'pipeline'
                 ? 'bg-emerald-400 text-zinc-950 font-bold shadow-md shadow-emerald-950/40'
                 : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>CRM Pipeline & Deals</span>
+            <span>Pipeline</span>
           </button>
 
           <button
             onClick={() => setActiveTab('directory')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
               activeTab === 'directory'
                 ? 'bg-emerald-400 text-zinc-950 font-bold shadow-md shadow-emerald-950/40'
                 : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
-            <span>Client Management & Specs</span>
+            <span>Clients</span>
           </button>
 
           <button
             onClick={() => setActiveTab('tasks')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
               activeTab === 'tasks'
                 ? 'bg-emerald-400 text-zinc-950 font-bold shadow-md shadow-emerald-950/40'
                 : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
             }`}
           >
             <CheckSquare className="w-3.5 h-3.5" />
-            <span>Tasks & Saturday 4h Sprint</span>
+            <span>Tasks & Sprint</span>
           </button>
 
           <button
             onClick={() => setActiveTab('playbook')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
               activeTab === 'playbook'
                 ? 'bg-emerald-400 text-zinc-950 font-bold shadow-md shadow-emerald-950/40'
                 : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Knowledge Base & Playbook</span>
+            <span>Playbook</span>
           </button>
         </div>
 
         <button
           onClick={() => setShowAddDealModal(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition-all active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition-all active:scale-95"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>+ Add Client / Deal</span>
+          <span>+ Add Deal</span>
         </button>
       </div>
 

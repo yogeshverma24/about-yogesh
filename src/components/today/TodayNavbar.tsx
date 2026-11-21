@@ -138,7 +138,7 @@ export function TodayNavbar({
             title="Open Operating Workspaces (7 Standalone Pages)"
           >
             <Layers className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="hidden lg:inline">Workspaces (7)</span>
+            <span className="hidden lg:inline">Workspaces</span>
           </Link>
 
           {/* AI Copilot */}

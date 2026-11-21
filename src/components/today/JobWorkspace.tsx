@@ -66,12 +66,12 @@ export function JobWorkspace({
   const [quickTaskTitle, setQuickTaskTitle] = useState<string>('');
 
   const tracks = [
-    { id: 'all', label: 'All Tracks', badge: 'Full Stack & Mobile' },
-    { id: 'dsa', label: 'DSA & LeetCode', badge: 'Blind 75 & Graphs' },
+    { id: 'all', label: 'All', badge: 'Full Stack & Mobile' },
+    { id: 'dsa', label: 'DSA', badge: 'Blind 75 & Graphs' },
     { id: 'system_design', label: 'System Design', badge: 'HLD & Redis' },
     { id: 'flutter', label: 'Flutter', badge: 'Riverpod 2.0 & Impeller' },
     { id: 'react_native', label: 'React Native', badge: 'Fabric & JSI C++' },
-    { id: 'ios', label: 'iOS (Swift 6)', badge: 'Concurrency & Actors' },
+    { id: 'ios', label: 'iOS Native', badge: 'Swift 6 & Actors' },
     { id: 'communication', label: 'Communication', badge: 'STAR & Fluency' },
   ];
 
@@ -167,7 +167,7 @@ export function JobWorkspace({
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                Action Stream
+                Stream
               </button>
               <button
                 onClick={() => setActiveTab('curriculum')}
@@ -177,7 +177,7 @@ export function JobWorkspace({
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                7 Competencies Hub
+                Curriculum
               </button>
             </div>
 
@@ -186,7 +186,7 @@ export function JobWorkspace({
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-300 transition-all active:scale-95 shadow-sm cursor-pointer"
             >
               <Mic className="w-3.5 h-3.5 text-amber-400" />
-              <span>Communication & Sales Hub ↗</span>
+              <span>Comms & Sales ↗</span>
             </button>
 
             <button
@@ -303,7 +303,7 @@ export function JobWorkspace({
             <span className="text-amber-400 font-bold">84% Readiness</span>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
             {tracks.map((t) => {
               const active = selectedTrack === t.id;
               const count =

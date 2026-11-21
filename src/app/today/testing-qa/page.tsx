@@ -142,18 +142,24 @@ export default function TestingQAPage() {
       {/* 3. TEST CATEGORY FILTER & CHECKLIST TABLE */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            {['all', 'auth', 'core_workflows', 'mobile_responsive', 'performance'].map((c) => (
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'auth', label: 'Auth' },
+              { id: 'core_workflows', label: 'Workflows' },
+              { id: 'mobile_responsive', label: 'Mobile' },
+              { id: 'performance', label: 'Perf' },
+            ].map((c) => (
               <button
-                key={c}
-                onClick={() => setFilterCategory(c)}
+                key={c.id}
+                onClick={() => setFilterCategory(c.id)}
                 className={`px-3 py-1.5 rounded-xl font-mono text-xs transition-all ${
-                  filterCategory === c
+                  filterCategory === c.id
                     ? 'bg-violet-400 text-zinc-950 font-bold shadow-sm'
                     : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
                 }`}
               >
-                {c === 'all' ? 'All 8 Suites' : c.replace('_', ' ')}
+                {c.label}
               </button>
             ))}
           </div>

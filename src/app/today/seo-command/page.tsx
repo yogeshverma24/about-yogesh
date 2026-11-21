@@ -86,36 +86,36 @@ export default function SEOCommandPage() {
       </div>
 
       {/* 2. SUB-VIEW SWITCHER */}
-      <div className="flex items-center gap-2 bg-zinc-950/90 p-1.5 rounded-2xl border border-zinc-800 w-fit">
+      <div className="flex items-center gap-1.5 bg-zinc-950/90 p-1.5 rounded-2xl border border-zinc-800 w-fit no-scrollbar overflow-x-auto">
         <button
           onClick={() => setActiveTab('work_status')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'work_status'
               ? 'bg-cyan-400 text-zinc-950 font-bold shadow-md shadow-cyan-950/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
-          SEO Work Status & Backlog
+          Work Status
         </button>
         <button
           onClick={() => setActiveTab('keywords')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'keywords'
               ? 'bg-cyan-400 text-zinc-950 font-bold shadow-md shadow-cyan-950/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
-          Keyword Rank Tracker (GSC)
+          Keywords
         </button>
         <button
           onClick={() => setActiveTab('blueprint')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'blueprint'
               ? 'bg-cyan-400 text-zinc-950 font-bold shadow-md shadow-cyan-950/40'
               : 'text-zinc-400 hover:text-white'
           }`}
         >
-          How-To Execution Blueprint
+          Blueprint
         </button>
       </div>
 

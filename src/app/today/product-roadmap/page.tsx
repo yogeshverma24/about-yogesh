@@ -245,7 +245,7 @@ export default function ProductRoadmapPage() {
         )}
 
         {/* Version Switcher Buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
           {productVersions.map((v) => {
             const isActive = v.id === currentVersion?.id;
             return (
@@ -259,7 +259,7 @@ export default function ProductRoadmapPage() {
                 }`}
               >
                 <span>{v.versionNumber}</span>
-                <span className="text-[10px] opacity-80">({v.items.length} items)</span>
+                <span className="text-[10px] opacity-80">({v.items.length})</span>
               </button>
             );
           })}
@@ -285,10 +285,10 @@ export default function ProductRoadmapPage() {
               onChange={(e) => setNewItemType(e.target.value as RoadmapItem['type'])}
               className="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-mono focus:outline-none"
             >
-              <option value="ui_ux">🎨 UI/UX Polish</option>
-              <option value="feature">⚡ New Feature</option>
-              <option value="bugfix">🐛 Bugfix</option>
-              <option value="performance">🚀 Performance</option>
+              <option value="ui_ux">UI/UX</option>
+              <option value="feature">Feature</option>
+              <option value="bugfix">Bugfix</option>
+              <option value="performance">Perf</option>
             </select>
 
             <button
@@ -300,18 +300,24 @@ export default function ProductRoadmapPage() {
           </form>
 
           {/* Type Filter Buttons */}
-          <div className="flex items-center gap-1.5 text-xs">
-            {['all', 'ui_ux', 'feature', 'bugfix', 'performance'].map((t) => (
+          <div className="flex items-center gap-1.5 text-xs no-scrollbar overflow-x-auto">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'ui_ux', label: 'UI/UX' },
+              { id: 'feature', label: 'Features' },
+              { id: 'bugfix', label: 'Bugs' },
+              { id: 'performance', label: 'Perf' },
+            ].map((t) => (
               <button
-                key={t}
-                onClick={() => setFilterType(t)}
-                className={`px-3 py-1 rounded-lg font-mono text-[11px] capitalize transition-all ${
-                  filterType === t
+                key={t.id}
+                onClick={() => setFilterType(t.id)}
+                className={`px-3 py-1 rounded-lg font-mono text-[11px] transition-all ${
+                  filterType === t.id
                     ? 'bg-zinc-800 text-sky-400 font-bold border border-sky-500/30'
                     : 'text-zinc-500 hover:text-zinc-300'
                 }`}
               >
-                {t === 'ui_ux' ? 'UI/UX Polish' : t}
+                {t.label}
               </button>
             ))}
           </div>

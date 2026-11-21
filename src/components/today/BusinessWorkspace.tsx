@@ -93,7 +93,7 @@ export function BusinessWorkspace({
   const ventures = [
     {
       id: 'all',
-      name: 'All Ecosystem',
+      name: 'All',
       tag: '4 Ventures',
       badge: 'Consolidated',
       channels: 'Consolidated founder execution across products, sales, and client delivery.',
@@ -319,7 +319,7 @@ export function BusinessWorkspace({
                     : 'text-zinc-400 hover:text-white'
                 }`}
               >
-                Strategy & Hub
+                Strategy
               </button>
             </div>
 
@@ -327,10 +327,10 @@ export function BusinessWorkspace({
               <button
                 onClick={() => onOpenHub('client_sprint')}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 transition-all active:scale-95 shadow-sm"
-                title="Open Deep-Dive Workspaces (7 Views)"
+                title="Open Workspaces"
               >
                 <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                <span className="hidden sm:inline">Operating Hubs (7 Views)</span>
+                <span className="hidden sm:inline">Workspaces</span>
               </button>
             )}
 
@@ -455,7 +455,7 @@ export function BusinessWorkspace({
             </button>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
             {ventures.map((v) => {
               const active = selectedProduct === v.id;
               const count =

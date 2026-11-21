@@ -38,7 +38,7 @@ const HUB_LINKS = [
   {
     id: 'clients',
     href: '/today/clients',
-    label: 'Client CRM & Delivery',
+    label: 'Clients',
     icon: Briefcase,
     color: 'text-emerald-400',
     border: 'border-emerald-500/30',
@@ -47,7 +47,7 @@ const HUB_LINKS = [
   {
     id: 'product-roadmap',
     href: '/today/product-roadmap',
-    label: 'Product Roadmap & Versions',
+    label: 'Roadmap',
     icon: Layers,
     color: 'text-sky-400',
     border: 'border-sky-500/30',
@@ -56,7 +56,7 @@ const HUB_LINKS = [
   {
     id: 'testing-qa',
     href: '/today/testing-qa',
-    label: 'QA & Release Readiness',
+    label: 'QA & Tests',
     icon: ShieldCheck,
     color: 'text-violet-400',
     border: 'border-violet-500/30',
@@ -65,7 +65,7 @@ const HUB_LINKS = [
   {
     id: 'sunday-milestone',
     href: '/today/sunday-milestone',
-    label: 'Sunday Milestone Lock (11h)',
+    label: 'Sunday Sprint',
     icon: Compass,
     color: 'text-amber-400',
     border: 'border-amber-500/30',
@@ -74,7 +74,7 @@ const HUB_LINKS = [
   {
     id: 'weekly-planning',
     href: '/today/weekly-planning',
-    label: 'Weekly Planning & Metrics',
+    label: 'Weekly Plan',
     icon: Calendar,
     color: 'text-rose-400',
     border: 'border-rose-500/30',
@@ -83,7 +83,7 @@ const HUB_LINKS = [
   {
     id: 'seo-command',
     href: '/today/seo-command',
-    label: 'SEO Command Center',
+    label: 'SEO',
     icon: TrendingUp,
     color: 'text-cyan-400',
     border: 'border-cyan-500/30',
@@ -92,7 +92,7 @@ const HUB_LINKS = [
   {
     id: 'learning',
     href: '/today/learning',
-    label: 'Communication & Sales Mastery',
+    label: 'Comms & Sales',
     icon: Mic,
     color: 'text-orange-400',
     border: 'border-orange-500/30',
@@ -193,7 +193,7 @@ export function HubPageShell({
         </div>
 
         {/* 2. SUB-NAV: 7 DEDICATED WORKSPACE TABS */}
-        <div className="max-w-7xl mx-auto mt-3 overflow-x-auto pb-1 pt-1 border-t border-zinc-850/70">
+        <div className="max-w-7xl mx-auto mt-3 overflow-x-auto pb-1 pt-1 border-t border-zinc-850/70 no-scrollbar">
           <div className="flex items-center gap-1.5 min-w-max">
             {HUB_LINKS.map((link) => {
               const Icon = link.icon;

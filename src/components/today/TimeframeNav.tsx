@@ -30,19 +30,19 @@ export function TimeframeNav({ currentTimeframe, onSelectTimeframe, counts, curr
     },
     {
       id: 'week',
-      title: 'This Week',
+      title: 'Week',
       sublabel: 'Sprint Goals',
       icon: CalendarDays,
     },
     {
       id: 'month',
-      title: 'This Month',
+      title: 'Month',
       sublabel: 'Deliverables & SEO',
       icon: CalendarRange,
     },
     {
       id: 'six_months',
-      title: '6 Month Vision',
+      title: 'Vision',
       sublabel: 'Long-term Roadmap',
       icon: Compass,
     },
