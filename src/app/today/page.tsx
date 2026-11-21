@@ -93,6 +93,24 @@ export default function TodayPage() {
     }
   }, []);
 
+  // Global Escape key listener for open modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showTaskModal) setShowTaskModal(false);
+        if (showAIModal) setShowAIModal(false);
+        if (showTimerModal) setShowTimerModal(false);
+        if (showLogModal) {
+          setShowLogModal(false);
+          setEditingLog(null);
+        }
+        if (activeHubId) setActiveHubId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showTaskModal, showAIModal, showTimerModal, showLogModal, activeHubId]);
+
   const fetchDashboardState = async () => {
     try {
       setLoading(true);

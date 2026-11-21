@@ -219,6 +219,15 @@ export default function ClientsPage() {
   const [newTaskTitle, setNewTaskTitle] = useState<string>('');
   const [newTaskPriority, setNewTaskPriority] = useState<'high' | 'medium' | 'low'>('high');
 
+  React.useEffect(() => {
+    if (!showAddDealModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowAddDealModal(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAddDealModal]);
+
   const STAGES: Array<{ id: ClientProject['stage']; label: string; badge: string; color: string }> = [
     { id: 'lead', label: 'Inbound', badge: 'New', color: 'border-zinc-700 bg-zinc-900/60 text-zinc-300' },
     { id: 'discovery', label: 'Discovery', badge: 'Active', color: 'border-blue-500/30 bg-blue-500/10 text-blue-300' },
@@ -853,7 +862,14 @@ export default function ClientsPage() {
 
       {/* 7. QUICK MODAL FOR ADDING A NEW CLIENT / DEAL */}
       {showAddDealModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddDealModal(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+        >
           <div className="w-full max-w-lg rounded-3xl bg-zinc-950 border border-emerald-500/30 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-zinc-850 pb-3">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">

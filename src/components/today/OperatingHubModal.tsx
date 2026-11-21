@@ -62,7 +62,14 @@ export function OperatingHubModal({ isOpen, initialHubId = 'client_sprint', onCl
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+    >
       <div className="w-full max-w-6xl max-h-[95vh] bg-[#080a12]/95 border border-zinc-800 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden">
         {/* MODAL TOP BAR: TITLE & CLOSE */}
         <div className="px-5 py-3.5 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/80">

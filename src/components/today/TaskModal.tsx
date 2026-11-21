@@ -1,7 +1,7 @@
 // src/components/today/TaskModal.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Trash2 } from 'lucide-react';
 import { TaskItem, DashboardMode, Timeframe, TaskPriority } from '@/lib/today/types';
 import { playChime } from '@/lib/today/sound';
@@ -26,6 +26,15 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
   const [reminderTime, setReminderTime] = useState('');
   const [subtasks, setSubtasks] = useState<string[]>([]);
   const [newSubtask, setNewSubtask] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -92,12 +101,20 @@ export function TaskModal({ isOpen, onClose, onSave, initialMode, initialTimefra
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="task-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+    >
       <div className="relative w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-[#0d1410]/90">
-          <h3 className="text-sm sm:text-base font-bold text-zinc-100 flex items-center gap-2">
-            <span>New Task or Sprint Item</span>
+          <h3 id="task-modal-title" className="text-sm sm:text-base font-bold text-zinc-100 flex items-center gap-2">
+            <span>New Task</span>
           </h3>
           <button
             onClick={onClose}

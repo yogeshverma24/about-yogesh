@@ -69,6 +69,15 @@ export function DailyStatusModal({
     }
   }, [existingLog, isOpen, todayStr]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const totalCalculatedHours =
@@ -105,7 +114,14 @@ export function DailyStatusModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+    >
       <div className="w-full max-w-2xl bg-[#080a12]/95 border border-white/[0.08] rounded-3xl p-5 sm:p-7 shadow-[0_30px_90px_rgba(0,0,0,0.9)] space-y-5 max-h-[92vh] overflow-y-auto">
         {/* 1. MINIMAL HEADER */}
         <div className="flex items-center justify-between border-b border-white/[0.06] pb-3.5">

@@ -37,6 +37,15 @@ export default function LearningMasteryPage() {
   const [newTakeaway, setNewTakeaway] = useState('');
   const [newFramework, setNewFramework] = useState('STAR Technique');
 
+  React.useEffect(() => {
+    if (!showAddModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowAddModal(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAddModal]);
+
   const filteredSessions = sessions.filter((s) => s.track === activeTrack);
 
   const totalMinutes = filteredSessions.reduce((acc, s) => acc + s.durationMinutes, 0);
@@ -317,7 +326,14 @@ export default function LearningMasteryPage() {
 
       {/* 6. ADD PRACTICE DRILL MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowAddModal(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+        >
           <div className="w-full max-w-lg rounded-3xl bg-zinc-950 border border-amber-500/30 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-zinc-850 pb-3">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">

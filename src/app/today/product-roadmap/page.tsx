@@ -32,6 +32,15 @@ export default function ProductRoadmapPage() {
   const [newTargetDate, setNewTargetDate] = useState('');
   const [newHeadline, setNewHeadline] = useState('');
 
+  React.useEffect(() => {
+    if (!showAddVersion) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowAddVersion(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAddVersion]);
+
   const [newItemTitle, setNewItemTitle] = useState('');
   const [newItemType, setNewItemType] = useState<'feature' | 'ui_ux' | 'bugfix' | 'performance'>('ui_ux');
   const [filterType, setFilterType] = useState<string>('all');
