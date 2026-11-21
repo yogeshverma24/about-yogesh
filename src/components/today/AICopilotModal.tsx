@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, X, Send, Bot, Copy, Check } from 'lucide-react';
+import { Sparkles, X, Send, Bot, Copy, Check, Database, RefreshCw, Plus } from 'lucide-react';
 import { playChime } from '@/lib/today/sound';
 import { FormattedAIResponse } from './FormattedAIResponse';
 
@@ -17,6 +17,7 @@ interface Props {
 export function AICopilotModal({
   isOpen,
   onClose,
+  onAddTaskFromAI,
   initialTopic,
   initialAction,
 }: Props) {
@@ -24,6 +25,11 @@ export function AICopilotModal({
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
+  const [isCached, setIsCached] = useState<boolean>(false);
+  const [lastAction, setLastAction] = useState<string>('schedule');
+  const [lastProduct, setLastProduct] = useState<string | undefined>(undefined);
+  const [lastTopic, setLastTopic] = useState<string | undefined>(undefined);
+  const [taskAdded, setTaskAdded] = useState<boolean>(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -89,14 +95,25 @@ export function AICopilotModal({
     },
   ];
 
-  const handleSend = async (actionParam?: string, productParam?: string, topicParam?: string, customText?: string) => {
+  const handleSend = async (
+    actionParam?: string,
+    productParam?: string,
+    topicParam?: string,
+    customText?: string,
+    forceRegenerate?: boolean
+  ) => {
     setLoading(true);
     setResponse('');
+    setTaskAdded(false);
     playChime('click');
 
     const effectiveAction = actionParam || 'custom';
     const effectiveProduct = effectiveAction === 'business_content' ? (productParam || initialTopic) : productParam;
     const effectiveTopic = effectiveAction === 'job_prep' ? (topicParam || initialTopic) : topicParam;
+
+    setLastAction(effectiveAction);
+    setLastProduct(effectiveProduct);
+    setLastTopic(effectiveTopic);
 
     try {
       const res = await fetch('/api/today/ai', {
@@ -107,18 +124,22 @@ export function AICopilotModal({
           prompt: customText || prompt,
           product: effectiveProduct,
           topic: effectiveTopic,
+          forceRegenerate: Boolean(forceRegenerate),
         }),
       });
 
       const data = await res.json();
       if (data.success && data.result) {
         setResponse(data.result);
+        setIsCached(Boolean(data.cached));
         playChime('success');
       } else {
         setResponse(data.error || 'Failed to process AI request.');
+        setIsCached(false);
       }
     } catch {
       setResponse('Connection failed. Please ensure the server is running.');
+      setIsCached(false);
     } finally {
       setLoading(false);
     }
@@ -200,22 +221,72 @@ export function AICopilotModal({
 
           {!loading && response && (
             <div className="relative p-5 rounded-2xl bg-zinc-900/60 border border-emerald-500/20 space-y-3">
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-                <span className="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
-                  <Bot className="w-4 h-4" />
-                  <span>Intelligence Response</span>
-                </span>
-                <button
-                  onClick={handleCopy}
-                  className="flex items-center gap-1 text-xs text-zinc-400 hover:text-emerald-300 bg-zinc-800/80 hover:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-700/60 transition-colors"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <Bot className="w-4 h-4" />
+                    <span>Intelligence Response</span>
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <Database className="w-2.5 h-2.5 text-emerald-400" />
+                    <span>{isCached ? 'Saved in MongoDB' : 'Saved to MongoDB'}</span>
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => handleSend(lastAction, lastProduct, lastTopic, undefined, true)}
+                    className="flex items-center gap-1 text-[11px] font-mono text-zinc-400 hover:text-white bg-zinc-800/60 hover:bg-zinc-800 px-2 py-1 rounded-lg border border-zinc-700/50 transition-colors"
+                    title="Force regenerate a fresh variation from Gemini"
+                  >
+                    <RefreshCw className="w-3 h-3 text-zinc-400" />
+                    <span>Regenerate</span>
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1 text-[11px] font-mono text-zinc-400 hover:text-emerald-300 bg-zinc-800/80 hover:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-700/60 transition-colors"
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
               </div>
 
               <div className="text-zinc-200 leading-relaxed font-sans pt-1">
                 <FormattedAIResponse content={response} />
+              </div>
+
+              {/* Action: Commit to MongoDB as real task */}
+              <div className="pt-2 flex items-center justify-between border-t border-zinc-800/80 text-xs">
+                <span className="text-[11px] text-zinc-400">
+                  Turn this AI strategic advice into an active task in your dashboard
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const firstLine = response.split('\n').find((l) => l.trim() && !l.startsWith('#') && !l.startsWith('-') && !l.startsWith('✦') && !l.startsWith('*')) || 'Execute AI Strategic Action Item';
+                    const cleanTitle = firstLine.replace(/[*_#`]/g, '').trim().slice(0, 75);
+                    const mode = lastAction === 'job_prep' ? 'job' : lastAction === 'business_content' ? 'business' : 'personal';
+                    onAddTaskFromAI(cleanTitle, response.slice(0, 350), mode);
+                    setTaskAdded(true);
+                    playChime('success');
+                    setTimeout(() => setTaskAdded(false), 3000);
+                  }}
+                  disabled={taskAdded}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-medium transition-all active:scale-95 disabled:opacity-80"
+                >
+                  {taskAdded ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Saved to Tasks in DB!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Save as Task in DB</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           )}

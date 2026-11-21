@@ -96,7 +96,7 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       milestones: initialMilestones,
       founderChecklist: INITIAL_FOUNDER_CHECKLIST,
       activeRotationWeek: 1,
-      weeklyHoursLogged: 14.5,
+      weeklyHoursLogged: 0,
       dailyLogs: initialDailyLogs,
       monthlyReports: initialMonthlyReports,
       settings: {},
@@ -132,7 +132,7 @@ function getLocalState(): TodayDashboardState & { settings: Record<string, any> 
       milestones: initialMilestones,
       founderChecklist: INITIAL_FOUNDER_CHECKLIST,
       activeRotationWeek: 1,
-      weeklyHoursLogged: 14.5,
+      weeklyHoursLogged: 0,
       dailyLogs: initialDailyLogs,
       monthlyReports: initialMonthlyReports,
       settings: {},
@@ -229,7 +229,7 @@ export async function getDashboardState(): Promise<TodayDashboardState> {
     profile: local.profile,
     founderChecklist: local.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
     activeRotationWeek: local.activeRotationWeek || 1,
-    weeklyHoursLogged: local.weeklyHoursLogged || 14.5,
+    weeklyHoursLogged: local.weeklyHoursLogged !== undefined ? local.weeklyHoursLogged : 0,
     dailyLogs: local.dailyLogs || initialDailyLogs,
     monthlyReports: local.monthlyReports || initialMonthlyReports,
   };
@@ -258,7 +258,7 @@ export async function updateFounderSchedule(updates: {
   return {
     founderChecklist: local.founderChecklist || INITIAL_FOUNDER_CHECKLIST,
     activeRotationWeek: local.activeRotationWeek || 1,
-    weeklyHoursLogged: local.weeklyHoursLogged || 14.5,
+    weeklyHoursLogged: local.weeklyHoursLogged !== undefined ? local.weeklyHoursLogged : 0,
   };
 }
 
@@ -529,6 +529,13 @@ export async function updateProfile(updates: Partial<PersonalProfile>): Promise<
 }
 
 export async function getAppSetting(key: string): Promise<any> {
+  const hasMongo = await checkMongoConnection();
+  if (hasMongo) {
+    try {
+      const doc = await SettingsModel.findOne({ key }).lean();
+      if (doc) return (doc as any).value;
+    } catch {}
+  }
   const local = getLocalState();
   return local.settings?.[key];
 }
