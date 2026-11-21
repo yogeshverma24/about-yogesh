@@ -40,9 +40,8 @@ export default function SundayMilestonePage() {
   return (
     <HubPageShell
       hubId="sunday-milestone"
-      title="Development Review & Sunday Milestone Lock"
-      badge="Sunday 11h Deep Product Sprint"
-      description="The cornerstone of Yogesh Verma's weekly shipping engine: 11 uninterrupted hours on Sunday dedicated to locking, architecting, building, and deploying the core product milestone."
+      title="Sunday Milestone Lock"
+      badge="11h Sprint"
     >
       {/* 1. TOP SPRINT KPI CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

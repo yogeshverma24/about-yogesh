@@ -40,9 +40,8 @@ export default function SEOCommandPage() {
   return (
     <HubPageShell
       hubId="seo-command"
-      title="SEO Review & Company Website Optimization Hub"
-      badge="Search Engine Command Center"
-      description="Track technical SEO infrastructure, Google Search Console keyword rank positions, Core Web Vitals optimization, and Thursday 1-hour growth execution backlog."
+      title="SEO Command Center"
+      badge="Search Console"
     >
       {/* 1. TOP SEO PERFORMANCE METRICS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

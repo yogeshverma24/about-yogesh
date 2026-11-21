@@ -83,9 +83,8 @@ export default function LearningMasteryPage() {
   return (
     <HubPageShell
       hubId="learning"
-      title="Communication & Sales Mastery Hub"
-      badge="Deliberate Practice Lab"
-      description="The dedicated learning and deliberate practice center for Yogesh Verma: practice senior technical storytelling (STAR/PREP/BLUF), drill engineering interview questions, and master consultative client sales pitches."
+      title="Communication & Sales Mastery"
+      badge="Practice Lab"
     >
       {/* 1. DUAL-TRACK MODE SWITCHER HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-950/90 p-1.5 rounded-2xl border border-zinc-800">

@@ -64,9 +64,8 @@ export default function TestingQAPage() {
   return (
     <HubPageShell
       hubId="testing-qa"
-      title="Testing, Regression Suite & Release Readiness"
-      badge="Quality Gate & Build Verification"
-      description="The Saturday 2-hour quality gate for Yogesh Verma's ecosystem: validate authentication, core workflows, mobile viewports, payment webhooks, and production build readiness."
+      title="QA & Release Readiness"
+      badge="Quality Gate"
     >
       {/* 1. QUALITY METRICS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

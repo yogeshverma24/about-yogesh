@@ -44,9 +44,8 @@ export default function WeeklyPlanningPage() {
   return (
     <HubPageShell
       hubId="weekly-planning"
-      title="Weekly Planning, Retrospective & Metrics Review"
-      badge="40h Founder Operating System"
-      description="Reflect on weekly hours logged vs the 39.5h target, review core deliverables shipped, and lock in the 3 non-negotiable must-win outcomes for the upcoming 7-day operating cadence."
+      title="Weekly Planning & Retrospective"
+      badge="40h Cadence"
     >
       {/* 1. TOP METRICS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

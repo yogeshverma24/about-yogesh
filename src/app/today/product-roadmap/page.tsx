@@ -125,9 +125,8 @@ export default function ProductRoadmapPage() {
   return (
     <HubPageShell
       hubId="product-roadmap"
-      title="Existing Product Roadmap & Version Release Matrix"
-      badge="Multi-Product Release Engine"
-      description="Track feature improvements, UI/UX polish, bugfixes, and performance targets across Yogesh Verma's 4 venture platforms. Lock versions, set target shipping dates, and manage backlogs."
+      title="Product Roadmap"
+      badge="4 Ventures"
     >
       {/* 1. VENTURE PLATFORM SELECTOR TABS */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

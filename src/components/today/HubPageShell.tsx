@@ -29,8 +29,8 @@ interface HubPageShellProps {
     | 'seo-command'
     | 'learning';
   title: string;
-  badge: string;
-  description: string;
+  badge?: string;
+  description?: string;
   children: React.ReactNode;
 }
 
@@ -219,28 +219,7 @@ export function HubPageShell({
       </header>
 
       {/* 3. MAIN PAGE CONTAINER */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* Page Hero Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-zinc-950 via-[#0c0d18] to-zinc-950 border border-white/[0.08] p-5 sm:p-6 shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 space-y-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-md">
-                Dedicated Standalone Workspace
-              </span>
-              <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-md bg-zinc-900 text-zinc-300 border border-zinc-800">
-                {badge}
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <span>{title}</span>
-            </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-3xl leading-relaxed">
-              {description}
-            </p>
-          </div>
-        </div>
-
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
         {/* Page Content */}
         {children}
       </main>

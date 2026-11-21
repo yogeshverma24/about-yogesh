@@ -330,9 +330,8 @@ export default function ClientsPage() {
   return (
     <HubPageShell
       hubId="clients"
-      title="Client Projects CRM, Delivery & Sales Playbook"
-      badge="Full CRM + Task Management + Playbook"
-      description="The end-to-end founder operating system for Delegatespace Studio: manage leads, deal pipelines, client deliverables, Saturday 4-hour execution blocks, and consultative outreach scripts."
+      title="Clients CRM & Delivery"
+      badge="Delegatespace"
     >
       {/* 1. TOP CRM KPI METRICS STRIP */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
