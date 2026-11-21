@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   TodayDashboardState,
   DashboardMode,
@@ -24,10 +25,13 @@ import { AICopilotModal } from '@/components/today/AICopilotModal';
 import { TaskModal } from '@/components/today/TaskModal';
 import { FocusTimerModal } from '@/components/today/FocusTimerModal';
 import { DailyStatusModal } from '@/components/today/DailyStatusModal';
+import { OperatingHubModal } from '@/components/today/OperatingHubModal';
 import { LockScreen } from '@/components/today/LockScreen';
 import { DailyLogItem } from '@/lib/today/types';
+import { OperatingHubId } from '@/lib/today/hubData';
 
 export default function TodayPage() {
+  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [state, setState] = useState<TodayDashboardState | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -42,6 +46,21 @@ export default function TodayPage() {
   const [showTimerModal, setShowTimerModal] = useState<boolean>(false);
   const [showLogModal, setShowLogModal] = useState<boolean>(false);
   const [editingLog, setEditingLog] = useState<DailyLogItem | null>(null);
+  const [activeHubId, setActiveHubId] = useState<OperatingHubId | null>(null);
+
+  const handleOpenHub = (hubId: OperatingHubId) => {
+    const routes: Record<OperatingHubId, string> = {
+      client_sprint: '/today/clients',
+      product_roadmap: '/today/product-roadmap',
+      testing_qa: '/today/testing-qa',
+      sunday_sprint: '/today/sunday-milestone',
+      weekly_planning: '/today/weekly-planning',
+      seo_command: '/today/seo-command',
+      learning_hub: '/today/learning',
+    };
+    const target = routes[hubId] || '/today/clients';
+    router.push(target);
+  };
 
   // AI prompt helper state
   const [aiTopic, setAiTopic] = useState<string>('');
@@ -380,10 +399,40 @@ export default function TodayPage() {
 
     if (!state) return counts;
 
+    const rawDay = new Date().getDay();
+    const todayDayKey = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][rawDay];
+
     state.tasks
       .filter((t) => currentMode === 'overview' || t.mode === currentMode)
       .forEach((t) => {
         if (counts[t.timeframe]) {
+          // If viewing today's timeframe and task is in business mode, ensure it matches today's dayKey
+          if (t.timeframe === 'today' && t.mode === 'business') {
+            if (t.dayKey && t.dayKey !== todayDayKey) return;
+            if (!t.dayKey) {
+              if (
+                t.id === 'b-dw1' ||
+                t.id === 'b-dw2' ||
+                t.title.toLowerCase().includes('linkedin') ||
+                t.title.toLowerCase().includes('seo priority')
+              ) {
+                if (todayDayKey !== 'thursday') return;
+              } else if (
+                t.id === 'b-fa1' ||
+                t.id === 'b-ca1' ||
+                t.title.toLowerCase().includes('agricultural advisory') ||
+                t.title.toLowerCase().includes('tech job')
+              ) {
+                if (todayDayKey !== 'friday') return;
+              } else if (
+                t.id === 'b-ds1' ||
+                t.title.toLowerCase().includes('agency project delivery')
+              ) {
+                if (todayDayKey !== 'wednesday') return;
+              }
+            }
+          }
+
           counts[t.timeframe].total += 1;
           if (t.status === 'completed') {
             counts[t.timeframe].completed += 1;
@@ -433,6 +482,7 @@ export default function TodayPage() {
         }}
         onOpenTimerModal={() => setShowTimerModal(true)}
         onOpenLogModal={() => handleOpenLogModal()}
+        onOpenHub={handleOpenHub}
       />
 
       {/* 2. MAIN CONTAINER */}
@@ -449,6 +499,7 @@ export default function TodayPage() {
             onOpenLogModal={handleOpenLogModal}
             onDeleteLog={handleDeleteDailyLog}
             onUpdateSchedule={handleUpdateSchedule}
+            onOpenHub={handleOpenHub}
           />
         )}
 
@@ -498,6 +549,7 @@ export default function TodayPage() {
               onCreateTask={handleCreateTask}
               onTriggerAI={handleTriggerAI}
               onUpdateSchedule={handleUpdateSchedule}
+              onOpenHub={handleOpenHub}
             />
           </>
         )}
@@ -521,6 +573,7 @@ export default function TodayPage() {
               onCreateTask={handleCreateTask}
               onUpdateProfile={handleUpdateProfile}
               onTriggerAI={handleTriggerAI}
+              onOpenHub={handleOpenHub}
             />
           </>
         )}
@@ -578,6 +631,13 @@ export default function TodayPage() {
         }}
         onSaveLog={handleSaveDailyLog}
         existingLog={editingLog}
+      />
+
+      {/* 4. DEDICATED OPERATING HUBS MODAL (7 DEEP-DIVE WORKSPACES) */}
+      <OperatingHubModal
+        isOpen={activeHubId !== null}
+        initialHubId={activeHubId || 'client_sprint'}
+        onClose={() => setActiveHubId(null)}
       />
     </div>
   );

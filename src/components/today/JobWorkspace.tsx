@@ -28,6 +28,7 @@ import {
   PersonalProfile,
   MilestoneItem,
 } from '@/lib/today/types';
+import { OperatingHubId } from '@/lib/today/hubData';
 import { TaskItemCard } from './TaskItemCard';
 import { JobView } from './JobView';
 
@@ -42,6 +43,7 @@ interface Props {
   onCreateTask: (task: Partial<TaskItem>) => Promise<void>;
   onUpdateProfile: (updates: Partial<PersonalProfile>) => void;
   onTriggerAI: (topic: string, actionType: string) => void;
+  onOpenHub?: (hubId: OperatingHubId) => void;
 }
 
 export function JobWorkspace({
@@ -55,6 +57,7 @@ export function JobWorkspace({
   onCreateTask,
   onUpdateProfile,
   onTriggerAI,
+  onOpenHub,
 }: Props) {
   const [activeTab, setActiveTab] = useState<'workspace' | 'curriculum'>('workspace');
   const [selectedTrack, setSelectedTrack] = useState<string>('all');
@@ -177,6 +180,14 @@ export function JobWorkspace({
                 7 Competencies Hub
               </button>
             </div>
+
+            <button
+              onClick={() => onOpenHub?.('learning_hub')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-300 transition-all active:scale-95 shadow-sm cursor-pointer"
+            >
+              <Mic className="w-3.5 h-3.5 text-amber-400" />
+              <span>Communication & Sales Hub ↗</span>
+            </button>
 
             <button
               onClick={() =>
@@ -412,6 +423,7 @@ export function JobWorkspace({
                     onToggleComplete={onToggleTaskComplete}
                     onUpdateSubtasks={onUpdateSubtasks}
                     onDelete={onDeleteTask}
+                    onOpenHub={onOpenHub}
                   />
                 ))}
               </div>

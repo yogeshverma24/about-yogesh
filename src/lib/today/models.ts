@@ -27,6 +27,7 @@ const TaskSchema = new Schema<TaskItem>(
     notes: String,
     externalLink: String,
     completedAt: String,
+    dayKey: String,
   },
   { timestamps: true }
 );

@@ -45,6 +45,7 @@ import {
   INITIAL_FOUNDER_CHECKLIST,
 } from '@/lib/today/scheduleData';
 import { DailyLogItem } from '@/lib/today/types';
+import { OperatingHubId } from '@/lib/today/hubData';
 
 interface Props {
   state: TodayDashboardState;
@@ -61,6 +62,7 @@ interface Props {
     activeRotationWeek?: number;
     weeklyHoursLogged?: number;
   }) => void;
+  onOpenHub?: (hubId: OperatingHubId) => void;
 }
 
 export function OverviewDashboard({
@@ -74,6 +76,7 @@ export function OverviewDashboard({
   onOpenLogModal,
   onDeleteLog,
   onUpdateSchedule,
+  onOpenHub,
 }: Props) {
   // 1. Time-aware Greeting
   const greeting = useMemo(() => {
@@ -127,7 +130,24 @@ export function OverviewDashboard({
     const completed = all.filter((t) => t.status === 'completed').length;
     const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-    const todayTasks = all.filter((t) => t.timeframe === 'today');
+    const todayDayKey = MASTER_WEEKLY_SCHEDULE[todayDayIndex]?.dayKey || 'saturday';
+    const todayTasks = all.filter((t) => {
+      if (t.timeframe !== 'today') return false;
+      if (t.mode === 'business') {
+        if (t.dayKey) return t.dayKey === todayDayKey;
+        if (t.id === 'b-dw1' || t.id === 'b-dw2' || t.title.toLowerCase().includes('linkedin') || t.title.toLowerCase().includes('seo priority')) {
+          return todayDayKey === 'thursday';
+        }
+        if (t.id === 'b-fa1' || t.id === 'b-ca1' || t.title.toLowerCase().includes('agricultural advisory') || t.title.toLowerCase().includes('tech job')) {
+          return todayDayKey === 'friday';
+        }
+        if (t.id === 'b-ds1' || t.title.toLowerCase().includes('agency project delivery')) {
+          return todayDayKey === 'wednesday';
+        }
+        return todayDayKey === 'saturday';
+      }
+      return true;
+    });
     const todayTotal = todayTasks.length;
     const todayCompleted = todayTasks.filter((t) => t.status === 'completed').length;
     const todayRate = todayTotal > 0 ? Math.round((todayCompleted / todayTotal) * 100) : 0;
@@ -261,6 +281,15 @@ export function OverviewDashboard({
           {/* Quick AI Executive Briefing */}
           <div className="flex flex-wrap items-center gap-2.5">
             <button
+              onClick={() => onOpenHub?.('client_sprint')}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/30 transition-all active:scale-95 cursor-pointer shadow-sm"
+              title="Open Dedicated Operating Workspaces"
+            >
+              <Layers className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Operating Workspaces ↗</span>
+            </button>
+
+            <button
               onClick={() => {
                 playChime('click');
                 onTriggerAI('overall', 'daily_review');
@@ -369,25 +398,50 @@ export function OverviewDashboard({
 
           {/* Time Blocks for Selected Day */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
-            {selectedDaySchedule.blocks.map((block, bIdx) => (
-              <div
-                key={block.id}
-                className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1.5 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="font-mono text-[11px] font-bold text-indigo-300">
-                      Block {bIdx + 1}
-                    </span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-zinc-800 text-zinc-200">
-                      {block.hours}h
-                    </span>
+            {selectedDaySchedule.blocks.map((block, bIdx) => {
+              let targetHub: OperatingHubId = 'client_sprint';
+              if (selectedDaySchedule.dayKey === 'saturday') {
+                if (bIdx === 0) targetHub = 'client_sprint';
+                else if (bIdx === 1) targetHub = 'product_roadmap';
+                else if (bIdx === 2) targetHub = 'testing_qa';
+                else if (bIdx === 3) targetHub = 'sunday_sprint';
+              } else if (selectedDaySchedule.dayKey === 'sunday') {
+                targetHub = 'sunday_sprint';
+              } else if (selectedDaySchedule.dayKey === 'thursday') {
+                targetHub = 'seo_command';
+              } else if (selectedDaySchedule.dayKey === 'tuesday') {
+                targetHub = 'learning_hub';
+              } else if (selectedDaySchedule.dayKey === 'monday') {
+                targetHub = 'weekly_planning';
+              } else if (selectedDaySchedule.dayKey === 'wednesday') {
+                targetHub = 'client_sprint';
+              }
+
+              return (
+                <div
+                  key={block.id}
+                  onClick={() => onOpenHub?.(targetHub)}
+                  className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800 space-y-1.5 flex flex-col justify-between hover:border-indigo-500/50 hover:bg-zinc-900 transition-all cursor-pointer group"
+                  title="Click to open dedicated workspace view"
+                >
+                  <div>
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-mono text-[11px] font-bold text-indigo-300 group-hover:text-indigo-200 flex items-center gap-1">
+                        <span>Block {bIdx + 1}</span>
+                        <span className="text-zinc-500 font-normal group-hover:text-indigo-400">• Open ↗</span>
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-zinc-800 text-zinc-200">
+                        {block.hours}h
+                      </span>
+                    </div>
+                    <h5 className="text-xs font-semibold text-zinc-100 group-hover:text-indigo-100 transition-colors">
+                      {block.title}
+                    </h5>
+                    <p className="text-[11px] text-zinc-400 leading-snug mt-1">{block.description}</p>
                   </div>
-                  <h5 className="text-xs font-semibold text-zinc-100">{block.title}</h5>
-                  <p className="text-[11px] text-zinc-400 leading-snug mt-1">{block.description}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -400,7 +454,12 @@ export function OverviewDashboard({
                 <Compass className="w-3.5 h-3.5 text-amber-400" />
                 4-Week Product Development Rotation
               </span>
-              <span className="text-[10px] font-mono text-zinc-500">Sunday Sprint Target</span>
+              <button
+                onClick={() => onOpenHub?.('sunday_sprint')}
+                className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <span>Sunday Sprint Lock ↗</span>
+              </button>
             </div>
 
             {/* Rotation Selector Tabs */}
@@ -432,9 +491,12 @@ export function OverviewDashboard({
                     <span className="text-xs font-bold text-amber-400 font-mono">
                       {currentRot.title}
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                      Active Cycle
-                    </span>
+                    <button
+                      onClick={() => onOpenHub?.('sunday_sprint')}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                    >
+                      Active Cycle ↗
+                    </button>
                   </div>
 
                   <div className="space-y-1 text-xs">
@@ -464,9 +526,17 @@ export function OverviewDashboard({
                   <ListTodo className="w-3.5 h-3.5 text-emerald-400" />
                   Founder Weekly Review Checklist
                 </span>
-                <span className="text-xs font-mono font-bold text-emerald-400">
-                  {completedChecklistCount} of {founderChecklist.length}
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => onOpenHub?.('weekly_planning')}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Weekly Plan ↗</span>
+                  </button>
+                  <span className="text-xs font-mono font-bold text-emerald-400">
+                    {completedChecklistCount} of {founderChecklist.length}
+                  </span>
+                </div>
               </div>
 
               {/* Progress Bar */}

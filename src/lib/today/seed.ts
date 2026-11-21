@@ -137,7 +137,92 @@ export const initialTasks: TaskItem[] = [
   },
 
   // ==================== BUSINESS MODE: TODAY ====================
-  // 1. Delegatework
+  // Saturday Tasks (11h Development & Maintenance)
+  {
+    id: 'b-sat1',
+    title: 'Delegatespace: 4h Client Projects Sprint (Features, Bug Fixes & Deadlines)',
+    description: 'Implement high-priority client deliverables, resolve bug tickets, and push updates to staging on https://www.delegatespace.com/.',
+    mode: 'business',
+    category: 'delegatespace',
+    timeframe: 'today',
+    dayKey: 'saturday',
+    status: 'pending',
+    priority: 'high',
+    dueDate: '2026-11-21',
+    reminderTime: '10:00 AM',
+    checklist: [
+      { id: 'sat-c1', text: 'Execute core client milestone feature logic', done: false },
+      { id: 'sat-c2', text: 'Fix priority bug tickets & staging verification', done: false },
+      { id: 'sat-c3', text: 'Review pull request & submit client progress report', done: false },
+    ],
+    tags: ['client_delivery', 'engineering', 'delegatespace'],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'b-sat2',
+    title: 'Existing Products: 4h Maintenance, Version Upgrades & UI/UX Polish',
+    description: 'Deploy version upgrades, optimize layout response, and eliminate production bugs across live apps (Delegatework, Fasly, Campus).',
+    mode: 'business',
+    category: 'delegatework',
+    timeframe: 'today',
+    dayKey: 'saturday',
+    status: 'pending',
+    priority: 'high',
+    dueDate: '2026-11-21',
+    reminderTime: '02:30 PM',
+    checklist: [
+      { id: 'sat-m1', text: 'Review production crash logs & error reports', done: false },
+      { id: 'sat-m2', text: 'Polish mobile responsive layout glitches', done: false },
+      { id: 'sat-m3', text: 'Run package upgrades & verify backward compatibility', done: false },
+    ],
+    tags: ['maintenance', 'ui_ux', 'bugfixes'],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'b-sat3',
+    title: 'Release Readiness: 2h Testing & End-to-End Regression Suite',
+    description: 'Run automated end-to-end regression tests, verify build artifacts, and stage production releases.',
+    mode: 'business',
+    category: 'delegatework',
+    timeframe: 'today',
+    dayKey: 'saturday',
+    status: 'pending',
+    priority: 'medium',
+    dueDate: '2026-11-21',
+    reminderTime: '06:30 PM',
+    checklist: [
+      { id: 'sat-t1', text: 'Run automated API & component regression suite', done: false },
+      { id: 'sat-t2', text: 'Test core user auth & booking/payment flows', done: false },
+      { id: 'sat-t3', text: 'Verify iOS/Android build signing & release bundles', done: false },
+    ],
+    tags: ['qa', 'regression', 'releases'],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'b-sat4',
+    title: 'Development Review & Sunday Milestone Lock (1.0h)',
+    description: 'Review Saturday code merges and clearly define Sunday primary product sprint milestone scope.',
+    mode: 'business',
+    category: 'delegatespace',
+    timeframe: 'today',
+    dayKey: 'saturday',
+    status: 'pending',
+    priority: 'medium',
+    dueDate: '2026-11-21',
+    reminderTime: '08:30 PM',
+    checklist: [
+      { id: 'sat-r1', text: 'Merge approved Saturday branch PRs', done: false },
+      { id: 'sat-r2', text: 'Lock single primary feature for Sunday sprint', done: false },
+    ],
+    tags: ['review', 'sprint_planning'],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+
+  // Thursday Tasks (3.5h DelegateSpace & DelegateWork SEO)
   {
     id: 'b-dw1',
     title: 'Delegatework: Publish LinkedIn marketing post on Modern Team Collaboration',
@@ -145,6 +230,7 @@ export const initialTasks: TaskItem[] = [
     mode: 'business',
     category: 'delegatework',
     timeframe: 'today',
+    dayKey: 'thursday',
     status: 'pending',
     priority: 'high',
     dueDate: '2026-11-20',
@@ -165,6 +251,7 @@ export const initialTasks: TaskItem[] = [
     mode: 'business',
     category: 'delegatework',
     timeframe: 'today',
+    dayKey: 'thursday',
     status: 'in_progress',
     priority: 'high',
     dueDate: '2026-11-20',
@@ -179,7 +266,7 @@ export const initialTasks: TaskItem[] = [
     updatedAt: new Date().toISOString(),
   },
 
-  // 2. Fasly
+  // Friday Tasks (3.5h Campus & Fasly Growth)
   {
     id: 'b-fa1',
     title: 'Fasly: Publish Weekly Agricultural Advisory Blog & Facebook Post',
@@ -187,6 +274,7 @@ export const initialTasks: TaskItem[] = [
     mode: 'business',
     category: 'fasly',
     timeframe: 'today',
+    dayKey: 'friday',
     status: 'pending',
     priority: 'high',
     dueDate: '2026-11-20',
@@ -200,8 +288,6 @@ export const initialTasks: TaskItem[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
-
-  // 3. Campus
   {
     id: 'b-ca1',
     title: 'Campus: Post 3 Tech Job/Internship listings & In-App Community Discussion',
@@ -209,6 +295,7 @@ export const initialTasks: TaskItem[] = [
     mode: 'business',
     category: 'campus',
     timeframe: 'today',
+    dayKey: 'friday',
     status: 'pending',
     priority: 'high',
     dueDate: '2026-11-20',
@@ -223,7 +310,7 @@ export const initialTasks: TaskItem[] = [
     updatedAt: new Date().toISOString(),
   },
 
-  // 4. Delegatespace
+  // Wednesday Tasks (3.5h Client Delivery & Operations)
   {
     id: 'b-ds1',
     title: 'Delegatespace: Agency Project Delivery Review & Client Pipeline Update',
@@ -231,6 +318,7 @@ export const initialTasks: TaskItem[] = [
     mode: 'business',
     category: 'delegatespace',
     timeframe: 'today',
+    dayKey: 'wednesday',
     status: 'in_progress',
     priority: 'medium',
     dueDate: '2026-11-20',

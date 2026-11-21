@@ -2,6 +2,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import {
   Sparkles,
   Plus,
@@ -11,9 +12,11 @@ import {
   Briefcase,
   GraduationCap,
   BookOpen,
+  Layers,
 } from 'lucide-react';
 import { DashboardMode } from '@/lib/today/types';
 import { modeThemes } from '@/lib/today/theme';
+import { OperatingHubId } from '@/lib/today/hubData';
 
 interface Props {
   currentMode: DashboardMode;
@@ -22,6 +25,7 @@ interface Props {
   onOpenAIModal: () => void;
   onOpenTimerModal: () => void;
   onOpenLogModal?: () => void;
+  onOpenHub?: (hubId: OperatingHubId) => void;
 }
 
 export function TodayNavbar({
@@ -31,6 +35,7 @@ export function TodayNavbar({
   onOpenAIModal,
   onOpenTimerModal,
   onOpenLogModal,
+  onOpenHub,
 }: Props) {
   const theme = modeThemes[currentMode];
 
@@ -125,6 +130,16 @@ export function TodayNavbar({
             />
             <span className="hidden md:inline">Daily Status</span>
           </button>
+
+          {/* Workspaces Hub Launcher */}
+          <Link
+            href="/today/clients"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+            title="Open Operating Workspaces (7 Standalone Pages)"
+          >
+            <Layers className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="hidden lg:inline">Workspaces (7)</span>
+          </Link>
 
           {/* AI Copilot */}
           <button

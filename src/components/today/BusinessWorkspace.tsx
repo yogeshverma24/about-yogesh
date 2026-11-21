@@ -33,6 +33,7 @@ import {
 import { TaskItemCard } from './TaskItemCard';
 import { BusinessView } from './BusinessView';
 import { MASTER_WEEKLY_SCHEDULE, PRODUCT_ROTATION_WEEKS } from '@/lib/today/scheduleData';
+import { OperatingHubId } from '@/lib/today/hubData';
 
 interface Props {
   state: TodayDashboardState;
@@ -49,6 +50,7 @@ interface Props {
     activeRotationWeek?: number;
     weeklyHoursLogged?: number;
   }) => void;
+  onOpenHub?: (hubId: OperatingHubId) => void;
 }
 
 export function BusinessWorkspace({
@@ -62,6 +64,7 @@ export function BusinessWorkspace({
   onCreateTask,
   onTriggerAI,
   onUpdateSchedule,
+  onOpenHub,
 }: Props) {
   // Navigation & Filter State
   const [activeTab, setActiveTab] = useState<'workspace' | 'strategy'>('workspace');
@@ -130,11 +133,50 @@ export function BusinessWorkspace({
     },
   ];
 
-  // Filter Tasks
+  // Filter Tasks by Mode, Timeframe, and Selected Schedule Day (when viewing Today)
   const filteredTasks = useMemo(() => {
     return state.tasks.filter((task) => {
       if (task.mode !== 'business') return false;
       if (task.timeframe !== currentTimeframe) return false;
+
+      // Filter by the selected day in Operating Cadence (e.g. Saturday)
+      if (currentTimeframe === 'today') {
+        const targetDay = activeDaySchedule.dayKey;
+        if (task.dayKey) {
+          if (task.dayKey !== targetDay) return false;
+        } else {
+          // Backward compatibility for tasks without dayKey:
+          if (
+            task.id === 'b-dw1' ||
+            task.id === 'b-dw2' ||
+            task.title.toLowerCase().includes('linkedin') ||
+            task.title.toLowerCase().includes('seo priority')
+          ) {
+            if (targetDay !== 'thursday') return false;
+          } else if (
+            task.id === 'b-fa1' ||
+            task.id === 'b-ca1' ||
+            task.title.toLowerCase().includes('agricultural advisory') ||
+            task.title.toLowerCase().includes('tech job')
+          ) {
+            if (targetDay !== 'friday') return false;
+          } else if (
+            task.id === 'b-ds1' ||
+            task.title.toLowerCase().includes('agency project delivery')
+          ) {
+            if (targetDay !== 'wednesday') return false;
+          } else if (
+            task.title.toLowerCase().includes('client projects sprint') ||
+            task.title.toLowerCase().includes('existing products') ||
+            task.title.toLowerCase().includes('release readiness') ||
+            task.title.toLowerCase().includes('development review')
+          ) {
+            if (targetDay !== 'saturday') return false;
+          } else {
+            if (targetDay !== 'monday') return false;
+          }
+        }
+      }
 
       if (selectedProduct !== 'all' && task.category !== selectedProduct) {
         return false;
@@ -153,18 +195,56 @@ export function BusinessWorkspace({
 
       return true;
     });
-  }, [state.tasks, currentTimeframe, selectedProduct, statusFilter, searchQuery]);
+  }, [state.tasks, currentTimeframe, activeDaySchedule.dayKey, selectedProduct, statusFilter, searchQuery]);
 
-  // Counts for Product Pills
+  // Counts for Product Pills (consistent with selected day)
   const productTaskCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     state.tasks
-      .filter((t) => t.mode === 'business' && t.timeframe === currentTimeframe)
+      .filter((t) => {
+        if (t.mode !== 'business' || t.timeframe !== currentTimeframe) return false;
+        if (currentTimeframe === 'today') {
+          const targetDay = activeDaySchedule.dayKey;
+          if (t.dayKey) {
+            if (t.dayKey !== targetDay) return false;
+          } else {
+            if (
+              t.id === 'b-dw1' ||
+              t.id === 'b-dw2' ||
+              t.title.toLowerCase().includes('linkedin') ||
+              t.title.toLowerCase().includes('seo priority')
+            ) {
+              if (targetDay !== 'thursday') return false;
+            } else if (
+              t.id === 'b-fa1' ||
+              t.id === 'b-ca1' ||
+              t.title.toLowerCase().includes('agricultural advisory') ||
+              t.title.toLowerCase().includes('tech job')
+            ) {
+              if (targetDay !== 'friday') return false;
+            } else if (
+              t.id === 'b-ds1' ||
+              t.title.toLowerCase().includes('agency project delivery')
+            ) {
+              if (targetDay !== 'wednesday') return false;
+            } else if (
+              t.title.toLowerCase().includes('client projects sprint') ||
+              t.title.toLowerCase().includes('existing products') ||
+              t.title.toLowerCase().includes('release readiness')
+            ) {
+              if (targetDay !== 'saturday') return false;
+            } else if (targetDay !== 'monday') {
+              return false;
+            }
+          }
+        }
+        return true;
+      })
       .forEach((t) => {
         counts[t.category] = (counts[t.category] || 0) + 1;
       });
     return counts;
-  }, [state.tasks, currentTimeframe]);
+  }, [state.tasks, currentTimeframe, activeDaySchedule.dayKey]);
 
   // Quick Inline Add
   const handleQuickAdd = async (e: React.FormEvent) => {
@@ -178,6 +258,7 @@ export function BusinessWorkspace({
       timeframe: currentTimeframe,
       priority: 'high',
       category: selectedProduct === 'all' ? 'delegatework' : selectedProduct,
+      dayKey: activeDaySchedule.dayKey,
     });
   };
 
@@ -241,6 +322,17 @@ export function BusinessWorkspace({
                 Strategy & Hub
               </button>
             </div>
+
+            {onOpenHub && (
+              <button
+                onClick={() => onOpenHub('client_sprint')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 transition-all active:scale-95 shadow-sm"
+                title="Open Deep-Dive Workspaces (7 Views)"
+              >
+                <Layers className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="hidden sm:inline">Operating Hubs (7 Views)</span>
+              </button>
+            )}
 
             <button
               onClick={() =>
@@ -354,7 +446,13 @@ export function BusinessWorkspace({
         <div className="space-y-1.5 pt-0.5">
           <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
             <span>Filter By Venture & Channel Focus</span>
-            <span className="text-sky-400 font-bold">SEO is Highest Priority for Delegatework</span>
+            <button
+              onClick={() => onOpenHub?.('seo_command')}
+              className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1 hover:underline cursor-pointer transition-colors"
+            >
+              <span>SEO is Highest Priority for Delegatework</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
@@ -362,7 +460,7 @@ export function BusinessWorkspace({
               const active = selectedProduct === v.id;
               const count =
                 v.id === 'all'
-                  ? state.tasks.filter((t) => t.mode === 'business' && t.timeframe === currentTimeframe).length
+                  ? Object.values(productTaskCounts).reduce((a, b) => a + b, 0)
                   : productTaskCounts[v.id] || 0;
 
               return (
@@ -460,9 +558,11 @@ export function BusinessWorkspace({
                 <div className="w-8 h-8 mx-auto rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-600">
                   <CheckCircle2 className="w-4 h-4 text-sky-400" />
                 </div>
-                <h4 className="text-xs font-semibold text-zinc-300">No tasks in this business view</h4>
+                <h4 className="text-xs font-semibold text-zinc-300">
+                  No tasks scheduled for {currentTimeframe === 'today' ? activeDaySchedule.dayName : currentTimeframe} in {selectedProduct === 'all' ? 'the ecosystem' : selectedProduct}
+                </h4>
                 <p className="text-[11px] text-zinc-500 max-w-xs mx-auto">
-                  Type a task title above and press enter to add it instantly to {selectedProduct === 'all' ? 'the ecosystem' : selectedProduct}.
+                  Type a task title above and press enter to add it instantly for {currentTimeframe === 'today' ? activeDaySchedule.dayName : 'this timeframe'}.
                 </p>
               </div>
             ) : (
@@ -474,6 +574,7 @@ export function BusinessWorkspace({
                     onToggleComplete={onToggleTaskComplete}
                     onUpdateSubtasks={onUpdateSubtasks}
                     onDelete={onDeleteTask}
+                    onOpenHub={onOpenHub}
                   />
                 ))}
               </div>
@@ -495,32 +596,63 @@ export function BusinessWorkspace({
               </div>
 
               <div className="space-y-2">
-                {activeDaySchedule.blocks.map((b, idx) => (
-                  <div
-                    key={b.id}
-                    className="p-2.5 rounded-xl bg-zinc-950/70 border border-zinc-850 text-xs space-y-1 hover:border-sky-500/30 transition-all"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-sky-400 font-bold">
-                        Block {idx + 1}
-                      </span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-850 text-zinc-300">
-                        {b.hours}h
-                      </span>
+                {activeDaySchedule.blocks.map((b, idx) => {
+                  let targetHub: OperatingHubId = 'client_sprint';
+                  if (activeDaySchedule.dayKey === 'saturday') {
+                    if (idx === 0) targetHub = 'client_sprint';
+                    else if (idx === 1) targetHub = 'product_roadmap';
+                    else if (idx === 2) targetHub = 'testing_qa';
+                    else if (idx === 3) targetHub = 'sunday_sprint';
+                  } else if (activeDaySchedule.dayKey === 'sunday') {
+                    targetHub = 'sunday_sprint';
+                  } else if (activeDaySchedule.dayKey === 'thursday') {
+                    targetHub = 'seo_command';
+                  } else if (activeDaySchedule.dayKey === 'tuesday') {
+                    targetHub = 'learning_hub';
+                  } else if (activeDaySchedule.dayKey === 'monday') {
+                    targetHub = 'weekly_planning';
+                  } else if (activeDaySchedule.dayKey === 'wednesday') {
+                    targetHub = 'client_sprint';
+                  }
+
+                  return (
+                    <div
+                      key={b.id}
+                      onClick={() => onOpenHub?.(targetHub)}
+                      className="p-2.5 rounded-xl bg-zinc-950/70 border border-zinc-850 text-xs space-y-1 hover:border-sky-500/50 hover:bg-sky-950/20 transition-all cursor-pointer group"
+                      title="Click to open dedicated workspace view"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono text-sky-400 font-bold flex items-center gap-1">
+                          <span>Block {idx + 1}</span>
+                          <span className="text-zinc-500 group-hover:text-sky-300 transition-colors font-normal">
+                            • Open View ↗
+                          </span>
+                        </span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-850 text-zinc-300">
+                          {b.hours}h
+                        </span>
+                      </div>
+                      <h6 className="font-semibold text-zinc-100 group-hover:text-sky-200 transition-colors">
+                        {b.title}
+                      </h6>
+                      <p className="text-[11px] text-zinc-400 leading-snug">{b.description}</p>
                     </div>
-                    <h6 className="font-semibold text-zinc-100">{b.title}</h6>
-                    <p className="text-[11px] text-zinc-400 leading-snug">{b.description}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
             {/* 2. SUNDAY PRODUCT ROTATION (4-WEEK SPRINT CYCLE) */}
             <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-850 space-y-2.5">
               <div className="flex items-center justify-between border-b border-zinc-850 pb-2">
-                <span className="text-[11px] font-mono font-semibold text-amber-400 uppercase tracking-wider">
-                  Sunday Product Sprint
-                </span>
+                <button
+                  onClick={() => onOpenHub?.('sunday_sprint')}
+                  className="text-[11px] font-mono font-semibold text-amber-400 uppercase tracking-wider hover:underline flex items-center gap-1"
+                >
+                  <span>Sunday Product Sprint</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
                   Week {activeRotationWeek} of 4
                 </span>
@@ -552,9 +684,13 @@ export function BusinessWorkspace({
             {/* 3. FOUNDER WEEKLY REVIEW CHECKLIST (8 ITEMS) */}
             <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-850 space-y-2.5">
               <div className="flex items-center justify-between border-b border-zinc-850 pb-2">
-                <span className="text-[11px] font-mono font-semibold text-sky-400 uppercase tracking-wider">
-                  Founder Review Checklist
-                </span>
+                <button
+                  onClick={() => onOpenHub?.('weekly_planning')}
+                  className="text-[11px] font-mono font-semibold text-sky-400 uppercase tracking-wider hover:underline flex items-center gap-1"
+                >
+                  <span>Founder Review Checklist</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
                 <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">
                   {checklistCompleted}/{checklistTotal} Done
                 </span>

@@ -31,6 +31,7 @@ export interface TaskItem {
   notes?: string;
   externalLink?: string;
   completedAt?: string;
+  dayKey?: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
   createdAt: string;
   updatedAt: string;
 }

@@ -1,7 +1,7 @@
 // src/components/today/TaskItemCard.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   CheckCircle2,
   Circle,
@@ -11,8 +11,10 @@ import {
   ChevronUp,
   Trash2,
   Sparkles,
+  ArrowUpRight,
 } from 'lucide-react';
 import { TaskItem, ChecklistItem } from '@/lib/today/types';
+import { OperatingHubId } from '@/lib/today/hubData';
 import { modeThemes } from '@/lib/today/theme';
 import { playChime } from '@/lib/today/sound';
 
@@ -21,12 +23,37 @@ interface Props {
   onToggleComplete: (id: string, currentStatus: string) => void;
   onUpdateSubtasks: (id: string, checklist: ChecklistItem[]) => void;
   onDelete: (id: string) => void;
+  onOpenHub?: (hubId: OperatingHubId) => void;
 }
 
-export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelete }: Props) {
+export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelete, onOpenHub }: Props) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const isCompleted = task.status === 'completed';
   const theme = modeThemes[task.mode];
+
+  // Check if this task links to an operating hub
+  const matchedHub = useMemo<OperatingHubId | null>(() => {
+    const t = task.title.toLowerCase();
+    if (t.includes('client projects') || task.id === 'b-sat1' || t.includes('agency project delivery')) {
+      return 'client_sprint';
+    }
+    if (t.includes('existing product') || t.includes('maintenance') || task.id === 'b-sat2' || t.includes('roadmap')) {
+      return 'product_roadmap';
+    }
+    if (t.includes('release readiness') || t.includes('testing') || t.includes('regression') || task.id === 'b-sat3') {
+      return 'testing_qa';
+    }
+    if (t.includes('development review') || t.includes('milestone lock') || task.id === 'b-sat4' || t.includes('sunday primary product')) {
+      return 'sunday_sprint';
+    }
+    if (t.includes('seo priority') || t.includes('seo review') || task.id === 'b-dw2') {
+      return 'seo_command';
+    }
+    if (t.includes('star') || t.includes('communication drill') || t.includes('sales pitch')) {
+      return 'learning_hub';
+    }
+    return null;
+  }, [task.title, task.id]);
 
   const handleToggle = () => {
     if (!isCompleted) {
@@ -121,6 +148,30 @@ export function TaskItemCard({ task, onToggleComplete, onUpdateSubtasks, onDelet
             <p className={`text-xs mt-1 leading-relaxed ${isCompleted ? 'text-zinc-600' : 'text-zinc-400'}`}>
               {task.description}
             </p>
+          )}
+
+          {/* Action Hub Link if matched to a dedicated workspace */}
+          {matchedHub && onOpenHub && (
+            <div className="mt-2.5">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenHub(matchedHub);
+                }}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono font-semibold bg-sky-950/70 hover:bg-sky-900/80 text-sky-300 border border-sky-500/30 hover:border-sky-400 transition-all shadow-sm active:scale-95"
+              >
+                <span>
+                  {matchedHub === 'client_sprint' && 'Open Client Pipeline Workspace'}
+                  {matchedHub === 'product_roadmap' && 'Open Product Roadmap & Versions'}
+                  {matchedHub === 'testing_qa' && 'Open Regression Suite & QA Gate'}
+                  {matchedHub === 'sunday_sprint' && 'Open Sunday Milestone Spec'}
+                  {matchedHub === 'seo_command' && 'Open SEO & Website Hub'}
+                  {matchedHub === 'learning_hub' && 'Open Communication & Sales Hub'}
+                </span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-sky-400" />
+              </button>
+            </div>
           )}
 
           {/* Subtasks summary or Expand Button */}
